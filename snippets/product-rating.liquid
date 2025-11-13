@@ -1,0 +1,98 @@
+{%- comment -%}
+  ----------------------------------------------------------------------------------------------------------------------
+  PRODUCT RATING BADGE
+  ----------------------------------------------------------------------------------------------------------------------
+
+  This component generates a review badge from the product metafields information.
+
+  ********************************************
+  Supported variables
+  ********************************************
+
+  * product: the product from which ratings are extracted
+  * show_empty: if set to true, the theme shows a 0.0 if there are no rating yet
+  * show_placeholder: if set to true, show random value (useful for the product card placeholder)
+  * show_single_star: if set to true, only one star is shown (otherwise, the number of scale)
+  * display_mode: either "rating" (e.g.: 3.5) or "count" (e.g.: 4 reviews). Default to "rating" if none is passed
+  * only_on_product_page: if set to true, only displays on product detail pages (not collection pages)
+  * manual_rating_value: manual rating value to override metafields
+  * manual_rating_count: manual review count to override metafields
+{%- endcomment -%}
+
+{%- liquid
+  # Check if we should hide on collection pages
+  if only_on_product_page == true and request.page_type != 'product'
+    assign hide_rating = true
+  else
+    # Priority: 1. Manual settings, 2. Metafields, 3. Placeholder/Empty
+    if manual_rating_value != blank and manual_rating_value > 0
+      assign rating_value = manual_rating_value | times: 1.0 | round: 1
+      assign rating_max = 5
+      if manual_rating_count != blank and manual_rating_count > 0
+        assign rating_count = manual_rating_count | times: 1
+      else
+        assign rating_count = 0
+      endif
+    elsif product.metafields.reviews.rating.value != blank
+      assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
+      assign rating_count = product.metafields.reviews.rating_count.value
+      assign rating_max = product.metafields.reviews.rating.value.scale_max
+    elsif show_empty
+      assign rating_value = 0.0
+      assign rating_count = 0
+      assign rating_max = 5
+    elsif show_placeholder
+      assign rating_value = 4.5
+      assign rating_count = 2
+      assign rating_max = 5
+    else
+      assign hide_rating = true
+    endif
+  endif
+-%}
+
+{%- unless hide_rating -%}
+  <span class="rating-badge" title="{{ 'product.rating_count' | t: count: rating_count }}">
+    <div
+      class="rating-badge__stars"
+      role="img"
+      aria-label="{{ 'general.rating.info' | t: rating_value: rating_value, rating_max: rating_max }}"
+    >
+      {%- liquid
+        if show_single_star
+          if rating_count == 0
+            render 'icon' with 'star-rating-empty', width: 24
+          else
+            render 'icon' with 'star-rating', width: 24
+          endif
+        else
+          assign rating_int = rating_value | floor
+          assign rating_remainder = rating_value | minus: rating_int
+          assign next_star_index = rating_int | plus: 1
+
+          for i in (1..rating_max)
+            if rating_count == 0
+              render 'icon' with 'star-rating-empty', width: 24
+            else
+              if i <= rating_int
+                render 'icon' with 'star-rating', width: 24
+              elsif i == next_star_index and rating_remainder >= 0.3
+                render 'icon' with 'star-rating-half', width: 24
+              else
+                render 'icon' with 'star-rating-empty', width: 24
+              endif
+            endif
+          endfor
+        endif
+      -%}
+    </div>
+
+    {%- comment -%}Show both rating value and count (like screenshot: 4.3 (4)){%- endcomment -%}
+    <span class="smallcaps" style="font-weight: bold; font-size: 1rem; color: #222222;">
+      {{ rating_value }}
+      {%- if rating_count > 0 -%}
+        <span style="font-weight: bold; font-size: 1rem; color: #222222;"> ({{ rating_count }})</span>
+      {%- endif -%}
+    </span>
+  </span>
+{%- endunless -%}

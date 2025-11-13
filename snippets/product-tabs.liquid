@@ -1,0 +1,295 @@
+{%- liquid
+  # Show all tabs by default if enabled in settings
+  assign show_information = block.settings.show_information_tab | default: true
+  assign show_contents = block.settings.show_contents_tab | default: true
+  assign show_producer = block.settings.show_producer_tab | default: true
+  assign show_reviews = block.settings.show_reviews_tab | default: true
+  assign show_qa = block.settings.show_qa_tab | default: true
+
+  assign visible_tabs_count = 0
+  if show_information
+    assign visible_tabs_count = visible_tabs_count | plus: 1
+  endif
+  if show_contents
+    assign visible_tabs_count = visible_tabs_count | plus: 1
+  endif
+  if show_producer
+    assign visible_tabs_count = visible_tabs_count | plus: 1
+  endif
+  if show_reviews
+    assign visible_tabs_count = visible_tabs_count | plus: 1
+  endif
+  if show_qa
+    assign visible_tabs_count = visible_tabs_count | plus: 1
+  endif
+-%}
+
+{%- if visible_tabs_count > 0 -%}
+  <div class="product-tabs" {{ block.shopify_attributes }}>
+    <x-tabs class="product-tabs__container" selected-index="0">
+      <template shadowrootmode="open">
+        <style>
+          :host {
+            display: block;
+          }
+          [role='tablist'] {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid rgba(var(--text-color) / 0.1);
+            margin-bottom: 1.5rem;
+          }
+          [role='tab'] {
+            background: none;
+            border: none;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            color: rgba(var(--text-color) / 0.6);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s ease;
+          }
+          [role='tab']:hover {
+            color: rgba(var(--text-color) / 0.8);
+          }
+          [role='tab'][aria-selected='true'] {
+            color: rgb(var(--text-color));
+            font-weight: 500;
+          }
+          [role='tab'][aria-selected='true']::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e91e63;
+          }
+          [role='tabpanel'] {
+            display: none;
+          }
+          [role='tabpanel'][hidden='false'] {
+            display: block;
+          }
+        </style>
+        <slot role="tablist" part="tab-list" name="title"></slot>
+        <slot part="tab-panel-list" name="content"></slot>
+      </template>
+
+      {%- comment -%}Information Tab{%- endcomment -%}
+      {%- if show_information -%}
+        <button class="product-tabs__tab" type="button" role="tab" slot="title">
+          {{ 'product.tabs.information' | t }}
+        </button>
+        <div role="tabpanel" slot="content">
+          <div class="product-tabs__content">
+            <div class="product-tabs__information prose">
+              {%- if product.description != blank -%}
+                {{- product.description -}}
+              {%- else -%}
+                <p class="text-subdued">{{ 'product.tabs.no_information' | t }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}Contents Tab{%- endcomment -%}
+      {%- if show_contents -%}
+        <button class="product-tabs__tab" type="button" role="tab" slot="title">
+          {{ 'product.tabs.contents' | t }}
+        </button>
+        <div role="tabpanel" slot="content">
+          <div class="product-tabs__content">
+            <div class="product-tabs__contents">
+              {%- liquid
+                assign metafield_contents = product.metafields.custom.contents.value | default: product.metafields.custom.ingredients.value | default: product.metafields.product.contents.value | default: product.metafields.product.ingredients.value
+              -%}
+              {%- if metafield_contents != blank -%}
+                <div class="product-tabs__contents-text prose">
+                  {{- metafield_contents -}}
+                </div>
+              {%- else -%}
+                <p class="text-subdued">{{ 'product.tabs.no_contents' | t }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}Producer Tab{%- endcomment -%}
+      {%- if show_producer -%}
+        <button class="product-tabs__tab" type="button" role="tab" slot="title">
+          {{ 'product.tabs.producer' | t }}
+        </button>
+        <div role="tabpanel" slot="content">
+          <div class="product-tabs__content">
+            <div class="product-tabs__producer">
+              {%- liquid
+                assign metafield_producer_name = product.metafields.custom.producer_name.value | default: product.metafields.brand.name.value
+                assign metafield_producer_description = product.metafields.custom.producer_description.value | default: product.metafields.brand.description.value
+                assign metafield_brand_collection = product.metafields.custom.brand_collection.value | default: product.metafields.brand.collection.value
+
+                assign collection_url = null
+                if metafield_brand_collection != blank
+                  assign collection_url = metafield_brand_collection
+                elsif metafield_producer_name != blank
+                  assign collection_handle = metafield_producer_name | handle
+                  assign collection_for_brand = collections[collection_handle]
+                  if collection_for_brand != blank
+                    assign collection_url = collection_for_brand.url
+                  else
+                    assign vendor_collection_handle = product.vendor | handle
+                    assign vendor_collection = collections[vendor_collection_handle]
+                    if vendor_collection != blank
+                      assign collection_url = vendor_collection.url
+                    endif
+                  endif
+                endif
+              -%}
+
+              {%- if metafield_producer_name != blank -%}
+                <div class="product-tabs__producer-brand">
+                  <div class="product-tabs__producer-name">{{ metafield_producer_name }}</div>
+                  {%- if collection_url != blank -%}
+                    <a href="{{ collection_url }}" class="product-tabs__producer-link">
+                      {{ 'product.tabs.producer_view_all' | t: producer: metafield_producer_name }}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- else -%}
+                <p class="text-subdued">{{ 'product.tabs.no_producer' | t }}</p>
+              {%- endif -%}
+
+              {%- if metafield_producer_description != blank -%}
+                <div class="product-tabs__producer-description prose">
+                  {{- metafield_producer_description -}}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}Product Reviews Tab{%- endcomment -%}
+      {%- if show_reviews -%}
+        <button class="product-tabs__tab" type="button" role="tab" slot="title">
+          {{ 'product.tabs.reviews' | t }}
+        </button>
+        <div role="tabpanel" slot="content">
+          <div class="product-tabs__content">
+            <div class="product-tabs__reviews">
+              {%- render 'product-reviews',
+                product: product,
+                reviews_url: block.settings.reviews_url,
+                show_empty: true,
+                block: block
+              -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}Product Q&A Tab{%- endcomment -%}
+      {%- if show_qa -%}
+        <button class="product-tabs__tab" type="button" role="tab" slot="title">
+          {{ 'product.tabs.qa' | t }}
+        </button>
+        <div role="tabpanel" slot="content">
+          <div class="product-tabs__content">
+            <div class="product-tabs__qa">
+              <div class="product-tabs__qa-form">
+                <div class="product-tabs__qa-login" id="qa-login-{{ block.id }}" hidden>
+                  <div class="product-tabs__qa-login-label">{{ 'product.tabs.qa_login' | t }}</div>
+                  <div class="product-tabs__qa-login-buttons">
+                    <button
+                      type="button"
+                      class="product-tabs__qa-login-button product-tabs__qa-login-button--twitter"
+                      aria-label="Login with Twitter/X"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" fill="black"/>
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="white"/>
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      class="product-tabs__qa-login-button product-tabs__qa-login-button--google"
+                      aria-label="Login with Google"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="product-tabs__qa-input-wrapper">
+                  <textarea
+                    class="product-tabs__qa-input"
+                    id="qa-input-{{ block.id }}"
+                    placeholder="{{ 'product.tabs.qa_placeholder' | t }}"
+                    rows="4"
+                  ></textarea>
+                </div>
+                <div class="product-tabs__qa-footer">
+                  <label class="product-tabs__qa-consent">
+                    <input type="checkbox" class="product-tabs__qa-consent-checkbox">
+                    <span>{{ 'product.tabs.qa_consent' | t }}</span>
+                  </label>
+                  <button type="button" class="product-tabs__qa-submit">
+                    {{ 'product.tabs.qa_submit' | t }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </x-tabs>
+  </div>
+
+  <script>
+    (function () {
+      const qaInput = document.getElementById('qa-input-{{ block.id }}');
+      const qaLogin = document.getElementById('qa-login-{{ block.id }}');
+
+      if (qaInput && qaLogin) {
+        let loginButtonsClicked = false;
+
+        qaInput.addEventListener('focus', function () {
+          qaLogin.hidden = false;
+          loginButtonsClicked = false;
+        });
+
+        qaInput.addEventListener('blur', function () {
+          // Delay hiding to allow clicking login buttons
+          setTimeout(function () {
+            if (
+              !loginButtonsClicked &&
+              document.activeElement !== qaInput &&
+              !qaLogin.contains(document.activeElement)
+            ) {
+              qaLogin.hidden = true;
+            }
+          }, 200);
+        });
+
+        // Prevent hiding when clicking login buttons
+        const loginButtons = qaLogin.querySelectorAll('.product-tabs__qa-login-button');
+        loginButtons.forEach(function (button) {
+          button.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            loginButtonsClicked = true;
+          });
+
+          button.addEventListener('click', function () {
+            // Handle login button click here
+            console.log('Login button clicked');
+          });
+        });
+      }
+    })();
+  </script>
+{%- endif -%}
