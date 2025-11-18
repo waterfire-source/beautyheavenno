@@ -1,0 +1,303 @@
+{{- 'brands-page.css' | asset_url | stylesheet_tag -}}
+
+<style>
+  #shopify-section-{{ section.id }} .brands-grid {
+    --brands-per-row-mobile: {{ section.settings.brands_per_row_mobile }};
+    --brands-per-row-desktop: {{ section.settings.brands_per_row_desktop }};
+  }
+
+  @media screen and (max-width: 699px) {
+    #shopify-section-{{ section.id }} .brands-grid {
+      grid-template-columns: repeat(var(--brands-per-row-mobile), 1fr);
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    #shopify-section-{{ section.id }} .brands-grid {
+      grid-template-columns: repeat(var(--brands-per-row-desktop), 1fr);
+    }
+  }
+</style>
+
+{%- liquid
+  assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5
+
+  assign alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z' | split: ','
+
+  assign brands_by_letter = ''
+  for block in section.blocks
+    if block.type == 'brand'
+      assign first_letter = block.settings.brand_name | slice: 0 | upcase
+      assign brands_by_letter = brands_by_letter | append: first_letter | append: ','
+    endif
+  endfor
+
+  assign available_letters = brands_by_letter | split: ',' | uniq | sort
+-%}
+
+<div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
+  <div class="container">
+    <div class="brands-page">
+      {%- if section.settings.title != blank or section.settings.description != blank -%}
+        <div class="brands-page__header">
+          {%- if section.settings.title != blank -%}
+            <h1 class="brands-page__title h1">{{ section.settings.title }}</h1>
+          {%- endif -%}
+          {%- if section.settings.description != blank -%}
+            <div class="brands-page__description prose">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <nav class="brands-alphabet" aria-label="Brand alphabet navigation">
+        <div class="brands-alphabet__wrapper">
+          {%- for letter in alphabet -%}
+            {%- assign has_brands = false -%}
+            {%- for available_letter in available_letters -%}
+              {%- if available_letter == letter -%}
+                {%- assign has_brands = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if has_brands -%}
+              <a href="#brands-{{ letter }}" class="brands-alphabet__letter brands-alphabet__letter--active">
+                {{ letter }}
+              </a>
+            {%- else -%}
+              <span class="brands-alphabet__letter brands-alphabet__letter--inactive">
+                {{ letter }}
+              </span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </nav>
+
+      <div class="brands-content">
+        {%- for letter in alphabet -%}
+          {%- assign brand_count = 0 -%}
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'brand' -%}
+              {%- assign first_letter = block.settings.brand_name | slice: 0 | upcase -%}
+              {%- if first_letter == letter -%}
+                {%- assign brand_count = brand_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if brand_count > 0 -%}
+            <div id="brands-{{ letter }}" class="brands-section">
+              <h2 class="brands-section__letter">{{ letter }}</h2>
+
+              <div class="brands-grid">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'brand' -%}
+                    {%- assign first_letter = block.settings.brand_name | slice: 0 | upcase -%}
+                    {%- if first_letter == letter -%}
+                      {%- liquid
+                        assign brand_name = block.settings.brand_name
+                        assign brand_logo = block.settings.brand_logo
+                        assign brand_url = block.settings.brand_url
+
+                        if brand_url == blank
+                          assign collection_handle = brand_name | handle
+                          assign brand_collection = collections[collection_handle]
+                          if brand_collection != blank
+                            assign brand_url = brand_collection.url
+                          endif
+                        endif
+                      -%}
+
+                      <div class="brand-card" {{ block.shopify_attributes }}>
+                        {%- if brand_url != blank -%}
+                          <a href="{{ brand_url }}" class="brand-card__link">
+                            <div class="brand-card__logo-wrapper">
+                              {%- if brand_logo != blank -%}
+                                {%- assign logo_width = block.settings.logo_width | default: 200 -%}
+                                {%- assign logo_height = logo_width | divided_by: brand_logo.aspect_ratio | round -%}
+                                <img
+                                  src="{{ brand_logo | image_url: width: logo_width }}"
+                                  srcset="{{ brand_logo | image_url: width: logo_width }} 1x, {{ brand_logo | image_url: width: logo_width | times: 2 }} 2x"
+                                  alt="{{ brand_name }}"
+                                  loading="lazy"
+                                  width="{{ logo_width }}"
+                                  height="{{ logo_height }}"
+                                  class="brand-card__logo"
+                                  style="max-width: {{ logo_width }}px;"
+                                >
+                              {%- else -%}
+                                <div class="brand-card__logo-placeholder">
+                                  {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+                                </div>
+                              {%- endif -%}
+                            </div>
+                            {%- if section.settings.show_brand_names -%}
+                              <div class="brand-card__name">
+                                {{ brand_name }}
+                              </div>
+                            {%- endif -%}
+                          </a>
+                        {%- else -%}
+                          <div class="brand-card__content">
+                            <div class="brand-card__logo-wrapper">
+                              {%- if brand_logo != blank -%}
+                                {%- assign logo_width = block.settings.logo_width | default: 200 -%}
+                                {%- assign logo_height = logo_width | divided_by: brand_logo.aspect_ratio | round -%}
+                                <img
+                                  src="{{ brand_logo | image_url: width: logo_width }}"
+                                  alt="{{ brand_name }}"
+                                  loading="lazy"
+                                  width="{{ logo_width }}"
+                                  height="{{ logo_height }}"
+                                  class="brand-card__logo"
+                                  style="max-width: {{ logo_width }}px;"
+                                >
+                              {%- else -%}
+                                <div class="brand-card__logo-placeholder">
+                                  {{ 'image' | placeholder_svg_tag: 'placeholder' }}
+                                </div>
+                              {%- endif -%}
+                            </div>
+                            {%- if section.settings.show_brand_names -%}
+                              <div class="brand-card__name">
+                                {{ brand_name }}
+                              </div>
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if section.blocks.size == 0 -%}
+          <div class="brands-empty">
+            <p class="text-subdued">
+              {{ section.settings.empty_state_text | default: 'No brands to display. Add brands in the theme editor.' }}
+            </p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brands Page",
+  "tag": "section",
+  "class": "shopify-section--main-brands",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Page Header"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page title",
+      "default": "Brands"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Page description",
+      "info": "Optional description text below the title"
+    },
+    {
+      "type": "header",
+      "content": "Brand Display Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_names",
+      "label": "Show brand names below logos",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "brands_per_row_desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "label": "Brands per row (desktop)",
+      "default": 5,
+      "info": "Number of brand cards displayed per row on desktop screens"
+    },
+    {
+      "type": "range",
+      "id": "brands_per_row_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Brands per row (mobile)",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state message",
+      "default": "No brands to display. Add brands in the theme editor."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand name",
+          "info": "Enter the exact brand name. This will be used to find the corresponding collection automatically."
+        },
+        {
+          "type": "image_picker",
+          "id": "brand_logo",
+          "label": "Brand logo",
+          "info": "Upload a high-quality brand logo. Recommended size: 400x400px"
+        },
+        {
+          "type": "range",
+          "id": "logo_width",
+          "min": 80,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "Logo max width",
+          "default": 200,
+          "info": "Maximum width of the logo in pixels"
+        },
+        {
+          "type": "url",
+          "id": "brand_url",
+          "label": "Brand URL (optional)",
+          "info": "Leave empty to automatically link to a collection matching the brand name. Or enter a custom URL."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands Page"
+    }
+  ]
+}
+{% endschema %}

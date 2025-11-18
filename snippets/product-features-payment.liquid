@@ -4,16 +4,14 @@
   if block.settings.feature_1_text != blank or block.settings.feature_2_text != blank
     assign show_block = true
   endif
-
-  if block.settings.payment_logo_1 != blank or block.settings.payment_logo_2 != blank
-    assign show_block = true
-  endif
 -%}
+
+{{ 'product-features-payment.css' | asset_url | stylesheet_tag }}
 
 {%- if show_block -%}
   <div class="product-features-payment v-stack gap-4" {{ block.shopify_attributes }}>
     {%- if block.settings.feature_1_text != blank or block.settings.feature_2_text != blank -%}
-      <div class="product-features-payment__features v-stack gap-2">
+      <div class="product-features-payment__features gap-2">
         {%- for i in (1..3) -%}
           {%- liquid
             assign text_setting = 'feature_' | append: i | append: '_text'
@@ -23,40 +21,11 @@
           -%}
 
           {%- if feature_text != blank -%}
-            <div class="product-features-payment__feature h-stack gap-2 align-center">
+            <div class="product-features-payment__feature gap-2">
               {%- if feature_icon != blank -%}
-                <i class="{{ feature_icon }}" aria-hidden="true" style="font-size: 16px;"></i>
+                <i class="{{ feature_icon }}" aria-hidden="true" style="font-size: 24px;"></i>
               {%- endif -%}
-              <span style="font-size: 16px font-weight: bold; color: #222222;">{{ feature_text }}</span>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
-
-    {%- if block.settings.payment_logo_1 != blank or block.settings.payment_logo_2 != blank -%}
-      <div class="product-features-payment__payments v-stack gap-1">
-        {%- for i in (1..3) -%}
-          {%- liquid
-            assign logo_setting = 'payment_logo_' | append: i
-            assign payment_logo = block.settings[logo_setting]
-          -%}
-
-          {%- if payment_logo != blank -%}
-            <div class="product-features-payment__payment-logo">
-              {%- capture sizes -%}(max-width: 699px) 120px, 150px{%- endcapture -%}
-              {%- capture widths -%}120,150,200,300{%- endcapture -%}
-              {{-
-                payment_logo
-                | image_url: width: payment_logo.width
-                | image_tag:
-                  sizes: sizes,
-                  widths: widths,
-                  class: 'constrained-image',
-                  loading: 'lazy',
-                  alt: payment_logo.alt
-                | default: 'Payment method'
-              -}}
+              <span style="font-size: 16px; color: #222222;">{{ feature_text }}</span>
             </div>
           {%- endif -%}
         {%- endfor -%}

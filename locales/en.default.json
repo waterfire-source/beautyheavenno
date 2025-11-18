@@ -98,6 +98,7 @@
       "sold_out_button": "Sold out",
       "unavailable_button": "Unavailable",
       "choose_options": "Choose options",
+      "quick_add": "Quick Add",
       "added_to_cart": "Added to your cart!",
       "sold_out_badge": "Sold out",
       "on_sale_badge": "On sale",
@@ -138,6 +139,37 @@
       "title": "Volume pricing",
       "minimum": "{{ minimum_quantity }}+",
       "price_at_each": "{{ price }}/ea"
+    },
+    "reviews": {
+      "based_on": "Based on {{ votes }} votes and {{ reviews }} reviews",
+      "stars": "stars",
+      "votes": "votes",
+      "view_all": "View all reviews",
+      "no_reviews": "No reviews yet"
+    },
+    "producer": {
+      "visit_homepage": "Visit producer's homepage",
+      "visit_brand_page": "Visit {{ producer }} brand page",
+      "view_all_products": "View all products from {{ producer }}"
+    },
+    "article_bonus": {
+      "article_number": "Art.no",
+      "gives_bonus_points": "Gives {{ points }} bonus points with purchase"
+    },
+    "tabs": {
+      "information": "Information",
+      "producer": "Producer",
+      "reviews": "Product Reviews",
+      "qa": "Product Q&A",
+      "contents": "Contents",
+      "no_information": "No product information available.",
+      "no_contents": "No contents information available.",
+      "no_producer": "No producer information available.",
+      "producer_view_all": "Show all products from {{ producer }}",
+      "qa_login": "Login",
+      "qa_placeholder": "Your question..",
+      "qa_consent": "I give Beautyheaven.no my consent to publish this question.",
+      "qa_submit": "Submit your question"
     },
     "rating_count": {
       "zero": "No reviews",

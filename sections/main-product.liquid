@@ -37,31 +37,39 @@
   }
 </style>
 
-{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient
+  | default: section.settings.color_scheme.settings.background
+  | md5
+-%}
 {%- capture product_form_id -%}product-form-main-{{ product.id }}-{{ section.id }}{%- endcapture -%}
 
 <div class="section-spacing section-spacing--tight color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
   <div class="container {% unless section.settings.container_size == 'full' %}container--{{ section.settings.container_size }}{% endunless %}">
-    <product-rerender id="product-info-{{ product.id }}-{{ section.id }}" observe-form="{{ product_form_id }}" allow-partial-rerender>
+    <product-rerender
+      id="product-info-{{ product.id }}-{{ section.id }}"
+      observe-form="{{ product_form_id }}"
+      allow-partial-rerender
+    >
       <div class="product">
         {%- if product.media.size > 0 -%}
           {%- render 'product-gallery',
-              product: product,
-              product_form_id: product_form_id,
-              desktop_layout: section.settings.desktop_media_layout,
-              mobile_controls: section.settings.mobile_controls,
-              enable_media_autoplay: section.settings.enable_media_autoplay,
-              enable_video_looping: section.settings.enable_video_looping,
-              enable_image_zoom: section.settings.enable_image_zoom,
-              max_image_zoom_level: section.settings.max_image_zoom_level -%}
+            product: product,
+            product_form_id: product_form_id,
+            desktop_layout: section.settings.desktop_media_layout,
+            mobile_controls: section.settings.mobile_controls,
+            enable_media_autoplay: section.settings.enable_media_autoplay,
+            enable_video_looping: section.settings.enable_video_looping,
+            enable_image_zoom: section.settings.enable_image_zoom,
+            max_image_zoom_level: section.settings.max_image_zoom_level
+          -%}
         {%- endif -%}
 
-        {%- render 'product-info', 
-          product: product, 
+        {%- render 'product-info',
+          product: product,
           product_form_id: product_form_id,
-          center_basic_info: section.settings.center_basic_info, 
-          has_content_below_gallery: has_content_below_gallery, 
-          context: 'main_product' 
+          center_basic_info: section.settings.center_basic_info,
+          has_content_below_gallery: has_content_below_gallery,
+          context: 'main_product'
         -%}
 
         {%- comment -%}On Prestige, some content may be on the left part below the product gallery{%- endcomment -%}
@@ -77,7 +85,13 @@
                   {%- if product.description != blank -%}
                     {%- if block.settings.collapse_content -%}
                       {%- assign accordion_title = 'product.general.description' | t -%}
-                      {%- render 'accordion', title: accordion_title, content: product.description, prose_content: true, size: 'lg', block: block -%}
+                      {%- render 'accordion',
+                        title: accordion_title,
+                        content: product.description,
+                        prose_content: true,
+                        size: 'lg',
+                        block: block
+                      -%}
                     {%- else -%}
                       <div class="product-content-below-gallery__description prose">
                         {{- product.description -}}
@@ -87,7 +101,7 @@
 
                 {%- when 'accordion' -%}
                   {%- liquid
-                    assign accordion_title = block.settings.page.title | default: block.settings.title 
+                    assign accordion_title = block.settings.page.title | default: block.settings.title
                     assign accordion_content = block.settings.page.content | default: block.settings.liquid | default: block.settings.content
 
                     if accordion_title != blank and accordion_content != blank
@@ -112,15 +126,25 @@
       <div class="product-sticky-bar__info sm-max:hidden">
         <div class="h-stack gap-6">
           {%- if product.media.size > 0 -%}
-            {%- assign default_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
-            {{- default_media | image_url: width: default_media.width | image_tag: loading: 'lazy', sizes: '60px', widths: '60,120,180' -}}
+            {%- assign default_media = product.selected_or_first_available_variant.featured_media
+              | default: product.featured_media
+            -%}
+            {{-
+              default_media
+              | image_url: width: default_media.width
+              | image_tag: loading: 'lazy', sizes: '60px', widths: '60,120,180'
+            -}}
           {%- endif -%}
 
           <div class="v-stack">
             <span class="h6">{{ product.title }}</span>
 
-            {%- if product.selected_or_first_available_variant != nil -%}
-              {%- render 'price-list', variant: product.selected_or_first_available_variant, hide_unit_price: true, context: 'card' -%}
+            {%- if product.selected_or_first_available_variant != null -%}
+              {%- render 'price-list',
+                variant: product.selected_or_first_available_variant,
+                hide_unit_price: true,
+                context: 'card'
+              -%}
             {%- endif -%}
           </div>
         </div>
@@ -131,7 +155,7 @@
           assign button_disabled = false
           assign button_style = 'solid'
 
-          if product.selected_or_first_available_variant == nil
+          if product.selected_or_first_available_variant == null
             assign button_disabled = true
             assign button_style = 'outline'
             assign button_content = 'product.general.unavailable_button' | t
@@ -148,17 +172,23 @@
           endif
         -%}
 
-        {%- render 'button', content: button_content, style: button_style, type: 'submit', form: product_form_id, disabled: button_disabled -%}
+        {%- render 'button',
+          content: button_content,
+          style: button_style,
+          type: 'submit',
+          form: product_form_id,
+          disabled: button_disabled
+        -%}
       </buy-buttons>
     </product-sticky-bar>
   </product-rerender>
 {%- endif -%}
 
 {%- comment -%}
-IMPLEMENTATION NOTE: Shopify does not currently allows to render a given section within the context of a given product. However,
-when rendering the quick buy drawers/popovers, we want to be able to re-use the merchant's choices (such as the selector type). This
-is however only possible by rendering the whole product page, and extracting the relevant part. Here, we therefore render the
-quick buy information in a template, that will be extracted in JS, which ensures it is not visible in the main product page
+  IMPLEMENTATION NOTE: Shopify does not currently allows to render a given section within the context of a given product. However,
+  when rendering the quick buy drawers/popovers, we want to be able to re-use the merchant's choices (such as the selector type). This
+  is however only possible by rendering the whole product page, and extracting the relevant part. Here, we therefore render the
+  quick buy information in a template, that will be extracted in JS, which ensures it is not visible in the main product page
 {%- endcomment -%}
 {%- render 'product-quick-buy', product: product -%}
 
@@ -182,7 +212,7 @@ quick buy information in a template, that will be extracted in JS, which ensures
   "class": "shopify-section--main-product",
   "tag": "section",
   "settings": [
-   {
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:global.colors.scheme",
@@ -386,6 +416,227 @@ quick buy information in a template, that will be extracted in JS, which ensures
       "limit": 1
     },
     {
+      "type": "article_bonus",
+      "name": "Article & Bonus",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Display article number and bonus points information. Values can be set manually or pulled from product metafields."
+        },
+        {
+          "type": "text",
+          "id": "article_number",
+          "label": "Article number",
+          "info": "Leave blank to use product SKU or metafields (custom.article_number)"
+        },
+        {
+          "type": "number",
+          "id": "bonus_points",
+          "label": "Bonus points",
+          "info": "Number of bonus points given with purchase. Leave blank to use metafields (custom.bonus_points)",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "features_payment",
+      "name": "Features & logos",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Display customer benefits/features with FontAwesome icons and payment method logos. Note: FontAwesome must be loaded in your theme for icons to display. Add FontAwesome CDN link in theme.liquid if not already included."
+        },
+        {
+          "type": "header",
+          "content": "Feature 1"
+        },
+        {
+          "type": "text",
+          "id": "feature_1_icon",
+          "label": "FontAwesome icon class",
+          "info": "e.g., fa fa-truck, fa fa-shipping-fast, fas fa-truck",
+          "default": "fa fa-truck"
+        },
+        {
+          "type": "text",
+          "id": "feature_1_text",
+          "label": "Feature text",
+          "default": "Always free shipping"
+        },
+        {
+          "type": "header",
+          "content": "Feature 2"
+        },
+        {
+          "type": "text",
+          "id": "feature_2_icon",
+          "label": "FontAwesome icon class",
+          "info": "e.g., fa fa-heart, fas fa-heart",
+          "default": "fa fa-heart"
+        },
+        {
+          "type": "text",
+          "id": "feature_2_text",
+          "label": "Feature text",
+          "default": "Bonus points on all purchases"
+        },
+        {
+          "type": "header",
+          "content": "Feature 3"
+        },
+        {
+          "type": "text",
+          "id": "feature_3_icon",
+          "label": "FontAwesome icon class",
+          "info": "e.g., fa fa-user, fa fa-store, fas fa-store",
+          "default": "fa fa-user"
+        },
+        {
+          "type": "text",
+          "id": "feature_3_text",
+          "label": "Feature text",
+          "default": "Norwegian online store"
+        }
+      ]
+    },
+    {
+      "type": "product_tabs",
+      "name": "Product Tabs",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Display product information in a tabbed interface. Each tab can be enabled or disabled individually."
+        },
+        {
+          "type": "header",
+          "content": "Tab Visibility"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_information_tab",
+          "label": "Show Information tab",
+          "info": "Displays product description",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_contents_tab",
+          "label": "Show Contents tab",
+          "info": "Displays product contents/ingredients from metafields",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_tab",
+          "label": "Show Producer tab",
+          "info": "Displays brand/producer information from metafields",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_reviews_tab",
+          "label": "Show Product Reviews tab",
+          "info": "Displays review breakdown and ratings",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_qa_tab",
+          "label": "Show Product Q&A tab",
+          "info": "Displays question submission form",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Tab Labels"
+        },
+        {
+          "type": "text",
+          "id": "information_tab_label",
+          "label": "Information tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "contents_tab_label",
+          "label": "Contents tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "producer_tab_label",
+          "label": "Producer tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "reviews_tab_label",
+          "label": "Reviews tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "header",
+          "content": "Producer Tab Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_logo",
+          "label": "Show brand/producer logo",
+          "info": "Display logo from product metafield (custom.producer_logo or brand.logo)",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "producer_logo_width",
+          "min": 80,
+          "max": 300,
+          "step": 20,
+          "unit": "px",
+          "label": "Producer logo max width",
+          "default": 160
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_link",
+          "label": "Show 'View all products' link",
+          "info": "Display link to brand collection page",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_description",
+          "label": "Show producer description",
+          "info": "Display brand description from metafields",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "qa_tab_label",
+          "label": "Q&A tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "header",
+          "content": "Reviews Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_empty_reviews",
+          "label": "Show reviews tab even if no reviews",
+          "default": true
+        },
+        {
+          "type": "url",
+          "id": "reviews_url",
+          "label": "Reviews page URL",
+          "info": "Optional link to full reviews page"
+        }
+      ]
+    },
+    {
       "type": "badges",
       "name": "t:sections.main_product.blocks.badges.name",
       "limit": 1,
@@ -410,35 +661,30 @@ quick buy information in a template, that will be extracted in JS, which ensures
       ]
     },
     {
-      "type": "rating",
-      "name": "t:sections.main_product.blocks.rating.name",
+      "type": "producer",
+      "name": "Producer/Manufacturer",
       "limit": 1,
       "settings": [
         {
           "type": "paragraph",
-          "content": "t:sections.main_product.blocks.rating.instructions"
+          "content": "Display producer or manufacturer information."
+        },
+        {
+          "type": "text",
+          "id": "producer_name",
+          "label": "Producer name",
+          "info": "Leave blank to use product vendor"
+        },
+        {
+          "type": "url",
+          "id": "producer_homepage_url",
+          "label": "Producer homepage URL"
         },
         {
           "type": "checkbox",
-          "id": "show_empty",
-          "label": "t:sections.main_product.blocks.rating.show_if_no_reviews",
+          "id": "show_all_products_link",
+          "label": "Show link to all products from producer",
           "default": true
-        },
-        {
-          "type": "select",
-          "id": "rating_mode",
-          "label": "t:sections.main_product.blocks.rating.show_product_rating_as",
-          "options": [
-            {
-              "value": "rating",
-              "label": "t:sections.main_product.blocks.rating.show_product_rating_as_options.rating"
-            },
-            {
-              "value": "count",
-              "label": "t:sections.main_product.blocks.rating.show_product_rating_as_options.count"
-            }
-          ],
-          "default": "rating"
         }
       ]
     },

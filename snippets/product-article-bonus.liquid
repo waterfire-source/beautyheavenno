@@ -1,26 +1,9 @@
-{%- comment -%}
-  ----------------------------------------------------------------------------------------------------------------------
-  PRODUCT ARTICLE NUMBER & BONUS POINTS
-  ----------------------------------------------------------------------------------------------------------------------
-
-  This component displays article number and bonus points information.
-
-  ********************************************
-  Supported variables
-  ********************************************
-
-  * product: the product from which info is extracted
-  * article_number: manual article number (overrides product SKU/metafields)
-  * bonus_points: manual bonus points (overrides metafields)
-  * block: the block object for shopify_attributes
-{%- endcomment -%}
+{{- 'product-article-bonus.css' | asset_url | stylesheet_tag -}}
 
 {%- liquid
-  # Priority: 1. Manual settings, 2. Metafields, 3. Product SKU
   assign metafield_article_number = product.metafields.custom.article_number.value | default: product.metafields.product.article_number.value
   assign metafield_bonus_points = product.metafields.custom.bonus_points.value | default: product.metafields.product.bonus_points.value
 
-  # Use manual settings if provided, otherwise fall back to metafields or product SKU
   assign final_article_number = article_number | default: metafield_article_number | default: product.selected_or_first_available_variant.sku
   assign final_bonus_points = bonus_points | default: metafield_bonus_points
 
@@ -39,7 +22,7 @@
     {%- endif -%}
 
     {%- if final_bonus_points != blank and final_bonus_points > 0 -%}
-      <div class="product-article-bonus__bonus-points" style="color: var(--accent-color, #ff6b9d); font-size: 18px">
+      <div class="product-article-bonus__bonus-points" style="color: var(--accent-color, #18a9a2); font-size: 18px">
         {{ 'product.article_bonus.gives_bonus_points' | t: points: final_bonus_points }}
       </div>
     {%- endif -%}

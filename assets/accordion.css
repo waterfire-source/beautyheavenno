@@ -1,0 +1,12 @@
+.product-tabs__accordion-title {
+    font-size: 16px!important;
+    font-weight: 700!important;
+    letter-spacing: 0.1rem!important;
+    text-transform: none!important;
+}
+
+@media (max-width: 768px) {
+    .product-tabs__accordion-title {
+        font-size: 16px!important;
+    }
+}

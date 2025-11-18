@@ -1,0 +1,57 @@
+.product-article-bonus {
+    padding: 0.5rem 0;
+}
+
+.product-article-bonus__article-number {
+    color: #222222;
+}
+
+.product-article-bonus__bonus-points {
+    font-weight: bold;
+    color: #e3155a;
+}
+
+.product-features-payment {
+    padding: 1rem 0;
+}
+
+.product-features-payment__feature {
+    color: #222222;
+}
+
+.product-features-payment__feature i {
+    font-size: 1.25rem;
+    width: 1.5rem;
+    text-align: center;
+    color: currentColor;
+}
+
+.product-features-payment__payment-logo {
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.product-features-payment__payment-logo img {
+    max-width: 150px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.product-producer__name-link {
+    display: inline-block;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.product-producer__name-link:hover {
+    opacity: 0.7;  
+}
+
+.product-producer__name {
+    font-weight: 500;
+    text-transform: uppercase;
+    color: currentColor;
+}  

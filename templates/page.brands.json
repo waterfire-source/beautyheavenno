@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-brands",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "title": "Brands",
+        "description": "",
+        "show_brand_names": true,
+        "brands_per_row_desktop": 5,
+        "brands_per_row_mobile": 2,
+        "empty_state_text": "No brands to display. Add brands in the theme editor."
+      },
+      "blocks": {}
+    }
+  },
+  "order": ["main"]
+}
