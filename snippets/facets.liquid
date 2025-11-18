@@ -18,6 +18,8 @@ Supported variables
 * context: an optional context to generate unique ID if facets are outputted several times
 {%- endcomment -%}
 
+{{ 'facets.css' | asset_url | stylesheet_tag }}
+
 {%- assign color_label_list = 'general.label.color' | t | replace: ', ', ',' | downcase | split: ',' -%}
 {%- capture id_prefix -%}facets-{{ context }}{%- endcapture -%}
 
@@ -38,7 +40,7 @@ Supported variables
       <input type="hidden" name="q" value="{{ results.terms | escape }}">
     {%- endif -%}
 
-    <div class="accordion-list">
+    {% comment %} <div class="accordion-list">
       {%- if quick_links_menu.links.size > 0 -%}
         {%- capture filter_content -%}
           <div class="v-stack gap-2.5">
@@ -128,7 +130,7 @@ Supported variables
           {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
-    </div>
+    </div> {% endcomment %}
 
     <noscript style="display: block; margin-top: 20px;">
       {%- assign button_content = 'collection.faceting.apply_filters' | t -%}

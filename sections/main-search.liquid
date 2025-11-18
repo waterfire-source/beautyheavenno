@@ -1,3 +1,5 @@
+{{ 'main-collection.css' | asset_url | stylesheet_tag }}
+
 {%- if search.performed -%}
   {%- liquid
     assign active_values_count = 0
@@ -89,7 +91,7 @@
                   <div class="main-search__resource-item" role="tabpanel" slot="content" {% cycle 'result_tab': '', 'hidden', 'hidden', 'hidden' %}>
                     <div class="v-stack gap-6 sm:gap-12">
                       {%- if show_filters or section.settings.show_sort_by -%}
-                        <height-observer variable="collection-toolbar" class="collection-toolbar full-bleed">
+                        <height-observer variable="collection-toolbar" class="collection-toolbar full-bleed" >
                           <div class="collection-toolbar__button-list">
                             {%- if show_filters -%}
                               <div class="collection-toolbar__button-container md:hidden">

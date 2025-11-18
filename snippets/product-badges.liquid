@@ -84,8 +84,8 @@ Supported variables
   {%- endfor -%}
 {%- endcapture -%}
 
-{%- if badges != blank -%}
+{% comment %} {%- if badges != blank -%}
   <badge-list class="badge-list {% if vertical %}badge-list--vertical{% endif %}">
     {{- badges -}}
   </badge-list>
-{%- endif -%}
+{%- endif -%} {% endcomment %}

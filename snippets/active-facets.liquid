@@ -72,7 +72,7 @@ Supported variables
 {%- endcapture -%}
 
 {%- if active_values_count > 0 -%}
-  <div class="active-facets {% if section.settings.filter_layout == 'drawer' %}justify-center{% endif %}">
+  {% comment %} <div class="active-facets {% if section.settings.filter_layout == 'drawer' %}justify-center{% endif %}">
     {{- active_facets -}}
-  </div>
+  </div> {% endcomment %}
 {%- endif -%}
