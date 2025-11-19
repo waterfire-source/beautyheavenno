@@ -1,0 +1,724 @@
+{{ 'our-looks.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 -%}
+  {%- assign carousel_id = 'our-looks-carousel-' | append: section.id -%}
+
+  <style>
+    #shopify-section-{{ section.id }} {
+      --our-looks-bg: {{ section.settings.background_color }};
+      --our-looks-text: {{ section.settings.text_color }};
+      --our-looks-accent: {{ section.settings.accent_color }};
+    }
+  </style>
+
+  <div class="our-looks section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+    <div class="our-looks__container">
+      <div class="our-looks__header">
+        {%- if section.settings.category_button_text != blank -%}
+          <div class="our-looks__category-button">
+            {{ section.settings.category_button_text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="our-looks__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+
+      <our-looks-carousel id="{{ carousel_id }}" class="our-looks__carousel">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign look_image_loading_strategy = nil
+            unless forloop.first
+              assign look_image_loading_strategy = 'lazy'
+            endunless
+
+            assign products_count = 0
+            for product_index in (1..4)
+              assign product_id = 'product_' | append: product_index
+              if block.settings[product_id] != blank
+                assign products_count = products_count | plus: 1
+              endif
+            endfor
+          -%}
+
+          <div class="our-looks__slide {% if forloop.first %}is-active{% endif %}" {{ block.shopify_attributes }}>
+            <div class="our-looks__content">
+              <div class="our-looks__image-container">
+                {%- liquid
+                  assign image_count = 0
+                  if block.settings.image_1 != blank
+                    assign image_count = image_count | plus: 1
+                  endif
+                  if block.settings.image_2 != blank
+                    assign image_count = image_count | plus: 1
+                  endif
+                  if block.settings.image_3 != blank
+                    assign image_count = image_count | plus: 1
+                  endif
+                -%}
+
+                <our-looks-image-carousel class="our-looks__image-carousel" data-look-index="{{ forloop.index0 }}">
+                  <div class="our-looks__image-wrapper">
+                    {%- liquid
+                      assign first_slide_active = true
+                    -%}
+                    {%- if block.settings.image_1 != blank -%}
+                      <div class="our-looks__image-slide {% if first_slide_active %}is-active{% endif %}">
+                        {{- block.settings.image_1 | image_url: width: block.settings.image_1.width | image_tag: loading: look_image_loading_strategy, widths: '400,500,600,700,800,1000,1200,1400,1600,1800', class: 'our-looks__image', sizes: '(max-width: 999px) 100vw, 50vw' -}}
+                      </div>
+                      {%- assign first_slide_active = false -%}
+                    {%- endif -%}
+                    {%- if block.settings.image_2 != blank -%}
+                      <div class="our-looks__image-slide {% if first_slide_active %}is-active{% endif %}">
+                        {{- block.settings.image_2 | image_url: width: block.settings.image_2.width | image_tag: loading: look_image_loading_strategy, widths: '400,500,600,700,800,1000,1200,1400,1600,1800', class: 'our-looks__image', sizes: '(max-width: 999px) 100vw, 50vw' -}}
+                      </div>
+                      {%- assign first_slide_active = false -%}
+                    {%- endif -%}
+                    {%- if block.settings.image_3 != blank -%}
+                      <div class="our-looks__image-slide {% if first_slide_active %}is-active{% endif %}">
+                        {{- block.settings.image_3 | image_url: width: block.settings.image_3.width | image_tag: loading: look_image_loading_strategy, widths: '400,500,600,700,800,1000,1200,1400,1600,1800', class: 'our-looks__image', sizes: '(max-width: 999px) 100vw, 50vw' -}}
+                      </div>
+                    {%- endif -%}
+
+                    {%- if image_count == 0 -%}
+                      {%- capture placeholder -%}{% cycle 'collection-1', 'collection-2', 'collection-3' %}{%- endcapture -%}
+                      <div class="our-looks__image-slide is-active">
+                        {{- placeholder | placeholder_svg_tag: 'placeholder' | replace: '<svg', '<svg class="our-looks__image" preserveAspectRatio="xMinYMin slice"' -}}
+                      </div>
+                    {%- endif -%}
+
+                  </div>
+
+                  {%- if image_count > 1 -%}
+                    <button type="button" class="our-looks__image-carousel-controls our-looks__image-carousel-prev" aria-label="Previous image" data-action="prev-image">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="our-looks__image-carousel-controls our-looks__image-carousel-next" aria-label="Next image" data-action="next-image">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+                </our-looks-image-carousel>
+
+                {%- if section.blocks.size > 1 -%}
+                  <button type="button" class="our-looks__carousel-controls our-looks__carousel-prev" aria-label="Previous look" data-action="prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="our-looks__carousel-controls our-looks__carousel-next" aria-label="Next look" data-action="next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                  </button>
+                {%- endif -%}
+              </div>
+
+              <div class="our-looks__details">
+                <div class="our-looks__details-header">
+                  {%- if section.settings.featured_label != blank -%}
+                    <div class="our-looks__featured-label">{{ section.settings.featured_label }}</div>
+                  {%- endif -%}
+                  {%- if block.settings.look_title != blank -%}
+                    <h3 class="our-looks__look-title">{{ block.settings.look_title }}</h3>
+                  {%- endif -%}
+                </div>
+
+                {%- if products_count > 0 -%}
+                  <div class="our-looks__products">
+                    {%- for product_index in (1..products_count) -%}
+                      {%- capture product_id -%}product_{{ product_index }}{%- endcapture -%}
+                      {%- assign product = block.settings[product_id] -%}
+
+                      {%- if product != blank -%}
+                        <div class="our-looks__product-item">
+                          <div class="our-looks__product-info">
+                            <h4 class="our-looks__product-name">{{ product.title }}</h4>
+                            <div class="our-looks__product-price">
+                              {%- if product.selected_or_first_available_variant -%}
+                                {{ product.selected_or_first_available_variant.price | money }}
+                              {%- else -%}
+                                {{ product.price | money }}
+                              {%- endif -%}
+                            </div>
+                          </div>
+                          {%- if product.available -%}
+                            {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
+                              <product-form>
+                                {%- form 'product', product -%}
+                                  <input type="hidden" name="on_success" value="force_open_drawer">
+                                  <input type="hidden" name="quantity" value="1">
+                                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                                  <button type="submit" class="our-looks__add-to-cart">
+                                    {{ 'product.general.add_to_cart_button' | t }}
+                                  </button>
+                                {%- endform -%}
+                              </product-form>
+                            {%- else -%}
+                              {%- capture quick_buy_id -%}our-looks-quick-buy-{{ section.id }}-{{ block.id }}-{{ product.id }}{%- endcapture -%}
+                              <quick-buy-modal id="{{ quick_buy_id }}" handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}" class="quick-buy-modal modal modal--lg color-scheme color-scheme--dialog">
+                                LOADING
+                              </quick-buy-modal>
+                              <button type="button" aria-controls="{{ quick_buy_id }}" class="our-looks__add-to-cart">
+                                {{ 'product.general.add_to_cart_button' | t }}
+                              </button>
+                            {%- endif -%}
+                          {%- else -%}
+                            <button type="button" class="our-looks__add-to-cart" disabled>
+                              {{ 'product.general.sold_out_button' | t }}
+                            </button>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.view_look_url != blank -%}
+                  <a href="{{ block.settings.view_look_url }}" class="our-looks__view-complete-look">
+                    {{ block.settings.view_look_button_text | default: 'View Complete Look' }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- comment -%} Image Pagination Dots {%- endcomment -%}
+            {%- if image_count > 1 -%}
+              <div class="our-looks__image-pagination">
+                {%- for i in (1..image_count) -%}
+                  <button class="our-looks__image-dot {% if forloop.first %}active{% endif %}" aria-label="Go to image {{ forloop.index }}" data-image-slide="{{ forloop.index0 }}"></button>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+
+        {%- if section.blocks.size > 1 -%}
+          <div class="our-looks__pagination">
+            {%- for i in (1..section.blocks.size) -%}
+              <button type="button" class="our-looks__pagination-dot {% if forloop.first %}is-active{% endif %}"
+                      aria-label="Go to look {{ forloop.index }}"
+                      data-slide-index="{{ forloop.index0 }}">
+                <span class="sr-only">Look {{ forloop.index }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </our-looks-carousel>
+    </div>
+  </div>
+
+  <script>
+    class OurLooksCarousel extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.slides = this.querySelectorAll('.our-looks__slide');
+        this.paginationDots = this.querySelectorAll('.our-looks__pagination-dot');
+        this.prevButton = this.querySelector('[data-action="prev"]');
+        this.nextButton = this.querySelector('[data-action="next"]');
+        this.productTags = this.querySelectorAll('.our-looks__product-tag');
+
+        this.init();
+      }
+
+      init() {
+        if (this.prevButton) {
+          this.prevButton.addEventListener('click', () => this.prev());
+        }
+        if (this.nextButton) {
+          this.nextButton.addEventListener('click', () => this.next());
+        }
+
+        this.paginationDots.forEach((dot, index) => {
+          dot.addEventListener('click', () => this.goToSlide(index));
+        });
+
+        // Update product tags on slide change
+        this.productTags.forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            const productIndex = parseInt(tag.dataset.productIndex) - 1;
+            const lookIndex = parseInt(tag.dataset.lookIndex);
+            this.goToSlide(lookIndex);
+
+            // Scroll to product in details section
+            setTimeout(() => {
+              const productItems = this.slides[lookIndex].querySelectorAll('.our-looks__product-item');
+              if (productItems[productIndex]) {
+                productItems[productIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                productItems[productIndex].style.transition = 'all 0.3s ease';
+                productItems[productIndex].style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                  productItems[productIndex].style.transform = 'scale(1)';
+                }, 300);
+              }
+            }, 300);
+          });
+        });
+
+        // Swipe support for mobile
+        this.setupSwipe();
+      }
+
+      setupSwipe() {
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+        let isHorizontalSwipe = false;
+
+        this.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          isDragging = true;
+          isHorizontalSwipe = false;
+        }, { passive: true });
+
+        this.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+
+          const currentX = e.touches[0].clientX;
+          const currentY = e.touches[0].clientY;
+          const diffX = Math.abs(currentX - startX);
+          const diffY = Math.abs(currentY - startY);
+
+          // Only prevent default if it's clearly a horizontal swipe
+          if (diffX > diffY && diffX > 10) {
+            isHorizontalSwipe = true;
+            e.preventDefault();
+          }
+        });
+
+        this.addEventListener('touchend', (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          const endX = e.changedTouches[0].clientX;
+          const endY = e.changedTouches[0].clientY;
+          const diffX = startX - endX;
+          const diffY = startY - endY;
+
+          // Only trigger swipe if horizontal movement is greater than vertical
+          if (isHorizontalSwipe && Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            if (diffX > 0) {
+              this.next();
+            } else {
+              this.prev();
+            }
+          }
+        }, { passive: true });
+      }
+
+      goToSlide(index) {
+        if (index < 0 || index >= this.slides.length) return;
+
+        this.currentIndex = index;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      next() {
+        this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      updateSlides() {
+        this.slides.forEach((slide, index) => {
+          if (index === this.currentIndex) {
+            slide.classList.add('is-active');
+          } else {
+            slide.classList.remove('is-active');
+          }
+        });
+      }
+
+      updatePagination() {
+        this.paginationDots.forEach((dot, index) => {
+          if (index === this.currentIndex) {
+            dot.classList.add('is-active');
+          } else {
+            dot.classList.remove('is-active');
+          }
+        });
+      }
+    }
+
+    customElements.define('our-looks-carousel', OurLooksCarousel);
+
+    class OurLooksImageCarousel extends HTMLElement {
+      constructor() {
+        super();
+        this.currentImageIndex = 0;
+        this.imageSlides = this.querySelectorAll('.our-looks__image-slide');
+        this.prevButton = this.querySelector('[data-action="prev-image"]');
+        this.nextButton = this.querySelector('[data-action="next-image"]');
+        // Pagination dots are now outside the carousel element, find them in the slide parent
+        const slideElement = this.closest('.our-looks__slide');
+        this.paginationDots = slideElement ? slideElement.querySelectorAll('.our-looks__image-dot') : [];
+
+        if (this.imageSlides.length > 1) {
+          this.init();
+        }
+      }
+
+      init() {
+        if (this.prevButton) {
+          this.prevButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.prev();
+          });
+        }
+        if (this.nextButton) {
+          this.nextButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.next();
+          });
+        }
+
+        this.paginationDots.forEach((dot, index) => {
+          dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.goToImage(index);
+          });
+        });
+
+        // Swipe support for image carousel
+        this.setupSwipe();
+      }
+
+      setupSwipe() {
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+        let isHorizontalSwipe = false;
+
+        this.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          isDragging = true;
+          isHorizontalSwipe = false;
+        }, { passive: true });
+
+        this.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+
+          const currentX = e.touches[0].clientX;
+          const currentY = e.touches[0].clientY;
+          const diffX = Math.abs(currentX - startX);
+          const diffY = Math.abs(currentY - startY);
+
+          // Only prevent default if it's clearly a horizontal swipe
+          if (diffX > diffY && diffX > 10) {
+            isHorizontalSwipe = true;
+            e.preventDefault();
+          }
+        });
+
+        this.addEventListener('touchend', (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          const endX = e.changedTouches[0].clientX;
+          const endY = e.changedTouches[0].clientY;
+          const diffX = startX - endX;
+          const diffY = startY - endY;
+
+          if (isHorizontalSwipe && Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            e.stopPropagation();
+            if (diffX > 0) {
+              this.next();
+            } else {
+              this.prev();
+            }
+          }
+        }, { passive: true });
+      }
+
+      next() {
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.imageSlides.length;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      prev() {
+        this.currentImageIndex = (this.currentImageIndex - 1 + this.imageSlides.length) % this.imageSlides.length;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      goToImage(index) {
+        if (index < 0 || index >= this.imageSlides.length) return;
+        this.currentImageIndex = index;
+        this.updateSlides();
+        this.updatePagination();
+      }
+
+      updateSlides() {
+        this.imageSlides.forEach((slide, index) => {
+          if (index === this.currentImageIndex) {
+            slide.classList.add('is-active');
+          } else {
+            slide.classList.remove('is-active');
+          }
+        });
+      }
+
+      updatePagination() {
+        this.paginationDots.forEach((dot, index) => {
+          if (index === this.currentImageIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    customElements.define('our-looks-image-carousel', OurLooksImageCarousel);
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Our Looks",
+  "class": "shopify-section--our-looks",
+  "tag": "section",
+  "max_blocks": 10,
+  "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "category_button_text",
+      "label": "Category button text",
+      "default": "Shop"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Our Looks"
+    },
+    {
+      "type": "text",
+      "id": "featured_label",
+      "label": "Featured label",
+      "default": "Featured Look"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#4fd1c7"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1",
+          "info": "Recommended size: 1200 x 1600px"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2",
+          "info": "Recommended size: 1200 x 1600px"
+        },
+        {
+          "type": "header",
+          "content": "Look Details"
+        },
+        {
+          "type": "text",
+          "id": "look_title",
+          "label": "Look title",
+          "default": "Summer Glow Essentials"
+        },
+        {
+          "type": "url",
+          "id": "view_look_url",
+          "label": "View complete look URL"
+        },
+        {
+          "type": "text",
+          "id": "view_look_button_text",
+          "label": "View complete look button text",
+          "default": "View Complete Look"
+        },
+        {
+          "type": "header",
+          "content": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "product_1_horizontal_position",
+          "label": "Horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 30
+        },
+        {
+          "type": "range",
+          "id": "product_1_vertical_position",
+          "label": "Vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 25
+        },
+        {
+          "type": "header",
+          "content": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "product_2_horizontal_position",
+          "label": "Horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 70
+        },
+        {
+          "type": "range",
+          "id": "product_2_vertical_position",
+          "label": "Vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 40
+        },
+        {
+          "type": "header",
+          "content": "Product 3"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "product_3_horizontal_position",
+          "label": "Horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "product_3_vertical_position",
+          "label": "Vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 60
+        },
+        {
+          "type": "header",
+          "content": "Product 4"
+        },
+        {
+          "type": "product",
+          "id": "product_4",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "product_4_horizontal_position",
+          "label": "Horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 80
+        },
+        {
+          "type": "range",
+          "id": "product_4_vertical_position",
+          "label": "Vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 75
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Looks",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "look",
+          "settings": {
+            "look_title": "Summer Glow Essentials",
+            "product_1_horizontal_position": 30,
+            "product_1_vertical_position": 25,
+            "product_2_horizontal_position": 70,
+            "product_2_vertical_position": 40
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

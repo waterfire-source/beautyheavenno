@@ -1,0 +1,99 @@
+.content-over-media {
+  background-color: #f6f6f6;
+}
+
+.video-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin-inline: auto;
+}
+
+.place-self-center {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+.video-subtitle {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  max-width: 600px;
+  text-align: center;
+}
+
+@media (max-width: 699px) {
+  .video-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding: 0 1.5rem;
+  }
+}
+
+.play-button {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff80;
+  padding: 26px 24px 26px 28px;
+  border-radius: 50%;
+}
+
+.play-button svg {
+  height: 28px;
+  width: 28px;
+}
+
+.place-self-center .h6 {
+  font-family: Inter;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 11.9px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: #ffffff;
+}
+
+.place-self-center .h2 {
+  font-family: Inter;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 51px;
+  line-height: 60px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: #ffffff;
+  margin-block-start: 16px !important;
+  margin-block-end: 48px !important;
+}
+
+.video-subtitle {
+  font-family: Inter;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 13.6px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 0px !important;
+}
+
+.play-button {
+  margin-block: 0px !important;
+}

@@ -1,0 +1,238 @@
+.reviews-section {
+  background-color: #f6f6f6;
+  padding: 96px 0;
+}
+
+.reviews-section .container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reviews-section__category {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #18a9a24d;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 16px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: #0f0f0f;
+  margin: 0 auto 24px;
+  text-align: center;
+  vertical-align: middle;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+.reviews-section__title {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 55.9px;
+  font-weight: 300;
+  line-height: 60px;
+  letter-spacing: -1.5px;
+  color: #0f0f0f;
+  text-align: center;
+  margin: 0 0 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.reviews-section__rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+
+.reviews-section__stars {
+  display: flex;
+  gap: 4px;
+}
+
+.reviews-section__rating-text {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.reviews-section__trustpilot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 64px;
+}
+
+.reviews-section__trustpilot-text {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.reviews-section__review-count {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #666666;
+}
+
+.reviews-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin: 0 0 64px;
+}
+
+.reviews-section__card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.reviews-section__quote-icon {
+  margin: 0 0 16px;
+}
+
+.reviews-section__card-stars {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 16px;
+}
+
+.reviews-section__card-text {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #333333;
+  margin: 0 0 24px;
+}
+
+.reviews-section__card-separator {
+  width: 100%;
+  height: 1px;
+  background-color: #e5e5e5;
+  margin-top: 24px;
+  margin-bottom: 33px;
+}
+
+.reviews-section__card-author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reviews-section__card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.reviews-section__card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reviews-section__card-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reviews-section__card-name {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #333333;
+  margin: 0;
+}
+
+.reviews-section__card-location {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #666666;
+  margin: 0;
+}
+
+.reviews-section__footer {
+  text-align: center;
+  margin: 0;
+  border-bottom: 2px solid #0f0f0f;
+  padding-bottom: 6px;
+  cursor: pointer;
+}
+
+.reviews-section__read-all {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #0f0f0f;
+}
+
+@media (max-width: 1024px) {
+  .reviews-section__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 699px) {
+  .reviews-section {
+    padding: 64px 0;
+  }
+
+  .reviews-section .container {
+    padding: 0 16px;
+  }
+
+  .reviews-section__title {
+    font-size: 32px;
+  }
+
+  .reviews-section__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 0 0 48px;
+  }
+
+  .reviews-section__card {
+    padding: 24px;
+  }
+
+  .reviews-section__trustpilot {
+    flex-wrap: wrap;
+    margin: 0 0 48px;
+  }
+}

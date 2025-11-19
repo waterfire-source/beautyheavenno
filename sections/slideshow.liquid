@@ -6,6 +6,8 @@ may have important consequence on the section itself.
 ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
+{{ 'slideshow.css' | asset_url | stylesheet_tag }}
+
 {%- if section.blocks.size > 0 -%}
   {%- assign carousel_id = 'carousel-' | append: section.id -%}
 
@@ -68,59 +70,82 @@ may have important consequence on the section itself.
           {%- endif -%}
 
           {%- comment -%}---------------- CONTENT ----------------{%- endcomment -%}
-          {% liquid
-            assign is_boxed = false
-            assign has_background = false
-            assign has_border = false
-            assign has_inside_offset = false
-
-            if block.settings.background_opacity > 0 and block.settings.background != blank and block.settings.background != 'rgba(0,0,0,0)'
-              assign has_background = true
-            endif
-
-            if block.settings.border_color != blank and block.settings.border_color != 'rgba(0,0,0,0)'
-              assign has_border = true
-            endif
-
-            if has_background and has_border
-              assign has_inside_offset = true
-            endif
-
-            if has_background or has_border
-              assign is_boxed = true
-            endif
-          %}
-
-          <div class="slideshow__slide-content {% if is_boxed %}slideshow__slide-content--boxed{% endif %} {% if has_border %}slideshow__slide-content--with-border{% endif %} {% if has_inside_offset %}slideshow__slide-content--with-border-offset{% endif %} {{ block.settings.mobile_text_position }} {{ block.settings.desktop_text_position }}" style="{% render 'surface', background: block.settings.background, background_opacity: block.settings.background_opacity, text_color: block.settings.text_color, border_color: block.settings.border_color %}">
-            <div class="prose">
+          <div class="slideshow__slide-content {{ block.settings.mobile_text_position }} {{ block.settings.desktop_text_position }}" style="{% render 'surface', background: block.settings.background, background_opacity: block.settings.background_opacity, text_color: block.settings.text_color, border_color: block.settings.border_color %}">
+            <div class="slideshow__hero-content">
+              {%- comment -%} Premium Badge {%- endcomment -%}
+              <div class="slideshow__premium-badge">
               {%- if block.settings.subheading != blank -%}
-                <p class="h6">{{ block.settings.subheading }}</p>
-              {%- endif -%}
-
-              {%- if block.settings.title != blank -%}
-                <p class="h1">{{ block.settings.title }}</p>
-              {%- endif -%}
-
-              {%- if block.settings.button_1_text != blank or block.settings.button_2_text != blank -%}
-                {%- assign button_mobile_position = block.settings.mobile_text_position | split: 'text-' | last -%}
-                {%- assign button_desktop_position = block.settings.desktop_text_position | split: 'text-' | last -%}
-
-                {%- if block.settings.button_1_style == 'link' or block.settings.button_2_style == 'link' or block.settings.button_1_text == blank or block.settings.button_2_text == blank -%}
-                  {%- capture button_wrapper_class -%}button-group justify-{{ button_mobile_position }} sm:justify-{{ button_desktop_position }}{%- endcapture -%}
+                  {{ block.settings.subheading }}
                 {%- else -%}
-                  {%- capture button_wrapper_class -%}button-group button-group--same-width justify-{{ button_mobile_position }} sm:justify-{{ button_desktop_position }}{%- endcapture -%}
-                {%- endif -%}
+                  PREMIUM BEAUTY COLLECTION
+              {%- endif -%}
+              </div>
 
-                <div class="{{ button_wrapper_class }}">
-                  {%- if block.settings.button_1_text != blank -%}
+              {%- comment -%} Main Headline {%- endcomment -%}
+              {%- if block.settings.title != blank -%}
+                <h1 class="slideshow__hero-headline">
+                  {{ block.settings.title }}
+                </h1>
+              {%- else -%}
+                <h1 class="slideshow__hero-headline">
+                  Your Heaven for<br>Premium Beauty
+                </h1>
+              {%- endif -%}
+
+              {%- comment -%} Description {%- endcomment -%}
+              <p class="slideshow__hero-description">
+                {%- if block.settings.description != blank -%}
+                  {{ block.settings.description }}
+                {%- else -%}
+                  Curated skincare, bodycare, haircare and premium beauty essentials from the world's finest brands.
+                {%- endif -%}
+              </p>
+
+              {%- comment -%} Buttons {%- endcomment -%}
+              {%- liquid
+                assign has_button_1 = false
+                if block.settings.button_1_text != blank and block.settings.button_1_link != blank
+                  assign has_button_1 = true
+                endif
+
+                assign has_button_2 = false
+                if block.settings.button_2_text != blank and block.settings.button_2_link != blank
+                  assign has_button_2 = true
+                endif
+              -%}
+
+              {%- if has_button_1 or has_button_2 -%}
+                <div class="slideshow__hero-buttons">
+                  {%- if has_button_1 -%}
                     {%- render 'button', href: block.settings.button_1_link, content: block.settings.button_1_text, style: block.settings.button_1_style, background: block.settings.button_1_background, text_color: block.settings.button_1_text_color -%}
                   {%- endif -%}
 
-                  {%- if block.settings.button_2_text != blank -%}
+                  {%- if has_button_2 -%}
                     {%- render 'button', href: block.settings.button_2_link, content: block.settings.button_2_text, style: block.settings.button_2_style, background: block.settings.button_2_background, text_color: block.settings.button_2_text_color -%}
                   {%- endif -%}
                 </div>
+              {%- else -%}
+                <div class="slideshow__hero-buttons">
+                  {%- render 'button', href: '/collections/all', content: 'Shop Now', style: 'solid', background: '#ffffff', text_color: '#000000' -%}
+                  {%- render 'button', href: '/collections', content: 'Browse Collections', style: 'outline', background: 'transparent', text_color: '#ffffff' -%}
+                </div>
               {%- endif -%}
+
+              {%- comment -%} Trust Indicator {%- endcomment -%}
+              <div class="slideshow__trust-indicator">
+                <div class="slideshow__trust-icons">
+                  <div class="slideshow__trust-icon"></div>
+                  <div class="slideshow__trust-icon"></div>
+                  <div class="slideshow__trust-icon"></div>
+                </div>
+                <span>
+                  {%- if block.settings.trust_text != blank -%}
+                    {{ block.settings.trust_text }}
+                  {%- else -%}
+                    Trusted by 10,000+ customers
+                  {%- endif -%}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -317,6 +342,12 @@ may have important consequence on the section itself.
           "default": "Image slide"
         },
         {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Curated skincare, bodycare, haircare and premium beauty essentials from the world's finest brands."
+        },
+        {
           "type": "select",
           "id": "mobile_text_position",
           "label": "t:global.position.mobile_content_position",
@@ -542,6 +573,12 @@ may have important consequence on the section itself.
           "label": "t:global.colors.gradient_overlay",
           "default": "linear-gradient(180deg, rgba(54, 54, 54, 0.2) 0%, rgba(4, 4, 4, 0.65) 100%)",
           "info": "t:sections.slideshow.blocks.image.gradient_overlay_info"
+        },
+        {
+          "type": "text",
+          "id": "trust_text",
+          "label": "Trust Indicator Text",
+          "default": "Trusted by 10,000+ customers"
         }
       ]
     },
@@ -582,6 +619,12 @@ may have important consequence on the section itself.
           "default": "Video slide"
         },
         {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Curated skincare, bodycare, haircare and premium beauty essentials from the world's finest brands."
+        },
+        {
           "type": "select",
           "id": "mobile_text_position",
           "label": "t:global.position.mobile_content_position",
@@ -807,6 +850,12 @@ may have important consequence on the section itself.
           "label": "t:global.colors.gradient_overlay",
           "default": "linear-gradient(180deg, rgba(54, 54, 54, 0.2) 0%, rgba(4, 4, 4, 0.65) 100%)",
           "info": "t:sections.slideshow.blocks.image.gradient_overlay_info"
+        },
+        {
+          "type": "text",
+          "id": "trust_text",
+          "label": "Trust Indicator Text",
+          "default": "Trusted by 10,000+ customers"
         }
       ]
     }

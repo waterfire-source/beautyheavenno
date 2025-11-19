@@ -1,0 +1,157 @@
+{%- comment -%}
+------------------------------------------------------------------------------------------------------------------------
+TRUST INDICATORS SECTION
+------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{{ 'trust-indicators.css' | asset_url | stylesheet_tag }}
+
+<div class="trust-indicators-section" style="background-color: {{ section.settings.background_color | default: '#e0f2f1' }};">
+  <div class="container">
+    <div class="trust-indicators-grid">
+      {%- for block in section.blocks -%}
+        <div class="trust-indicator-item" {{ block.shopify_attributes }}>
+          <div class="trust-indicator-icon">
+            {%- assign icon_color = section.settings.icon_color | default: '#18A9A2' -%}
+            {%- if block.settings.icon == 'truck' -%}
+              {%- assign clip_id = 'clip_truck_' | append: block.id -%}
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#{{ clip_id }})">
+                  <path d="M16.3333 21V6.99996C16.3333 6.38112 16.0875 5.78763 15.6499 5.35004C15.2123 4.91246 14.6188 4.66663 14 4.66663H4.66668C4.04784 4.66663 3.45435 4.91246 3.01676 5.35004C2.57918 5.78763 2.33334 6.38112 2.33334 6.99996V19.8333C2.33334 20.1427 2.45626 20.4395 2.67505 20.6583C2.89384 20.877 3.19059 21 3.50001 21H5.83334" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17.5 21H10.5" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M22.1667 21H24.5C24.8094 21 25.1062 20.8771 25.325 20.6583C25.5438 20.4395 25.6667 20.1428 25.6667 19.8334V15.575C25.6662 15.3103 25.5757 15.0536 25.41 14.847L21.35 9.77204C21.2409 9.6354 21.1025 9.52504 20.945 9.44911C20.7874 9.37318 20.6149 9.33362 20.44 9.33337H16.3333" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M19.8333 23.3333C21.122 23.3333 22.1667 22.2886 22.1667 21C22.1667 19.7113 21.122 18.6666 19.8333 18.6666C18.5447 18.6666 17.5 19.7113 17.5 21C17.5 22.2886 18.5447 23.3333 19.8333 23.3333Z" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8.16668 23.3333C9.45534 23.3333 10.5 22.2886 10.5 21C10.5 19.7113 9.45534 18.6666 8.16668 18.6666C6.87801 18.6666 5.83334 19.7113 5.83334 21C5.83334 22.2886 6.87801 23.3333 8.16668 23.3333Z" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                  <clipPath id="{{ clip_id }}">
+                    <rect width="28" height="28" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            {%- elsif block.settings.icon == 'lightning' -%}
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4.66667 16.3334C4.44589 16.3341 4.22944 16.2722 4.04245 16.1548C3.85545 16.0375 3.70561 15.8694 3.61031 15.6703C3.51501 15.4711 3.47818 15.249 3.50408 15.0298C3.52999 14.8105 3.61758 14.6031 3.75667 14.4317L15.3067 2.53169C15.3933 2.43169 15.5114 2.36411 15.6415 2.34005C15.7716 2.31599 15.906 2.33688 16.0227 2.39928C16.1394 2.46169 16.2313 2.56191 16.2836 2.68349C16.3358 2.80507 16.3451 2.94078 16.31 3.06836L14.07 10.0917C14.0039 10.2685 13.9818 10.4586 14.0054 10.6459C14.0289 10.8331 14.0976 11.0118 14.2054 11.1667C14.3133 11.3216 14.4571 11.448 14.6245 11.535C14.7919 11.6221 14.978 11.6673 15.1667 11.6667H23.3333C23.5541 11.6659 23.7706 11.7278 23.9576 11.8452C24.1445 11.9626 24.2944 12.1306 24.3897 12.3298C24.485 12.5289 24.5218 12.751 24.4959 12.9703C24.47 13.1895 24.3824 13.3969 24.2433 13.5684L12.6933 25.4684C12.6067 25.5684 12.4886 25.6359 12.3585 25.66C12.2284 25.6841 12.094 25.6632 11.9773 25.6008C11.8606 25.5384 11.7687 25.4381 11.7164 25.3166C11.6642 25.195 11.6549 25.0593 11.69 24.9317L13.93 17.9084C13.9961 17.7316 14.0182 17.5414 13.9946 17.3542C13.9711 17.167 13.9024 16.9882 13.7946 16.8334C13.6867 16.6785 13.5429 16.5521 13.3755 16.465C13.2081 16.3779 13.022 16.3327 12.8333 16.3334H4.66667Z" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {%- elsif block.settings.icon == 'shield' -%}
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.3333 15.1666C23.3333 21 19.25 23.9166 14.3967 25.6083C14.1425 25.6944 13.8665 25.6903 13.615 25.5966C8.75 23.9166 4.66667 21 4.66667 15.1666V6.99995C4.66667 6.69054 4.78959 6.39379 5.00838 6.175C5.22717 5.9562 5.52392 5.83329 5.83334 5.83329C8.16667 5.83329 11.0833 4.43329 13.1133 2.65995C13.3605 2.44879 13.6749 2.33276 14 2.33276C14.3251 2.33276 14.6395 2.44879 14.8867 2.65995C16.9283 4.44495 19.8333 5.83329 22.1667 5.83329C22.4761 5.83329 22.7728 5.9562 22.9916 6.175C23.2104 6.39379 23.3333 6.69054 23.3333 6.99995V15.1666Z" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10.5 14L12.8333 16.3333L17.5 11.6666" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {%- elsif block.settings.icon == 'lock' -%}
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.1667 12.8334H5.83333C4.54467 12.8334 3.5 13.878 3.5 15.1667V23.3334C3.5 24.622 4.54467 25.6667 5.83333 25.6667H22.1667C23.4553 25.6667 24.5 24.622 24.5 23.3334V15.1667C24.5 13.878 23.4553 12.8334 22.1667 12.8334Z" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.16669 12.8334V8.16671C8.16669 6.61961 8.78127 5.13588 9.87523 4.04192C10.9692 2.94796 12.4529 2.33337 14 2.33337C15.5471 2.33337 17.0308 2.94796 18.1248 4.04192C19.2188 5.13588 19.8334 6.61961 19.8334 8.16671V12.8334" stroke="{{ icon_color }}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {%- endif -%}
+          </div>
+          <div class="trust-indicator-text" style="color: {{ section.settings.text_color | default: '#333333' }};">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Indicators",
+  "tag": "section",
+  "class": "shopify-section--trust-indicators",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#e0f2f1"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#18A9A2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "indicator",
+      "name": "Trust Indicator",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Truck (Free Shipping)"
+            },
+            {
+              "value": "lightning",
+              "label": "Lightning (Fast Delivery)"
+            },
+            {
+              "value": "shield",
+              "label": "Shield (Authentic Products)"
+            },
+            {
+              "value": "lock",
+              "label": "Lock (Secure Checkout)"
+            }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Indicators",
+      "blocks": [
+        {
+          "type": "indicator",
+          "settings": {
+            "icon": "truck",
+            "text": "Free Shipping"
+          }
+        },
+        {
+          "type": "indicator",
+          "settings": {
+            "icon": "lightning",
+            "text": "Fast Delivery"
+          }
+        },
+        {
+          "type": "indicator",
+          "settings": {
+            "icon": "shield",
+            "text": "100% Authentic Products"
+          }
+        },
+        {
+          "type": "indicator",
+          "settings": {
+            "icon": "lock",
+            "text": "Secure Checkout"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

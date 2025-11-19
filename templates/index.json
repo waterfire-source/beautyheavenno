@@ -15,8 +15,8 @@
         "slide-1": {
           "type": "image",
           "settings": {
-            "subheading": "Our bag",
-            "title": "Inspired by the 90s",
+            "subheading": "Premium Beauty Collection",
+            "title": "Your Heaven for Premium Beauty",
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
             "content_max_width": 780,
@@ -35,8 +35,8 @@
         "slide-2": {
           "type": "image",
           "settings": {
-            "subheading": "Our bag",
-            "title": "Elegant & Timeless",
+            "subheading": "Premium Beauty Collection",
+            "title": "Your Heaven for Premium Beauty",
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
             "content_max_width": 400,

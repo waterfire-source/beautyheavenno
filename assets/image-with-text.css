@@ -1,0 +1,182 @@
+.image-with-text-section {
+  display: flex;
+  width: 100%;
+  padding-top: 128px;
+  padding-bottom: 128px;
+  background-color: #ffffff;
+}
+
+.image-with-text-section > .container {
+  max-width: 1600px;
+  margin-inline: auto;
+  display: flex;
+}
+
+.image-with-text-section__image-wrapper {
+  flex: 0 0 50%;
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.image-with-text-section__image-wrapper .placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.image-with-text-section__image-wrapper picture,
+.image-with-text-section__image-wrapper img,
+.image-with-text-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.image-with-text-section__content {
+  flex: 0 0 50%;
+  width: 50%;
+  background: white;
+  padding: 4rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+}
+
+.image-with-text-section__title {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 56.3px;
+  font-weight: 300;
+  line-height: 60px;
+  letter-spacing: -1.5px;
+  vertical-align: middle;
+  color: #0f0f0f;
+}
+
+.image-with-text-section__paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 23.75px;
+}
+
+.image-with-text-section__paragraph {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 29.5px;
+  letter-spacing: 0%;
+  text-align: left;
+  vertical-align: middle;
+  color: #0f0f0f;
+}
+
+.image-with-text-section__link {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f0f0f;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-transform: uppercase;
+  line-height: 20px;
+  letter-spacing: 1.4px;
+  transition: opacity 0.3s ease;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 10.25px;
+}
+
+.image-with-text-section__link:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 1280px) {
+  .image-with-text-section__content {
+    padding: 28px 10px 28px 28px;
+  }
+
+  .image-with-text-section__title {
+    font-size: 34px;
+    line-height: 38px;
+  }
+
+  .image-with-text-section__paragraph {
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+
+@media (max-width: 699px) {
+  .image-with-text-section {
+    padding-top: 0;
+    padding-bottom: 128px;
+  }
+
+  .image-with-text-section > .container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .image-with-text-section__content {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 128px 24px 64px 24px;
+    order: 1;
+    gap: 1.5rem;
+  }
+
+  .image-with-text-section__image-wrapper {
+    flex: 0 0 auto;
+    width: 100%;
+    order: 2;
+    position: relative;
+    padding-inline: 24px;
+  }
+
+  .image-with-text-section__image-wrapper picture,
+  .image-with-text-section__image-wrapper img,
+  .image-with-text-section__image {
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-with-text-section__title {
+    font-size: 45.8px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  .image-with-text-section__paragraphs {
+    gap: 1rem;
+  }
+
+  .image-with-text-section__paragraph {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+    color: #0f0f0fb2;
+  }
+
+  .image-with-text-section__link {
+    margin-top: 0;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    text-align: center;
+    color: #0f0f0f;
+  }
+}
