@@ -1472,6 +1472,35 @@
       <path d="m6.41 6.852 3.182-2.037M6.409 9.148l3.183 2.037m1.793-5.352c1.168 0 2.115-.97 2.115-2.166 0-1.197-.947-2.167-2.115-2.167-1.169 0-2.116.97-2.116 2.167 0 1.196.947 2.166 2.116 2.166Zm0 8.667c1.168 0 2.115-.97 2.115-2.167 0-1.196-.947-2.166-2.115-2.166-1.169 0-2.116.97-2.116 2.166 0 1.197.947 2.167 2.116 2.167Zm-6.77-4.333c1.169 0 2.116-.97 2.116-2.167 0-1.197-.947-2.167-2.116-2.167C3.447 5.833 2.5 6.803 2.5 8c0 1.197.947 2.167 2.115 2.167Z" stroke="currentColor" stroke-opacity=".65" stroke-linecap="square"/>
     </svg>
 
+    {%- comment -%} CUSTOM ICONS {%- endcomment -%}
+
+  {%- when 'lightning' or 'lightning-bolt' -%}
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke-width="{{ stroke_width | default: settings.icon_stroke_width }}"
+      width="{{ width | default: 24 }}"
+      class="{{ class | strip }}"
+      viewBox="0 0 24 24"
+    >
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'shield-check' or 'shield-checkmark' -%}
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke-width="{{ stroke_width | default: settings.icon_stroke_width }}"
+      width="{{ width | default: 24 }}"
+      class="{{ class | strip }}"
+      viewBox="0 0 24 24"
+    >
+      <path clip-rule="evenodd" d="M3 4.285v7.274c0 4.708 2.284 8.928 6.882 10.618l1.041.382a3.13 3.13 0 0 0 2.154 0l1.041-.382C18.716 20.487 21 16.267 21 11.559V4.285a1.418 1.418 0 0 0-.868-1.301A18.248 18.248 0 0 0 12 1.254a18.248 18.248 0 0 0-8.132 1.73A1.418 1.418 0 0 0 3 4.285Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
     {%- comment -%} STANDARD ICONS OF SHOPIFY {%- endcomment -%}
 
   {%- when 'media-model-badge' -%}

@@ -1,0 +1,216 @@
+/* Premium Beauty Collection Hero Banner Styles */
+.slideshow__premium-badge {
+  font-family: Inter !important;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #ffffff4d;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 16px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-align: center;
+}
+
+.slideshow__slide-content {
+  max-width: 60% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slideshow__hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.slideshow__hero-headline {
+  font-family: Inter !important;
+  font-size: 93.2px;
+  font-weight: 300;
+  line-height: 96px;
+  letter-spacing: -2.4px;
+  text-align: center !important;
+  vertical-align: middle !important;
+  color: #ffffff;
+  margin: 0;
+}
+
+.slideshow__hero-description {
+  font-family: Inter !important;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 32px;
+  letter-spacing: 0.6px;
+  color: #fffffff2;
+  max-width: 600px;
+  margin: 0;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.slideshow__hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.slideshow__hero-buttons .button {
+  font-family: Inter !important;
+  border-radius: 999px !important;
+  padding: 0.875rem 2rem !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  min-width: 180px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.slideshow__hero-buttons .button:not(.button--outline) {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+.slideshow__hero-buttons .button--outline {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 1) !important;
+  color: rgba(255, 255, 255, 1) !important;
+  --button-background: transparent !important;
+  --button-text-color: rgba(255, 255, 255, 1) !important;
+  --button-outline-color: rgba(255, 255, 255, 1) !important;
+}
+
+.slideshow__hero-buttons .button--outline:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+.slideshow__trust-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 30px;
+  font-size: 14px;
+  color: #ffffffcc;
+  font-weight: 300;
+  line-height: 20px;
+  letter-spacing: 0.35px;
+}
+
+.slideshow__trust-icons {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+.slideshow__trust-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff66;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Left circle - dull light brown/beige with subtle gradient */
+.slideshow__trust-icon:nth-child(1) {
+  backdrop-filter: blur(4px);
+  background-color: #ffffff33;
+  z-index: 1;
+  margin-right: -12px;
+}
+
+/* Middle circle - grey-beige with vertical gradient (metallic sheen) */
+.slideshow__trust-icon:nth-child(2) {
+  backdrop-filter: blur(4px);
+  background-color: #ffffff33;
+  z-index: 2;
+  margin-right: -12px;
+}
+
+/* Right circle - warm coppery/bronze gradient */
+.slideshow__trust-icon:nth-child(3) {
+  backdrop-filter: blur(4px);
+  background-color: #ffffff33;
+  z-index: 3;
+}
+
+@media screen and (max-width: 1360px) {
+  .slideshow__slide-content {
+    max-width: 80% !important;
+  }
+
+  .slideshow__hero-headline {
+    font-size: 70px !important;
+  }
+
+  .slideshow__hero-description {
+    font-size: 20px !important;
+  }
+}
+
+@media screen and (max-width: 699px) {
+  .slideshow__slide-content {
+    max-width: 100% !important;
+  }
+
+  .slideshow__hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .slideshow__hero-buttons .button {
+    width: 100%;
+    min-width: auto;
+    font-size: 14px !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  .slideshow__hero-headline {
+    font-size: 30px !important;
+    line-height: 36px !important;
+  }
+
+  .slideshow__hero-description {
+    font-size: 16px !important;
+    line-height: 24px !important;
+    max-width: 100% !important;
+  }
+
+  .slideshow__trust-indicator {
+    width: 100%;
+    gap: 0.5rem;
+    margin-top: 10px;
+  }
+
+  .slideshow__trust-icon {
+    order: -1;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.circle-button {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  color: #ffffff;
+}
+
+.slideshow__next-section-button {
+  bottom: 47px;
+}
