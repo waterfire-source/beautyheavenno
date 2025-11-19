@@ -102,6 +102,16 @@
   }
 }
 
+.brands-grid--carousel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.brands-grid--carousel .brand-card {
+  flex: 0 0 auto;
+}
+
 .brand-card {
   display: flex;
   flex-direction: column;
@@ -219,6 +229,14 @@
 
   .brand-card__name {
     font-size: 0.813rem;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .brands-grid--carousel .brand-card {
+    min-width: 140px;
+    max-width: 180px;
+    width: 140px;
   }
 }
 

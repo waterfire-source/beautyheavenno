@@ -92,7 +92,7 @@
             <div id="brands-{{ letter }}" class="brands-section">
               <h2 class="brands-section__letter">{{ letter }}</h2>
 
-              <div class="brands-grid">
+              {%- capture brand_list -%}
                 {%- for block in section.blocks -%}
                   {%- if block.type == 'brand' -%}
                     {%- assign first_letter = block.settings.brand_name | slice: 0 | upcase -%}
@@ -172,7 +172,47 @@
                     {%- endif -%}
                   {%- endif -%}
                 {%- endfor -%}
-              </div>
+              {%- endcapture -%}
+
+              {%- if section.settings.stack_brands -%}
+                <div class="brands-grid">
+                  {{- brand_list -}}
+                </div>
+              {%- else -%}
+                {%- assign carousel_id = 'brands-carousel-' | append: section.id | append: '-' | append: letter -%}
+
+                <div class="floating-controls-container floating-controls-container--inside floating-controls-container--on-hover">
+                  <carousel-prev-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
+                    <button
+                      type="button"
+                      class="prev-next-button prev-next-button--prev circle-button hover:animate-icon-inline"
+                      disabled
+                    >
+                      <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
+                      {%- render 'icon' with 'arrow-left', direction_aware: true -%}
+                    </button>
+                  </carousel-prev-button>
+
+                  <scroll-carousel
+                    id="{{ carousel_id }}"
+                    group-cells
+                    allow-drag
+                    class="brands-grid brands-grid--carousel scroll-area bleed md:unbleed"
+                  >
+                    {{- brand_list -}}
+                  </scroll-carousel>
+
+                  <carousel-next-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
+                    <button
+                      type="button"
+                      class="prev-next-button prev-next-button--next circle-button hover:animate-icon-inline"
+                    >
+                      <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
+                      {%- render 'icon' with 'arrow-right', direction_aware: true -%}
+                    </button>
+                  </carousel-next-button>
+                </div>
+              {%- endif -%}
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -223,6 +263,13 @@
     },
     {
       "type": "checkbox",
+      "id": "stack_brands",
+      "label": "Stack brands in grid",
+      "default": false,
+      "info": "When disabled, brands will be displayed in a carousel with navigation arrows"
+    },
+    {
+      "type": "checkbox",
       "id": "show_brand_names",
       "label": "Show brand names below logos",
       "default": true
@@ -235,7 +282,8 @@
       "step": 1,
       "label": "Brands per row (desktop)",
       "default": 5,
-      "info": "Number of brand cards displayed per row on desktop screens"
+      "info": "Number of brand cards displayed per row on desktop screens",
+      "visible_if": "{{ section.settings.stack_brands }}"
     },
     {
       "type": "range",
@@ -244,7 +292,8 @@
       "max": 3,
       "step": 1,
       "label": "Brands per row (mobile)",
-      "default": 2
+      "default": 2,
+      "visible_if": "{{ section.settings.stack_brands }}"
     },
     {
       "type": "header",
