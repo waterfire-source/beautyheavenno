@@ -1,30 +1,10 @@
-{%- if section.settings.image != blank or section.blocks.size > 0 -%}
-  {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  CSS
-  ------------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
+{{ 'image-with-text.css' | asset_url | stylesheet_tag }}
 
-  <style>
-    #shopify-section-{{ section.id }} {
-      --image-with-text-content-max-width: {% if section.settings.content_width == 'sm' %}430px{% elsif section.settings.content_width == 'md' %}780px{% else %}100%{% endif %};
-    }
-  </style>
-
-  {%- comment -%}
-  ------------------------------------------------------------------------------------------------------------------------
-  LIQUID
-  ------------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
-
-  {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
-
-  <div class="{% unless section.settings.remove_vertical_spacing %}section-spacing{% endunless %} color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
-    <image-with-text class="image-with-text {% if section.settings.image_position == 'end' %}image-with-text--reverse{% endif %}">
+<div class="image-with-text-section">
+  <div class="container">
+    <div class="image-with-text-section__image-wrapper">
       {%- if section.settings.image != blank -%}
         <picture>
-          {%- assign sizes = '(max-width: 699px) 100vw, 50vw' -%}
-
           {%- if section.settings.mobile_image != blank -%}
             <source
                 media="(max-width: 699px)"
@@ -34,82 +14,47 @@
             >
           {%- endif -%}
 
-          {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: sizes: sizes, widths: '200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200', reveal-on-scroll: section.settings.reveal_on_scroll -}}
+          {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: widths: '400,500,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000', class: 'image-with-text-section__image', sizes: '(max-width: 699px) 100vw, 66.666vw' -}}
         </picture>
       {%- else -%}
-        {{- 'image' | placeholder_svg_tag: 'placeholder' -}}
+        {%- capture placeholder -%}{% cycle 'lifestyle-1', 'lifestyle-2' %}{%- endcapture -%}
+        {{- placeholder | placeholder_svg_tag: 'image-with-text-section__image placeholder' -}}
+      {%- endif -%}
+    </div>
+
+    <div class="image-with-text-section__content">
+      {%- if section.settings.title != blank -%}
+        <h2 class="image-with-text-section__title">{{ section.settings.title }}</h2>
       {%- endif -%}
 
-      <div class="prose text-center sm:text-start">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'subheading' -%}
-              {%- if block.settings.text != blank -%}
-                <p class="h6" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
-              {%- endif -%}
+      <div class="image-with-text-section__paragraphs">
+        {%- assign paragraph_1_stripped = section.settings.paragraph_1 | strip_html | strip -%}
+        {%- if paragraph_1_stripped != blank -%}
+          <div class="image-with-text-section__paragraph">{{ section.settings.paragraph_1 }}</div>
+        {%- endif -%}
 
-            {%- when 'heading' -%}
-              {%- if block.settings.text != blank -%}
-                <p class="{{ block.settings.heading_tag }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
-              {%- endif -%}
-
-            {%- when 'richtext' -%}
-              {%- if block.settings.content != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.content -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'page' -%}
-              {%- if block.settings.page.content != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.page.content -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'liquid' -%}
-              {%- if block.settings.liquid != blank -%}
-                <div {{ block.shopify_attributes }}>
-                  {{- block.settings.liquid -}}
-                </div>
-              {%- endif -%}
-
-            {%- when 'link' -%}
-              <a {% if block.settings.url %}href="{{ block.settings.url }}"{% endif %} class="link" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</a>
-
-            {%- when 'button' -%}
-              {%- if block.settings.text != blank -%}
-                {% render 'button', content: block.settings.text, href: block.settings.url, style: block.settings.style, background: block.settings.background, text_color: block.settings.text_color, block: block %}
-              {%- endif -%}
-          {%- endcase -%}
-        {%- endfor -%}
+        {%- assign paragraph_2_stripped = section.settings.paragraph_2 | strip_html | strip -%}
+        {%- if paragraph_2_stripped != blank -%}
+          <div class="image-with-text-section__paragraph">{{ section.settings.paragraph_2 }}</div>
+        {%- endif -%}
       </div>
-    </image-with-text>
+
+      {%- if section.settings.link_text != blank -%}
+        <a href="{{ section.settings.link_url }}" class="image-with-text-section__link">{{ section.settings.link_text }}</a>
+      {%- endif -%}
+    </div>
   </div>
-{%- endif -%}
+</div>
 
 {% schema %}
 {
   "name": "t:sections.image_with_text.name",
   "class": "shopify-section--image-with-text",
   "tag": "section",
-  "max_blocks": 6,
   "disabled_on": {
     "groups": ["header", "custom.overlay"]
   },
   "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:global.colors.scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "checkbox",
-      "id": "separate_section_with_border",
-      "label": "t:global.section.separate_section_with_border",
-      "default": true
-    },
     {
       "type": "image_picker",
       "id": "image",
@@ -123,227 +68,43 @@
       "info": "t:sections.image_with_text.mobile_image_size_recommendation"
     },
     {
-      "type": "checkbox",
-      "id": "reveal_on_scroll",
-      "label": "t:global.animation.reveal_image_on_scroll",
-      "default": true
+      "type": "header",
+      "content": "Content"
     },
     {
-      "type": "select",
-      "id": "image_position",
-      "label": "t:sections.image_with_text.image_position",
-      "options": [
-        {
-          "value": "start",
-          "label": "t:global.position.left"
-        },
-        {
-          "value": "end",
-          "label": "t:global.position.right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "content_width",
-      "label": "t:global.sizes.content_width",
-      "options": [
-        {
-          "value": "sm",
-          "label": "t:global.sizes.small"
-        },
-        {
-          "value": "md",
-          "label": "t:global.sizes.medium"
-        },
-        {
-          "value": "lg",
-          "label": "t:global.sizes.large"
-        }
-      ],
-      "default": "sm"
-    },
-    {
-      "type": "checkbox",
-      "id": "remove_vertical_spacing",
-      "label": "t:global.spacing.remove_vertical_spacing",
-      "default": true
-    }
-  ],
-  "blocks": [
-    {
-      "type": "subheading",
-      "name": "t:sections.image_with_text.blocks.subheading.name",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Subheading"
-        }
-      ]
-    },
-    {
-      "type": "heading",
-      "name": "t:sections.image_with_text.blocks.heading.name",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Heading"
-        },
-        {
-          "type": "select",
-          "id": "heading_tag",
-          "label": "t:global.text.style",
-          "options": [
-            {
-              "value": "h1",
-              "label": "H1"
-            },
-            {
-              "value": "h2",
-              "label": "H2"
-            },
-            {
-              "value": "h3",
-              "label": "H3"
-            },
-            {
-              "value": "h4",
-              "label": "H4"
-            },
-            {
-              "value": "h5",
-              "label": "H5"
-            },
-            {
-              "value": "h6",
-              "label": "H6"
-            }
-          ],
-          "default": "h1"
-        }
-      ]
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "A Better Way to Experience Beauty"
     },
     {
       "type": "richtext",
-      "name": "t:sections.image_with_text.blocks.paragraph.name",
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "content",
-          "label": "t:global.text.content",
-          "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
-        }
-      ]
+      "id": "paragraph_1",
+      "label": "First paragraph",
+      "default": "<p>At BeautyHeaven, we believe beauty should be a luxurious, personal experience. We carefully curate only the finest products from trusted brands worldwide.</p>"
     },
     {
-      "type": "page",
-      "name": "t:sections.image_with_text.blocks.page.name",
-      "settings": [
-        {
-          "type": "page",
-          "id": "page",
-          "label": "Page"
-        }
-      ]
+      "type": "richtext",
+      "id": "paragraph_2",
+      "label": "Second paragraph",
+      "default": "<p>Every product is authentic, ethically sourced, and chosen with your skin's health in mind. Our customer-first approach means you always get expert guidance and premium service.</p>"
     },
     {
-      "type": "liquid",
-      "name": "t:sections.image_with_text.blocks.liquid.name",
-      "settings": [
-        {
-          "type": "liquid",
-          "id": "liquid",
-          "label": "t:global.code.liquid",
-          "default": "<p>Write custom Liquid code to include widget or dynamic code.</p>"
-        }
-      ]
+      "type": "text",
+      "id": "link_text",
+      "label": "Link text",
+      "default": "OUR STORY"
     },
     {
-      "type": "link",
-      "name": "t:sections.image_with_text.blocks.link.name",
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Text"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "t:global.text.link"
-        }
-      ]
-    },
-    {
-      "type": "button",
-      "name": "t:sections.image_with_text.blocks.button.name",
-      "settings": [
-        {
-          "type": "select",
-          "id": "style",
-          "label": "t:global.text.style",
-          "options": [
-            {
-              "value": "outline",
-              "label": "t:global.text.button_style_options.outline"
-            },
-            {
-              "value": "solid",
-              "label": "t:global.text.button_style_options.solid"
-            }
-          ],
-          "default": "solid"
-        },
-        {
-          "type": "text",
-          "id": "text",
-          "label": "t:global.text.text",
-          "default": "Button text"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "t:global.text.link"
-        },
-        {
-          "type": "color",
-          "id": "background",
-          "label": "t:global.colors.background"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "label": "t:global.text.text"
-        }
-      ]
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
     }
   ],
   "presets": [
     {
       "name": "t:sections.image_with_text.presets.image_with_text.name",
-      "category": "t:global.categories.media",
-      "blocks": [
-        {
-          "type": "subheading",
-          "settings": {
-            "text": "Subheading"
-          }
-        },
-        {
-          "type": "heading",
-          "settings": {
-            "text": "Image with text"
-          }
-        },
-        {
-          "type": "richtext"
-        }
-      ]
+      "category": "t:global.categories.media"
     }
   ]
 }

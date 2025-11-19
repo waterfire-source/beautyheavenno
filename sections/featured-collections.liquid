@@ -1,251 +1,289 @@
+{%- comment -%}
+------------------------------------------------------------------------------------------------------------------------
+FEATURED COLLECTIONS SECTION
+------------------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+
+{{ 'featured-collections.css' | asset_url | stylesheet_tag }}
+
 {%- if section.blocks.size > 0 -%}
-  <style>
-    #shopify-section-{{ section.id }} {
-      --product-list-items-per-row: {{ section.settings.products_per_row_mobile | times: 1 }};
-      --product-list-horizontal-spacing-factor: {{ section.settings.horizontal_spacing_factor }};
-      --product-list-vertical-spacing-factor: {{ section.settings.vertical_spacing_factor }};
-    }
-
-    @media screen and (min-width: 700px) {
-      #shopify-section-{{ section.id }} {
-        --product-list-items-per-row: {{ section.settings.products_per_row_desktop }};
-      }
-    }
-  </style>
-
-  {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
-
-  <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
+  <div class="featured-collections-section">
     <div class="container">
-      {%- assign wrapper_carousel_id = 'featured-collections-carousel-' | append: section.id -%}
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="featured-collections-header">
+        {%- if section.settings.category_button_text != blank -%}
+          <div class="featured-collections-category-button">
+            {{ section.settings.category_button_text }}
+          </div>
+        {%- endif -%}
 
-      <div class="section-stack">
-        <div class="v-stack justify-self-center gap-4 text-center sm:gap-5">
-          {%- if section.settings.subheading != blank -%}
-            <p class="h6 text-center">{{- section.settings.subheading -}}</p>
-          {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="featured-collections-heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
 
-          {%- if section.blocks.size > 1 -%}
-            <carousel-navigation align-selected class="featured-collections-navigation scroll-area bleed" aria-controls="{{ wrapper_carousel_id }}">
-              {%- for block in section.blocks -%}
-                <button class="h2" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
-                  {{- block.settings.title | default: block.settings.collection.title | default: 'Collection' -}}
-                </button>
-              {%- endfor -%}
-            </carousel-navigation>
-          {%- else -%}
-            <h2 class="h2">{{ section.blocks.first.settings.title | default: section.blocks.first.settings.collection.title | default: 'Collection' }}</h2>
-          {%- endif -%}
-        </div>
-
-        <featured-collections-carousel id="{{ wrapper_carousel_id }}" class="featured-collections-carousel">
+      {%- comment -%} Collection Cards Grid {%- endcomment -%}
+      <div class="featured-collections-wrapper">
+        <div class="featured-collections-grid">
           {%- for block in section.blocks -%}
-            <div class="featured-collections-carousel__item {% if forloop.first %}is-selected{% endif %}" {{ block.shopify_attributes }}>
-              {%- capture product_list -%}
-                {%- assign should_reveal = false -%}
+            <div class="featured-collection-card" {{ block.shopify_attributes }}>
+              <div class="featured-collection-card__image-wrapper">
+                {%- if block.settings.desktop_image != blank -%}
+                  <picture>
+                    {%- if block.settings.mobile_image != blank -%}
+                      <source
+                        media="(max-width: 699px)"
+                        srcset="{{ block.settings.mobile_image | image_url: width: 800 }} 800w, {{ block.settings.mobile_image | image_url: width: 1000 }} 1000w"
+                        width="{{ block.settings.mobile_image.width }}"
+                        height="{{ block.settings.mobile_image.height }}"
+                      >
+                    {%- endif -%}
 
-                {%- if settings.stagger_products_apparition and forloop.first -%}
-                  {%- assign should_reveal = true -%}
+                    {{- block.settings.desktop_image | image_url: width: block.settings.desktop_image.width | image_tag: loading: 'lazy', sizes: '100vw', widths: '800,1200,1600,2000', class: 'featured-collection-card__image' -}}
+                  </picture>
+                {%- elsif block.settings.collection.featured_image != blank -%}
+                  <picture>
+                    {%- if block.settings.mobile_image != blank -%}
+                      <source
+                        media="(max-width: 699px)"
+                        srcset="{{ block.settings.mobile_image | image_url: width: 800 }} 800w, {{ block.settings.mobile_image | image_url: width: 1000 }} 1000w"
+                        width="{{ block.settings.mobile_image.width }}"
+                        height="{{ block.settings.mobile_image.height }}"
+                      >
+                    {%- endif -%}
+
+                    {{- block.settings.collection.featured_image | image_url: width: block.settings.collection.featured_image.width | image_tag: loading: 'lazy', sizes: '100vw', widths: '800,1200,1600,2000', class: 'featured-collection-card__image' -}}
+                  </picture>
+                {%- else -%}
+                  {%- capture placeholder_image -%}{%- cycle 'collection-1', 'collection-2', 'collection-3', 'collection-4' -%}{%- endcapture -%}
+                  {{- placeholder_image | placeholder_svg_tag: 'featured-collection-card__image placeholder' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}
                 {%- endif -%}
 
-                {%- for product in block.settings.collection.products limit: block.settings.products_count -%}
-                  {%- render 'product-card', product: product, reveal: should_reveal, position: forloop.index, hide_product_information: section.settings.hide_product_information, block: block -%}
-                {%- else -%}
-                  {%- for i in (1..block.settings.products_count) -%}
-                    {%- render 'product-card-placeholder', reveal: should_reveal, loop_index: forloop.index0, hide_product_information: section.settings.hide_product_information -%}
-                  {%- endfor -%}
-                {%- endfor -%}
-              {%- endcapture -%}
+                {%- comment -%} Content Overlay {%- endcomment -%}
+                <div class="featured-collection-card__content">
+                  {%- if block.settings.tagline != blank -%}
+                    <p class="featured-collection-card__tagline">{{ block.settings.tagline }}</p>
+                  {%- endif -%}
 
-              {%- if section.settings.stack_products -%}
-                <product-list class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} justify-center">
-                  {{- product_list -}}
-                </product-list>
-              {%- else -%}
-                {%- assign product_carousel_id = 'featured-collections-product-list-carousel-' | append: block.id -%}
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="featured-collection-card__title">{{ block.settings.title }}</h3>
+                  {%- elsif block.settings.collection.title != blank -%}
+                    <h3 class="featured-collection-card__title">{{ block.settings.collection.title }}</h3>
+                  {%- endif -%}
 
-                <product-list class="floating-controls-container floating-controls-container--inside floating-controls-container--on-hover">
-                  <carousel-prev-button class="floating-controls-container__control" aria-controls="{{ product_carousel_id }}">
-                    <button type="button" class="prev-next-button prev-next-button--prev circle-button hover:animate-icon-inline" disabled>
-                      <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
-                      {%- render 'icon' with 'arrow-left', direction_aware: true -%}
-                    </button>
-                  </carousel-prev-button>
-
-                  <scroll-carousel id="{{ product_carousel_id }}" group-cells allow-drag class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} product-list--carousel scroll-area bleed md:unbleed">
-                    {{- product_list -}}
-                  </scroll-carousel>
-                  
-                  <carousel-next-button class="floating-controls-container__control" aria-controls="{{ product_carousel_id }}">
-                    <button type="button" class="prev-next-button prev-next-button--next circle-button hover:animate-icon-inline">
-                      <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
-                      {%- render 'icon' with 'arrow-right', direction_aware: true -%}
-                    </button>
-                  </carousel-next-button>
-                </product-list>
-              {%- endif -%}
-
-              {%- if block.settings.link_text != blank -%}
-                {%- assign button_link = block.settings.link_url | default: block.settings.collection.url | default: '#' -%}
-
-                <div class="justify-self-center">
-                  {%- render 'button', href: button_link, content: block.settings.link_text -%}
+                  {%- if block.settings.button_text != blank -%}
+                    <div class="featured-collection-card__button">
+                      <span>{{ block.settings.button_text }}</span>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.33334 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 3.33325L12.6667 7.99992L8 12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
                 </div>
-              {%- endif -%}
+              </div>
             </div>
           {%- endfor -%}
-        </featured-collections-carousel>
+        </div>
+
+        {%- comment -%} Mobile Pagination Dots {%- endcomment -%}
+        {%- if section.blocks.size > 1 -%}
+          <div class="featured-collections-pagination">
+            {%- for block in section.blocks -%}
+              <button class="featured-collections-dot {% if forloop.first %}active{% endif %}" aria-label="Go to slide {{ forloop.index }}" data-slide="{{ forloop.index0 }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
 {%- endif -%}
 
+<script>
+  (function() {
+    const sectionId = 'shopify-section-{{ section.id }}';
+    const grid = document.querySelector(`#${sectionId} .featured-collections-grid`);
+    const dots = document.querySelectorAll(`#${sectionId} .featured-collections-dot`);
+
+    if (!grid || dots.length === 0) return;
+
+    // Only run on mobile
+    if (window.innerWidth > 699) return;
+
+    function updateActiveDot() {
+      if (!grid) return;
+
+      const cards = grid.querySelectorAll('.featured-collection-card');
+      if (cards.length === 0) return;
+
+      const scrollLeft = grid.scrollLeft;
+      const cardWidth = cards[0].offsetWidth;
+      const gap = 16; // 1rem gap
+      const scrollPosition = scrollLeft + (cardWidth / 2);
+
+      // Find which card is currently in view
+      let activeIndex = 0;
+      cards.forEach((card, index) => {
+        const cardLeft = index * (cardWidth + gap);
+        const cardRight = cardLeft + cardWidth;
+
+        if (scrollPosition >= cardLeft && scrollPosition < cardRight) {
+          activeIndex = index;
+        }
+      });
+
+      // Update dots
+      dots.forEach((dot, index) => {
+        if (index === activeIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+
+    // Handle scroll events
+    let scrollTimeout;
+    grid.addEventListener('scroll', function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(updateActiveDot, 100);
+    });
+
+    // Handle dot clicks
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', function() {
+        const cards = grid.querySelectorAll('.featured-collection-card');
+        if (cards[index]) {
+          const cardWidth = cards[0].offsetWidth;
+          const gap = 16;
+          const scrollTo = index * (cardWidth + gap);
+
+          grid.scrollTo({
+            left: scrollTo,
+            behavior: 'smooth'
+          });
+
+          // Update active dot immediately
+          dots.forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+        }
+      });
+    });
+
+    // Initial update
+    updateActiveDot();
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        if (window.innerWidth <= 699) {
+          updateActiveDot();
+        }
+      }, 250);
+    });
+  })();
+</script>
+
 {% schema %}
 {
-  "name": "t:sections.featured_collections.name",
+  "name": "Featured Collections",
   "class": "shopify-section--featured-collections",
   "tag": "section",
-  "disabled_on": {
-    "templates": ["password"],
-    "groups": ["header", "custom.overlay"]
-  },
-  "max_blocks": 5,
+  "max_blocks": 4,
   "settings": [
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:global.colors.scheme",
-      "default": "scheme-1"
+      "type": "text",
+      "id": "category_button_text",
+      "label": "Category Button Text",
+      "default": "SHOP BY CATEGORY"
     },
     {
-      "type": "checkbox",
-      "id": "separate_section_with_border",
-      "label": "t:global.section.separate_section_with_border",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "hide_product_information",
-      "label": "t:global.product_list.hide_product_information",
-      "info": "t:global.product_list.hide_product_information_info"
-    },
-    {
-      "type": "header",
-      "content": "t:global.product_list.product_list_category"
-    },
-    {
-      "type": "checkbox",
-      "id": "stack_products",
-      "label": "t:global.product_list.stack_products",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "products_per_row_mobile",
-      "label": "t:global.product_list.products_per_row_mobile",
-      "options": [
-        {
-          "value": "1",
-          "label": "1"
-        },
-        {
-          "value": "2",
-          "label": "2"
-        }
-      ],
-      "default": "2",
-      "visible_if": "{{ section.settings.stack_products }}"
-    },
-    {
-      "type": "range",
-      "id": "products_per_row_desktop",
-      "min": 2,
-      "max": 6,
-      "label": "t:global.product_list.products_per_row_desktop",
-      "info": "t:global.product_list.products_per_row_desktop_info",
-      "default": 4,
-      "visible_if": "{{ section.settings.stack_products }}"
-    },
-    {
-      "type": "header",
-      "content": "t:global.product_list.spacing_category",
-      "info": "t:global.product_list.spacing_category_info"
-    },
-    {
-      "type": "range",
-      "min": 0.2,
-      "max": 2,
-      "step": 0.1,
-      "id": "horizontal_spacing_factor",
-      "label": "Horizontal spacing factor",
-      "default": 1
-    },
-    {
-      "type": "range",
-      "min": 0.2,
-      "max": 2,
-      "step": 0.1,
-      "id": "vertical_spacing_factor",
-      "label": "Vertical spacing factor",
-      "default": 1
-    },
-    {
-      "type": "header",
-      "content": "t:global.section.header_category"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "subheading",
-      "label": "t:global.text.subheading",
-      "default": "Featured collection"
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Collections"
     }
   ],
   "blocks": [
     {
       "type": "collection",
-      "name": "t:sections.featured_collections.blocks.collection.name",
+      "name": "Collection",
       "settings": [
         {
           "type": "collection",
           "id": "collection",
-          "label": "t:sections.featured_collections.blocks.collection.collection"
+          "label": "Collection"
         },
         {
-          "type": "range",
-          "id": "products_count",
-          "min": 2,
-          "max": 50,
-          "label": "t:global.product_list.products_to_show",
-          "default": 8
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop Image",
+          "info": "Recommended size: 1200x800px"
         },
         {
-          "type": "inline_richtext",
-          "id": "title",
-          "label": "t:global.text.heading",
-          "info": "t:sections.featured_collections.blocks.collection.title_info"
-        },
-        {
-          "type": "url",
-          "id": "link_url",
-          "label": "t:global.text.link_url",
-          "info": "t:sections.featured_collections.blocks.collection.default_link_url"
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image",
+          "info": "Recommended size: 800x1000px"
         },
         {
           "type": "text",
-          "id": "link_text",
-          "label": "t:global.text.link_text",
-          "default": "View all"
-        }
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Glow from within"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Collection Title",
+          "info": "Leave blank to use collection name"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Collection"
+        },
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.featured_collections.presets.featured_collections.name",
-      "category": "t:global.categories.collections",
+      "name": "Featured Collections",
       "blocks": [
         {
-          "type": "collection"
+          "type": "collection",
+          "settings": {
+            "tagline": "Glow from within",
+            "title": "Skincare",
+            "button_text": "Shop Collection"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "tagline": "Healthy, beautiful hair",
+            "title": "Haircare",
+            "button_text": "Shop Collection"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "tagline": "Nourish your skin",
+            "title": "Bodycare",
+            "button_text": "Shop Collection"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "tagline": "Perfect presents",
+            "title": "Gift Sets",
+            "button_text": "Shop Collection"
+          }
         }
       ]
     }

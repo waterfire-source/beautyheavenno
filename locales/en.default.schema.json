@@ -523,7 +523,19 @@
       "blocks": {
         "message": {
           "name": "Message",
-          "text": "Text"
+          "always_free_shipping": "Free Shipping on Orders Over 500 kr",
+          "bonus_points": "Exclusive Member Rewards",
+          "norwegian_online_store": "Authentic Norwegian Store",
+          "login_link": "Login link",
+          "login_text": "Log in",
+          "authorized_dealer_link": "Authorized link",
+          "authorized_dealer_text": "Authorized dealer",
+          "customer_service_link": "Customer service link",
+          "customer_service_text": "Customer service",
+          "beauty_heaven_clinic_link": "Beauty heaven clinic link",
+          "beauty_heaven_clinic_text": "Beauty heaven clinic",
+          "visit_us_link": "Visit us link",
+          "visit_us_text": "Visit us"
         }
       }
     },
@@ -705,7 +717,7 @@
     },
     "custom_section": {
       "name": "Custom section"
-    },    
+    },
     "faq": {
       "name": "FAQ",
       "show_categories": "Show sidebar categories",

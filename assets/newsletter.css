@@ -1,0 +1,145 @@
+.newsletter-section {
+  background-color: #ffffff;
+  padding: 96px 0;
+}
+
+.newsletter-section .container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.newsletter-section__heading {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 56.6px;
+  font-weight: 300;
+  line-height: 60px;
+  letter-spacing: -1.5px;
+  color: #0f0f0f;
+  margin: 0 0 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.newsletter-section__description {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 28px;
+  letter-spacing: 0%;
+  color: #0f0f0fb2;
+  margin: 0 0 32px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.newsletter-section__form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.newsletter-section__form-wrapper {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.newsletter-section__input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid #0f0f0f33;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: 0.35px;
+  color: #000000;
+  background-color: #ffffff;
+  outline: none;
+}
+
+.newsletter-section__input::placeholder {
+  color: #9ca3af;
+}
+
+.newsletter-section__input:focus {
+  border-color: #18a9a2;
+}
+
+.newsletter-section__button {
+  padding: 14px 32px;
+  border: none;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.35px;
+  color: #ffffff;
+  background-color: #18a9a2;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.newsletter-section__button:hover {
+  background-color: #159a94;
+}
+
+.newsletter-section__button:active {
+  background-color: #128b86;
+}
+
+.newsletter-section__success {
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 8px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+.newsletter-section__error {
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 8px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 699px) {
+  .newsletter-section {
+    padding: 64px 0;
+  }
+
+  .newsletter-section .container {
+    padding: 0 16px;
+  }
+
+  .newsletter-section__heading {
+    font-size: 36px;
+  }
+
+  .newsletter-section__form-wrapper {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .newsletter-section__button {
+    width: 100%;
+  }
+}

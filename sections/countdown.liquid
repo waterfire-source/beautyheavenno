@@ -1,81 +1,8 @@
-{%- comment -%}
-This countdown section is the main countdown section that can be added everywhere. For the condensed countdown section
-usable in the header group, please look at the "countdown-condensed.liquid" section instead.
-{%- endcomment -%}
+{{ 'countdown.css' | asset_url | stylesheet_tag }}
 
-<style>
-  #shopify-section-{{ section.id }} {
-    {%- if section.settings.image -%}
-      --content-over-media-content-max-width: 71.875rem;
-      --content-over-media-row-gap: var(--section-vertical-spacing);
-      --content-over-media-overlay: {{ section.settings.overlay_color.rgb }} / {{ section.settings.overlay_opacity | divided_by: 100.0 }};
-    {%- endif -%}
-
-    --countdown-timer-flip-background: {{ section.settings.flip_background.rgb }} / {{ section.settings.flip_background_opacity | divided_by: 100.0 }};
-    --countdown-timer-flip-text-color: {{ section.settings.flip_text_color.rgb }};
-  }
-</style>
-
-{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
-
-<div class="color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.image != blank %}color-scheme--with-image-overlay{% else %}section-spacing {% if section.settings.separate_section_with_border %}bordered-section{% endif %}{% endif %}">
-  {%- capture section_content -%}
-    <div class="countdown {% if section.settings.timer_position == 'start' %}countdown--reverse{% endif %}">
-      <div class="countdown__content prose">
-        {%- if section.settings.subheading != blank -%}
-          <p class="h6">{{ section.settings.subheading }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.title != blank -%}
-          <h2 class="h1">{{ section.settings.title }}</h2>
-        {%- endif -%}
-
-        {{- section.settings.content -}}
-
-        {%- if section.settings.button_text != blank -%}
-          {%- render 'button', href: section.settings.button_link, content: section.settings.button_text -%}
-        {%- endif -%}
-      </div>
-
-      {%- assign accessibility_expiration_date = section.settings.expiration_date | date: format: 'date_at_time' -%}
-      {%- assign accessibility_text = 'sections.countdown_timer.expires_accessibility_text' | t: expiration_date: accessibility_expiration_date -%}
-
-      {%- if section.settings.flip_background != blank and section.settings.flip_background != 'rgba(0,0,0,0)' -%}
-        {%- assign has_flip_background = true -%}
-      {%- endif -%}
-
-      <countdown-timer class="countdown__timer" role="timer" aria-label="{{ accessibility_text | escape }}" expires-at="{{ section.settings.expiration_date | date: '%FT%T%:z' | escape }}" expiration-behavior="{{ section.settings.expiration_behavior }}">
-        <div class="countdown__timer-item" aria-hidden="true">
-          <countdown-timer-flip type="days" {% if section.settings.animate_number %}animate{% endif %} class="countdown__timer-flip {% if has_flip_background %}countdown__timer-flip--background{% endif %} h1">00</countdown-timer-flip>
-          <span class="countdown__timer-unit h6">{{ 'sections.countdown_timer.days_long' | t }}</span>
-        </div>
-
-        <span class="countdown__timer-item-separator" aria-hidden="true">:</span>
-
-        <div class="countdown__timer-item" aria-hidden="true">
-          <countdown-timer-flip type="hours" {% if section.settings.animate_number %}animate{% endif %} class="countdown__timer-flip {% if has_flip_background %}countdown__timer-flip--background{% endif %} h1">00</countdown-timer-flip>
-          <span class="countdown__timer-unit h6">{{ 'sections.countdown_timer.hours_long' | t }}</span>
-        </div>
-
-        <span class="countdown__timer-item-separator" aria-hidden="true">:</span>
-
-        <div class="countdown__timer-item" aria-hidden="true">
-          <countdown-timer-flip type="minutes" {% if section.settings.animate_number %}animate{% endif %} class="countdown__timer-flip {% if has_flip_background %}countdown__timer-flip--background{% endif %} h1">00</countdown-timer-flip>
-          <span class="countdown__timer-unit h6">{{ 'sections.countdown_timer.minutes_long' | t }}</span>
-        </div>
-
-        <span class="countdown__timer-item-separator" aria-hidden="true">:</span>
-
-        <div class="countdown__timer-item" aria-hidden="true">
-          <countdown-timer-flip type="seconds" {% if section.settings.animate_number %}animate{% endif %} class="countdown__timer-flip {% if has_flip_background %}countdown__timer-flip--background{% endif %} h1">00</countdown-timer-flip>
-          <span class="countdown__timer-unit h6">{{ 'sections.countdown_timer.seconds_long' | t }}</span>
-        </div>
-      </countdown-timer>
-    </div>
-  {%- endcapture -%}
-
-  {%- if section.settings.image -%}
-    <div class="content-over-media content-over-media--{{ section.settings.image_size }}">
+<div class="countdown-sale">
+  <div class="countdown-sale__image-wrapper">
+    {%- if section.settings.image != blank -%}
       <picture>
         {%- if section.settings.mobile_image != blank -%}
           <source
@@ -86,16 +13,66 @@ usable in the header group, please look at the "countdown-condensed.liquid" sect
           >
         {%- endif -%}
 
-        {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: widths: '400,500,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000' -}}
+        {{- section.settings.image | image_url: width: section.settings.image.width | image_tag: widths: '400,500,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000', class: 'countdown-sale__image', sizes: '100vw' -}}
       </picture>
+    {%- else -%}
+      {%- capture placeholder -%}{% cycle 'lifestyle-1', 'lifestyle-2' %}{%- endcapture -%}
+      {{- placeholder | placeholder_svg_tag: 'countdown-sale__image placeholder' | replace: '<svg', '<svg class="countdown-sale__image" preserveAspectRatio="xMinYMin slice"' -}}
+    {%- endif -%}
 
-      {{- section_content -}}
+    <div class="countdown-sale__overlay" style="background: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+
+    <div class="countdown-sale__content">
+      {%- if section.settings.badge_text != blank -%}
+        <div class="countdown-sale__badge">{{ section.settings.badge_text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="countdown-sale__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="countdown-sale__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      {%- assign accessibility_expiration_date = section.settings.expiration_date | date: format: 'date_at_time' -%}
+      {%- assign accessibility_text = 'sections.countdown_timer.expires_accessibility_text' | t: expiration_date: accessibility_expiration_date -%}
+
+      <countdown-timer class="countdown-sale__timer" role="timer" aria-label="{{ accessibility_text | escape }}" expires-at="{{ section.settings.expiration_date | date: '%FT%T%:z' | escape }}" expiration-behavior="{{ section.settings.expiration_behavior }}">
+        <div class="countdown-sale__timer-item" aria-hidden="true">
+          <div class="countdown-sale__timer-box">
+            <countdown-timer-flip type="days" {% if section.settings.animate_number %}animate{% endif %} class="countdown-sale__timer-number">00</countdown-timer-flip>
+          </div>
+          <span class="countdown-sale__timer-label">{{ 'sections.countdown_timer.days_long' | t }}</span>
+        </div>
+
+        <div class="countdown-sale__timer-item" aria-hidden="true">
+          <div class="countdown-sale__timer-box">
+            <countdown-timer-flip type="hours" {% if section.settings.animate_number %}animate{% endif %} class="countdown-sale__timer-number">00</countdown-timer-flip>
+          </div>
+          <span class="countdown-sale__timer-label">{{ 'sections.countdown_timer.hours_long' | t }}</span>
+        </div>
+
+        <div class="countdown-sale__timer-item" aria-hidden="true">
+          <div class="countdown-sale__timer-box">
+            <countdown-timer-flip type="minutes" {% if section.settings.animate_number %}animate{% endif %} class="countdown-sale__timer-number">00</countdown-timer-flip>
+          </div>
+          <span class="countdown-sale__timer-label">{{ 'sections.countdown_timer.minutes_long' | t }}</span>
+        </div>
+
+        <div class="countdown-sale__timer-item" aria-hidden="true">
+          <div class="countdown-sale__timer-box">
+            <countdown-timer-flip type="seconds" {% if section.settings.animate_number %}animate{% endif %} class="countdown-sale__timer-number">00</countdown-timer-flip>
+          </div>
+          <span class="countdown-sale__timer-label">{{ 'sections.countdown_timer.seconds_long' | t }}</span>
+        </div>
+      </countdown-timer>
+
+      {%- if section.settings.button_text != blank -%}
+        <a href="{{ section.settings.button_link }}" class="countdown-sale__button">{{ section.settings.button_text }}</a>
+      {%- endif -%}
     </div>
-  {%- else -%}
-    <div class="container container--md">
-      {{- section_content -}}
-    </div>
-  {%- endif -%}
+  </div>
 </div>
 
 {% schema %}
@@ -161,22 +138,22 @@ usable in the header group, please look at the "countdown-condensed.liquid" sect
       "default": "auto"
     },
     {
-      "type": "inline_richtext",
-      "id": "subheading",
-      "label": "t:global.text.subheading",
-      "default": "Subheading"
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Limited Time Only"
     },
     {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:global.text.heading",
-      "default": "Special offer"
+      "default": "Super Sale Up to 40% Off"
     },
     {
-      "type": "richtext",
-      "id": "content",
-      "label": "t:global.text.content",
-      "default": "<p>Share something about your limited offer or temporary promotion.</p>"
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Shop our selection of exclusive products at reduced prices"
     },
     {
       "type": "url",
@@ -186,7 +163,8 @@ usable in the header group, please look at the "countdown-condensed.liquid" sect
     {
       "type": "text",
       "id": "button_text",
-      "label": "t:global.text.button_text"
+      "label": "t:global.text.button_text",
+      "default": "Shop Now"
     },
     {
       "type": "header",
@@ -217,22 +195,6 @@ usable in the header group, please look at the "countdown-condensed.liquid" sect
       "default": "leave"
     },
     {
-      "type": "select",
-      "id": "timer_position",
-      "label": "t:sections.countdown_timer.timer_position",
-      "options": [
-        {
-          "value": "start",
-          "label": "t:global.position.left"
-        },
-        {
-          "value": "end",
-          "label": "t:global.position.right"
-        }
-      ],
-      "default": "end"
-    },
-    {
       "type": "checkbox",
       "id": "animate_number",
       "label": "t:sections.countdown_timer.animate_number",
@@ -241,25 +203,6 @@ usable in the header group, please look at the "countdown-condensed.liquid" sect
     {
       "type": "header",
       "content": "t:global.colors.category"
-    },
-    {
-      "type": "color",
-      "id": "flip_background",
-      "label": "t:sections.countdown_timer.flip_background"
-    },
-    {
-      "type": "range",
-      "id": "flip_background_opacity",
-      "min": 0,
-      "max": 100,
-      "unit": "%",
-      "label": "t:sections.countdown_timer.flip_background_opacity",
-      "default": 50
-    },
-    {
-      "type": "color",
-      "id": "flip_text_color",
-      "label": "t:sections.countdown_timer.flip_text_color"
     },
     {
       "type": "color",

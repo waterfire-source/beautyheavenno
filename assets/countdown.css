@@ -1,0 +1,248 @@
+.countdown-sale {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.countdown-sale__image-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 700px) {
+  .countdown-sale {
+    min-height: 600px;
+  }
+
+  .countdown-sale__image-wrapper {
+    min-height: 600px;
+  }
+}
+
+.countdown-sale__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.countdown-sale__image-wrapper picture,
+.countdown-sale__image-wrapper .placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.countdown-sale__image-wrapper .placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+.countdown-sale__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.countdown-sale__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.countdown-sale__badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: #18a9a2;
+  color: white;
+  border-radius: 999px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 10.2px;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 16px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.countdown-sale__title {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 51px;
+  font-weight: 300;
+  line-height: 60px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  margin: 0;
+  text-align: center;
+}
+
+.countdown-sale__subtitle {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 28px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  margin: 0;
+  text-align: center;
+  max-width: 600px;
+}
+
+.countdown-sale__timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.countdown-sale__timer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.countdown-sale__timer-box {
+  background: #ffffff33;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 30.6px;
+  font-weight: 300;
+  line-height: 40px;
+  letter-spacing: 0%;
+}
+
+.countdown-sale__timer-number {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 30.6px;
+  font-weight: 300;
+  line-height: 40px;
+  letter-spacing: 0%;
+  text-align: center;
+  color: white;
+  margin: 0;
+  display: block;
+}
+
+.countdown-sale__timer-number::part(digit) {
+  color: white;
+}
+
+.countdown-sale__timer-label {
+  font-family: Inter;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 11.9px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: #ffffff;
+  text-transform: lowercase;
+}
+
+.countdown-sale__button {
+  padding: 18.4px 40px;
+  background: white;
+  color: #0f0f0f;
+  border: none;
+  border-radius: 999px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 13.6px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.countdown-sale__button:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 699px) {
+  .countdown-sale__content {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .countdown-sale__title {
+    font-size: 25.5px;
+    line-height: 36px;
+  }
+
+  .countdown-sale__subtitle {
+    font-size: 1rem;
+  }
+
+  .countdown-sale__timer {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .countdown-sale__timer-box {
+    padding: 0.75rem 1rem;
+    min-width: 60px;
+    background-color: #ffffff1a;
+  }
+
+  .countdown-sale__timer-number {
+    font-size: 20.4px;
+  }
+
+  .countdown-sale__timer-label {
+    font-size: 10.2px;
+  }
+
+  .countdown-sale__button {
+    padding: 0.875rem 2rem;
+    font-size: 13.6px;
+  }
+}

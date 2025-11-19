@@ -1,0 +1,171 @@
+{{ 'bestsellers.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 -%}
+  <style>
+    #shopify-section-{{ section.id }} {
+      --bestsellers-products-per-row: {{ section.settings.products_per_row }};
+      --bestsellers-products-per-row-mobile: {{ section.settings.products_per_row_mobile }};
+    }
+  </style>
+
+  <div class="bestsellers section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+    <div class="bestsellers__container">
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="bestsellers__header">
+        {%- if section.settings.title != blank -%}
+          <h2 class="bestsellers__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Products Grid {%- endcomment -%}
+      <div class="bestsellers__grid">
+        {%- for block in section.blocks -%}
+          {%- assign product = block.settings.product -%}
+          {%- if product != blank -%}
+            <div class="bestsellers__product-card" {{ block.shopify_attributes }}>
+              <div class="bestsellers__product-image-wrapper">
+                {%- if product.featured_media -%}
+                  <a href="{{ product.url }}" class="bestsellers__product-image-link" data-instant>
+                    {{- product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', sizes: '(max-width: 699px) 50vw, 25vw', widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', class: 'bestsellers__product-image' -}}
+                  </a>
+                {%- else -%}
+                  {%- capture placeholder -%}{% cycle 'product-1', 'product-2', 'product-3', 'product-4', 'product-5', 'product-6' %}{%- endcapture -%}
+                  <a href="{{ product.url }}" class="bestsellers__product-image-link" data-instant>
+                    {{- placeholder | placeholder_svg_tag: 'bestsellers__product-image placeholder' -}}
+                  </a>
+                {%- endif -%}
+
+                {%- if product.available -%}
+                  {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
+                    <product-form>
+                      {%- form 'product', product -%}
+                        <input type="hidden" name="on_success" value="force_open_drawer">
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                        <button type="submit" class="bestsellers__quick-add-button">
+                          <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>
+                          {%- render 'icon' with 'plus', width: 16 -%}
+                        </button>
+                      {%- endform -%}
+                    </product-form>
+                  {%- else -%}
+                    {%- capture quick_buy_id -%}bestsellers-quick-buy-{{ section.id }}-{{ block.id }}-{{ product.id }}{%- endcapture -%}
+                    <quick-buy-modal id="{{ quick_buy_id }}" handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}" class="quick-buy-modal modal modal--lg color-scheme color-scheme--dialog">
+                      LOADING
+                    </quick-buy-modal>
+                    <button type="button" aria-controls="{{ quick_buy_id }}" class="bestsellers__quick-add-button">
+                      <span class="sr-only">{{ 'product.general.choose_options' | t }}</span>
+                      {%- render 'icon' with 'plus', width: 16 -%}
+                    </button>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+
+              <div class="bestsellers__product-info">
+                <h3 class="bestsellers__product-name">
+                  <a href="{{ product.url }}" data-instant>{{ product.title }}</a>
+                </h3>
+                <div class="bestsellers__product-price">
+                  {%- if product.selected_or_first_available_variant -%}
+                    {{ product.selected_or_first_available_variant.price | money }}
+                  {%- else -%}
+                    {{ product.price | money }}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bestsellers",
+  "class": "shopify-section--bestsellers",
+  "tag": "section",
+  "max_blocks": 20,
+  "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Bestsellers"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_mobile",
+      "label": "Products per row (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bestsellers",
+      "category": "Products",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
