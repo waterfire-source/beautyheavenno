@@ -1,0 +1,68 @@
+.product-gallery__radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__media {
+    display: none;
+}
+
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(1):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(1),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(2):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(2),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(3):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(3),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(4):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(4),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(5):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(5),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(6):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(6),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(7):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(7),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(8):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(8),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(9):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(9),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(10):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(10),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(11):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(11),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(12):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(12),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(13):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(13),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(14):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(14),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(15):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(15),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(16):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(16),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(17):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(17),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(18):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(18),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(19):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(19),
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__radio:nth-of-type(20):checked ~ * .product-gallery__carousel .product-gallery__media:nth-of-type(20) {
+    display: block;
+}
+
+product-gallery:not([data-desktop-layout*="grid"]) .product-gallery__carousel {
+    grid-template-columns: 100% !important;
+    overflow: hidden;
+}
+
+.product-gallery__thumbnail-scroller label.product-gallery__thumbnail {
+    cursor: pointer;
+}
+
+
+.product-gallery__radio:nth-of-type(1):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(1),
+.product-gallery__radio:nth-of-type(2):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(2),
+.product-gallery__radio:nth-of-type(3):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(3),
+.product-gallery__radio:nth-of-type(4):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(4),
+.product-gallery__radio:nth-of-type(5):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(5),
+.product-gallery__radio:nth-of-type(6):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(6),
+.product-gallery__radio:nth-of-type(7):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(7),
+.product-gallery__radio:nth-of-type(8):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(8),
+.product-gallery__radio:nth-of-type(9):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(9),
+.product-gallery__radio:nth-of-type(10):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(10),
+.product-gallery__radio:nth-of-type(11):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(11),
+.product-gallery__radio:nth-of-type(12):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(12),
+.product-gallery__radio:nth-of-type(13):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(13),
+.product-gallery__radio:nth-of-type(14):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(14),
+.product-gallery__radio:nth-of-type(15):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(15),
+.product-gallery__radio:nth-of-type(16):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(16),
+.product-gallery__radio:nth-of-type(17):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(17),
+.product-gallery__radio:nth-of-type(18):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(18),
+.product-gallery__radio:nth-of-type(19):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(19),
+.product-gallery__radio:nth-of-type(20):checked ~ * .product-gallery__thumbnail-scroller .product-gallery__thumbnail:nth-of-type(20) {
+    opacity: 1;
+    border-color: rgb(var(--text-color));
+}

@@ -1,4 +1,5 @@
 {{ 'header.css' | asset_url | stylesheet_tag }}
+{{ 'mobile-menu-custom.css' | asset_url | stylesheet_tag }}
 
 <style>
   :root {
@@ -25,11 +26,14 @@
 </style>
 
 <height-observer variable="header">
-  <div id="shopify-section-{{ section.id }}" class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+  <div
+    id="shopify-section-{{ section.id }}"
+    class="header color-scheme color-scheme--{{ section.settings.color_scheme.id }}"
+  >
     {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    TOP SECTION: Logo, Search, Utility Icons
-    --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      TOP SECTION: Logo, Search, Utility Icons
+      --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
 
     <div class="header__top-section">
@@ -43,10 +47,21 @@
                   {%- capture sizes -%}(max-width: 699px) {{ section.settings.logo_mobile_max_width }}px, {{ section.settings.logo_max_width }}px{%- endcapture -%}
                   {%- capture widths -%}{{ section.settings.logo_mobile_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 3 | at_most: section.settings.logo.width }}{%- endcapture -%}
                   {%- assign alt_text = section.settings.logo.alt | default: shop.name -%}
-                  {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag: sizes: sizes, alt: alt_text, widths: widths, class: 'header__logo-image' -}}
+                  {{-
+                    section.settings.logo
+                    | image_url: width: section.settings.logo.width
+                    | image_tag: sizes: sizes, alt: alt_text, widths: widths, class: 'header__logo-image'
+                  -}}
                 {%- else -%}
                   {%- assign logo_file = 'logo.jpeg' -%}
-                  <img src="{{ logo_file | asset_url }}" alt="{{ shop.name }}" class="header__logo-image" loading="eager" width="{{ section.settings.logo_max_width }}" height="auto">
+                  <img
+                    src="{{ logo_file | asset_url }}"
+                    alt="{{ shop.name }}"
+                    class="header__logo-image"
+                    loading="eager"
+                    width="{{ section.settings.logo_max_width }}"
+                    height="auto"
+                  >
                 {%- endif -%}
               </a>
             </h1>
@@ -56,10 +71,21 @@
                 {%- capture sizes -%}(max-width: 699px) {{ section.settings.logo_mobile_max_width }}px, {{ section.settings.logo_max_width }}px{%- endcapture -%}
                 {%- capture widths -%}{{ section.settings.logo_mobile_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 2 | at_most: section.settings.logo.width }}, {{ section.settings.logo_max_width | times: 3 | at_most: section.settings.logo.width }}{%- endcapture -%}
                 {%- assign alt_text = section.settings.logo.alt | default: shop.name -%}
-                {{- section.settings.logo | image_url: width: section.settings.logo.width | image_tag: sizes: sizes, alt: alt_text, widths: widths, class: 'header__logo-image' -}}
+                {{-
+                  section.settings.logo
+                  | image_url: width: section.settings.logo.width
+                  | image_tag: sizes: sizes, alt: alt_text, widths: widths, class: 'header__logo-image'
+                -}}
               {%- else -%}
                 {%- assign logo_file = 'logo.jpeg' -%}
-                <img src="{{ logo_file | asset_url }}" alt="{{ shop.name }}" class="header__logo-image" loading="eager" width="{{ section.settings.logo_max_width }}" height="auto">
+                <img
+                  src="{{ logo_file | asset_url }}"
+                  alt="{{ shop.name }}"
+                  class="header__logo-image"
+                  loading="eager"
+                  width="{{ section.settings.logo_max_width }}"
+                  height="auto"
+                >
               {%- endif -%}
             </a>
           {%- endif -%}
@@ -76,7 +102,8 @@
                 placeholder="Hei. Hva leter du etter?"
                 aria-label="Search"
                 autocomplete="off"
-                spellcheck="false">
+                spellcheck="false"
+              >
               <button type="submit" class="header__search-button" aria-label="Search">
                 {%- render 'icon' with 'search', class: 'header__search-icon' -%}
               </button>
@@ -87,21 +114,34 @@
         {%- comment -%} Utility Icons {%- endcomment -%}
         <div class="header__utility-icons">
           {%- comment -%} Customer Service {%- endcomment -%}
-          <a href="{% if section.settings.customer_service_link != blank %}{{ section.settings.customer_service_link }}{% else %}{{ routes.root_url }}{% endif %}" class="header__utility-item">
+          <a
+            href="{% if section.settings.customer_service_link != blank %}{{ section.settings.customer_service_link }}{% else %}{{ routes.root_url }}{% endif %}"
+            class="header__utility-item"
+          >
             <i class="fa-solid fa-headphones header__utility-icon"></i>
             <span class="header__utility-text">Kundeservice</span>
           </a>
 
           {%- comment -%} Login/Account {%- endcomment -%}
           {%- if shop.customer_accounts_enabled -%}
-            <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__utility-item">
+            <a
+              href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+              class="header__utility-item"
+            >
               {%- render 'icon' with 'account', class: 'header__utility-icon' -%}
               <span class="header__utility-text">Logg inn</span>
             </a>
           {%- endif -%}
 
           {%- comment -%} Shopping Cart {%- endcomment -%}
-          <a href="{{ routes.cart_url }}" class="header__utility-item" {% if settings.cart_type != 'page' and request.page_type != 'cart' %}aria-controls="cart-drawer"{% endif %} data-no-instant>
+          <a
+            href="{{ routes.cart_url }}"
+            class="header__utility-item"
+            {% if settings.cart_type != 'page' and request.page_type != 'cart' %}
+              aria-controls="cart-drawer"
+            {% endif %}
+            data-no-instant
+          >
             {%- render 'icon' with 'cart', class: 'header__utility-icon' -%}
             <span class="header__utility-text">Handlekurv</span>
             {%- unless cart.empty? -%}
@@ -113,9 +153,9 @@
     </div>
 
     {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    BOTTOM SECTION: Navigation Menu
-    --------------------------------------------------------------------------------------------------------------------
+      --------------------------------------------------------------------------------------------------------------------
+      BOTTOM SECTION: Navigation Menu
+      --------------------------------------------------------------------------------------------------------------------
     {%- endcomment -%}
 
     {%- assign menu = section.settings.menu -%}
@@ -123,8 +163,18 @@
 
     {%- if menu.links.size > 0 or sidebar_menu.links.size > 0 -%}
       <div class="header__primary-nav-section">
-        <nav class="header__primary-nav {% if section.settings.layout == 'logo_center_navigation_below' or section.settings.layout == 'logo_left_navigation_center' %}header__primary-nav--center{% endif %}" aria-label="{{ 'header.general.primary_navigation' | t | escape }}">
-          <button type="button" aria-controls="sidebar-menu" {% unless section.settings.layout == 'drawer' %}class="md:hidden"{% endunless %} id="mobile-menu-toggle-{{ section.id }}">
+        <nav
+          class="header__primary-nav {% if section.settings.layout == 'logo_center_navigation_below' or section.settings.layout == 'logo_left_navigation_center' %}header__primary-nav--center{% endif %}"
+          aria-label="{{ 'header.general.primary_navigation' | t | escape }}"
+        >
+          <button
+            type="button"
+            aria-controls="sidebar-menu"
+            {% unless section.settings.layout == 'drawer' %}
+              class="md:hidden"
+            {% endunless %}
+            id="mobile-menu-toggle-{{ section.id }}"
+          >
             <span class="sr-only">{{ 'header.general.menu' | t }}</span>
             {%- render 'icon' with 'hamburger', class: 'header__nav-icon' -%}
           </button>
@@ -143,13 +193,20 @@
                       assign mega_menu_block = block
                       break
                     endif
-
                   endfor
                 %}
 
                 <li class="header__primary-nav-item" data-title="{{ link.title | escape }}">
                   {%- if link.levels == 0 and mega_menu_block == '' -%}
-                    <a href="{{ link.url }}" class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+                    <a
+                      href="{{ link.url }}"
+                      class="block {% if section.settings.menu_text_font == 'heading' %}h6{% endif %}"
+                      {% if link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{- link.title -}}
+                    </a>
                   {%- else -%}
                     {%- capture disclosure_content -%}
                       <details class="header__menu-disclosure">
@@ -193,7 +250,11 @@
                     {%- endcapture -%}
 
                     {% if mega_menu_block != '' %}
-                      <mega-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}" class="contents">
+                      <mega-menu-disclosure
+                        follow-summary-link
+                        trigger="{{ section.settings.menu_open_trigger }}"
+                        class="contents"
+                      >
                         {{- disclosure_content -}}
                       </mega-menu-disclosure>
                     {%- else -%}
@@ -213,26 +274,34 @@
     {%- assign sidebar_menu = section.settings.sidebar_menu | default: section.settings.menu -%}
 
     {%- if sidebar_menu.links.size > 0 -%}
-      {%- render 'header-sidebar', menu: sidebar_menu, color_scheme: section.settings.sidebar_color_scheme, show_dividers: section.settings.sidebar_show_dividers, open_second_level_menus: section.settings.sidebar_open_second_level_menus -%}
+      {%- render 'header-sidebar',
+        menu: sidebar_menu,
+        color_scheme: section.settings.sidebar_color_scheme,
+        show_dividers: section.settings.sidebar_show_dividers,
+        open_second_level_menus: section.settings.sidebar_open_second_level_menus
+      -%}
     {%- endif -%}
   </div>
 </height-observer>
 
 <script>
-  document.documentElement.style.setProperty('--header-height', `${document.getElementById('shopify-section-{{ section.id }}').clientHeight.toFixed(2)}px`);
+  document.documentElement.style.setProperty(
+    '--header-height',
+    `${document.getElementById('shopify-section-{{ section.id }}').clientHeight.toFixed(2)}px`
+  );
 
   // Mobile menu toggle functionality
-  (function() {
+  (function () {
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle-{{ section.id }}');
     const sidebarMenu = document.getElementById('sidebar-menu');
 
     if (mobileMenuToggle && sidebarMenu) {
-      mobileMenuToggle.addEventListener('click', function(e) {
+      mobileMenuToggle.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
         // Check if sidebar is currently open
-        const isOpen = sidebarMenu.hasAttribute('open') || (sidebarMenu.open === true);
+        const isOpen = sidebarMenu.hasAttribute('open') || sidebarMenu.open === true;
 
         if (isOpen) {
           // Close the sidebar
