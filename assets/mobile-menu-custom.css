@@ -1,0 +1,564 @@
+header-sidebar::part(member-rewards-banner),
+header-sidebar::part(search-section),
+header-sidebar::part(footer-actions) {
+  display: none;
+}
+
+header-sidebar::part(header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 16px;
+}
+
+.mobile-menu-logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menu-logo a {
+  display: block;
+  line-height: 0;
+}
+
+.mobile-menu-logo img {
+  max-width: 160px;
+  height: auto;
+  display: block;
+}
+
+/* Cart icon in header */
+.mobile-menu-cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menu-cart a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #1f2937;
+  text-decoration: none;
+}
+
+.mobile-menu-cart svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mobile-menu-cart__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #14b8a6;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+/* Close button */
+header-sidebar::part(close-button) {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #1f2937;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+header-sidebar::part(close-button):hover {
+  opacity: 0.7;
+}
+
+header-sidebar::part(close-button) svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   Search Section
+   ======================================== */
+.mobile-menu-search {
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.mobile-menu-search form {
+  width: 100%;
+}
+
+.mobile-menu-search input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #f9fafb;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-search input:focus {
+  outline: none;
+  border-color: #14b8a6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+.mobile-menu-search input::placeholder {
+  color: #9ca3af;
+}
+
+/* ========================================
+   Drawer Content Layout
+   ======================================== */
+header-sidebar::part(content) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100vh;
+  background: white;
+  width: 85vw;
+  max-width: 400px;
+}
+
+header-sidebar::part(base) {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+header-sidebar::part(overlay) {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+header-sidebar::part(panel-list) {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0;
+  position: relative;
+}
+
+/* ========================================
+   Navigation Menu
+   ======================================== */
+.header-sidebar__main-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+.header-sidebar__scroller {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar */
+.header-sidebar__scroller::-webkit-scrollbar {
+  width: 6px;
+}
+
+.header-sidebar__scroller::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.header-sidebar__scroller::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.header-sidebar__scroller::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Menu list */
+.header-sidebar__linklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.header-sidebar__linklist > li {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.header-sidebar__linklist > li:last-child {
+  border-bottom: none;
+}
+
+/* Menu buttons and links */
+.header-sidebar__linklist-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 20px;
+  background: white;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1f2937;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+
+.header-sidebar__linklist-button:hover {
+  background: #f9fafb;
+  color: #14b8a6;
+}
+
+/* Chevron icons */
+.header-sidebar__linklist-button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.header-sidebar__linklist-button:hover svg {
+  color: #14b8a6;
+}
+
+/* Links without dropdown - hide icon */
+.header-sidebar__linklist a.header-sidebar__linklist-button svg {
+  display: none;
+}
+
+/* ========================================
+   Sale Link Special Styling
+   ======================================== */
+.header-sidebar__linklist a[href*="sale"],
+.header-sidebar__linklist a[href*="Sale"] {
+  color: #14b8a6 !important;
+  background: #f0fdfa;
+  font-weight: 500;
+}
+
+.header-sidebar__linklist a[href*="sale"]:hover,
+.header-sidebar__linklist a[href*="Sale"]:hover {
+  background: #ccfbf1;
+}
+
+/* ========================================
+   Sub-panel (Second Level Menu)
+   ======================================== */
+.header-sidebar__collapsible-panel {
+  position: absolute;
+  inset: 0;
+  background: white;
+  z-index: 10;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.header-sidebar__sub-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+.header-sidebar__sub-panel[hidden] {
+  display: none;
+}
+
+/* Back button */
+.header-sidebar__back-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 20px;
+  background: #f9fafb;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.header-sidebar__back-button:hover {
+  background: #f3f4f6;
+}
+
+.header-sidebar__back-button svg {
+  width: 14px;
+  height: 14px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Nested Links (Third Level)
+   ======================================== */
+.accordion__disclosure {
+  border: none;
+}
+
+.accordion__disclosure summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordion__disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion__disclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.animated-plus {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.animated-plus::before,
+.animated-plus::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.animated-plus::before {
+  width: 12px;
+  height: 2px;
+}
+
+.animated-plus::after {
+  width: 2px;
+  height: 12px;
+}
+
+.accordion__disclosure[open] .animated-plus::after {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+
+.header-sidebar__nested-linklist {
+  padding: 8px 0 8px 40px;
+  background: #fafafa;
+}
+
+.header-sidebar__nested-linklist a {
+  display: block;
+  padding: 10px 20px 10px 0;
+  color: #6b7280;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.header-sidebar__nested-linklist a:hover {
+  color: #14b8a6;
+}
+
+/* ========================================
+   Footer Section
+   ======================================== */
+.header-sidebar__footer {
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  margin-top: auto;
+}
+
+.mobile-menu-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.mobile-menu-footer a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  gap: 8px;
+  text-decoration: none;
+  color: #1f2937;
+  font-size: 13px;
+  font-weight: 400;
+  border-right: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-footer a:last-child {
+  border-right: none;
+}
+
+.mobile-menu-footer a:hover {
+  background: #f9fafb;
+  color: #14b8a6;
+}
+
+.mobile-menu-footer svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.5;
+}
+
+/* ========================================
+   Responsive Adjustments
+   ======================================== */
+@media (max-width: 699px) {
+  header-sidebar::part(header) {
+    padding: 14px 16px;
+  }
+
+  .mobile-menu-logo img {
+    max-width: 140px;
+  }
+
+  .mobile-menu-search {
+    padding: 14px 16px;
+  }
+
+  .mobile-menu-search input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .header-sidebar__linklist-button {
+    padding: 16px 16px;
+    font-size: 15px;
+  }
+
+  .header-sidebar__back-button {
+    padding: 16px 16px;
+    font-size: 14px;
+  }
+
+  .mobile-menu-footer a {
+    padding: 16px 12px;
+    font-size: 12px;
+  }
+
+  .mobile-menu-footer svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  header-sidebar::part(content) {
+    width: 90vw;
+    max-width: 100vw;
+  }
+}
+
+/* ========================================
+   Desktop - Hide Mobile Menu Elements
+   ======================================== */
+@media (min-width: 700px) {
+  .mobile-menu-search,
+  .mobile-menu-footer {
+    display: none;
+  }
+}
+
+/* ========================================
+   Focus States (Accessibility)
+   ======================================== */
+.header-sidebar__linklist-button:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: -2px;
+}
+
+.mobile-menu-footer a:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: -2px;
+}
+
+header-sidebar::part(close-button):focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ========================================
+   Smooth Transitions
+   ======================================== */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-sidebar__scroller,
+header-sidebar::part(panel-list) {
+  scroll-behavior: smooth;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+.text-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link-faded {
+  color: #6b7280;
+}
+
+.link-faded-reverse {
+  color: #1f2937;
+  text-decoration: none;
+}
+
+.link-faded-reverse:hover {
+  color: #14b8a6;
+}
+

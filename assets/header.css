@@ -1,5 +1,3 @@
-/* Header Styles for Beauty Heaven.no */
-
 :root {
   --header-top-height: auto;
   --header-nav-height: auto;
@@ -8,7 +6,6 @@
   --header-border-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Main Header Container */
 #shopify-section-header {
   position: relative;
   z-index: 4;
@@ -21,11 +18,10 @@
   padding-inline: 0 !important;
 }
 
-/* Top Header Section - Logo, Search, Icons */
 .header__top-section {
   width: 100% !important;
   border-bottom: 1px solid var(--header-border-color);
-  background: white !important; /* Override transparent header behavior */
+  background: white !important;
 }
 
 .header__top-container {
@@ -37,7 +33,7 @@
   padding-right: 10px !important;
   width: 100%;
   max-width: 1600px;
-  background: white !important; /* Override transparent header behavior */
+  background: white !important;
 }
 
 @media screen and (max-width: 699px) {
@@ -71,7 +67,6 @@
   }
 }
 
-/* Logo Section */
 .header__logo-wrapper {
   display: flex;
   align-items: center;
@@ -103,7 +98,6 @@
   color: #333;
 }
 
-/* Search Bar Section */
 .header__search-wrapper {
   display: flex;
   justify-content: center;
@@ -162,7 +156,6 @@
   height: 20px;
 }
 
-/* Utility Icons Section */
 .header__utility-icons {
   display: flex;
   align-items: center;
@@ -213,7 +206,6 @@
   }
 }
 
-/* Cart Badge */
 .header__cart-badge {
   position: absolute;
   top: -4px;
@@ -235,12 +227,11 @@
   display: none;
 }
 
-/* Navigation Menu Section */
 .header__nav-section {
   width: 100%;
   background: var(
     --header-light-grey
-  ) !important; /* Override transparent header behavior */
+  ) !important;
   border-bottom: 1px solid var(--header-border-color);
 }
 
@@ -323,7 +314,6 @@
   display: none;
 }
 
-/* Dropdown Menu */
 .header__menu-disclosure {
   position: relative;
 }
@@ -349,7 +339,6 @@
   display: block;
 }
 
-/* Hover trigger support */
 @media (hover: hover) and (pointer: fine) {
   .header__menu-disclosure:not([open]):hover > .header__dropdown-menu {
     display: block;
@@ -383,7 +372,6 @@
   font-weight: 600;
 }
 
-/* Mobile Menu Button */
 .header__mobile-menu-button {
   display: none;
   background: none;
@@ -401,14 +389,12 @@
   }
 }
 
-/* Sticky Header */
 .header.is-sticky {
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* Transparent Header Support */
 .header.is-transparent {
   background: transparent;
 }
@@ -423,13 +409,11 @@
   border-bottom: none;
 }
 
-/* Hide on Scroll */
 .header.is-hidden {
   transform: translateY(-100%);
   transition: transform 0.3s ease-in-out;
 }
 
-/* Primary Navigation List Styling */
 .header__primary-nav-section {
   width: 100%;
   min-height: 50px;
@@ -443,6 +427,7 @@
 .header__primary-nav {
   width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0;
   margin-inline: auto;
@@ -450,7 +435,6 @@
   padding: 0 1rem;
 }
 
-/* Mobile Menu Toggle Button - Show on mobile, hide on desktop */
 .header__primary-nav button[aria-controls="sidebar-menu"] {
   display: flex;
   align-items: center;
@@ -463,19 +447,16 @@
   margin-right: 0.5rem;
 }
 
-/* Hide toggle button on desktop (700px and above) */
 @media screen and (min-width: 700px) {
   .header__primary-nav button[aria-controls="sidebar-menu"] {
     display: none !important;
   }
 }
 
-/* Desktop Menu List - Hide on mobile, show on desktop */
 .header__primary-nav .contents.unstyled-list {
   display: none !important;
 }
 
-/* Show menu list on desktop (700px and above) */
 @media screen and (min-width: 700px) {
   .header__primary-nav .contents.unstyled-list {
     display: flex !important;
@@ -485,7 +466,7 @@
 .header__primary-nav .contents {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 1.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -524,7 +505,6 @@
   font-weight: 600;
 }
 
-/* Menu Disclosure Styling */
 .header__menu-disclosure {
   position: relative;
 }
@@ -561,7 +541,6 @@
   color: var(--header-teal-color);
 }
 
-/* Dropdown Menu Styling */
 .header__dropdown-menu {
   position: absolute;
   top: 100%;
@@ -604,7 +583,6 @@
   background-color: rgba(0, 128, 128, 0.08);
 }
 
-/* Nested Dropdown Menu */
 .header__dropdown-menu .header__dropdown-menu {
   position: absolute;
   left: 100%;
@@ -613,13 +591,11 @@
   margin-top: 0;
 }
 
-/* Auto-open dropdowns styling */
 .header__menu-disclosure[open] > .header__dropdown-menu,
 .header__menu-disclosure[open] .header__dropdown-menu {
   display: block;
 }
 
-/* Hover support for dropdowns (keep existing behavior) */
 @media (hover: hover) and (pointer: fine) {
   .header__primary-nav-item:hover .header__dropdown-menu,
   .header__menu-disclosure:hover > .header__dropdown-menu {

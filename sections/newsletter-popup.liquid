@@ -1,3 +1,5 @@
+{{ 'newsletter-popup-pro.css' | asset_url | stylesheet_tag }}
+
 {%- unless request.page_type == 'captcha' or section.settings.show_only_on_index and template != 'index' -%}
   {%- unless section.settings.show_only_for_visitors and customer -%}
     {%- assign posted_successfully = false -%}
@@ -9,55 +11,112 @@
       {%- endform -%}
     {%- endcapture -%}
 
-    <newsletter-popup class="pop-in newsletter-popup color-scheme color-scheme--{{ section.settings.color_scheme.id }}" title="Newsletter popup" {% if section.settings.show_only_once %}only-once{% endif %} apparition-delay="{{ section.settings.apparition_delay }}" {% if posted_successfully %}open{% endif %} handle-editor-events>
-      <dialog-close-button class="contents">
-        <button class="pop-in__close-button tap-area">
-          <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
-          {%- render 'icon' with 'close' -%}
-        </button>
-      </dialog-close-button>
+    <newsletter-popup
+      class="newsletter-popup-pro"
+      title="Newsletter popup"
+      {% if section.settings.show_only_once %}
+        only-once
+      {% endif %}
+      apparition-delay="{{ section.settings.apparition_delay }}"
+      {% if posted_successfully %}
+        open
+      {% endif %}
+      handle-editor-events
+    >
+      <div class="newsletter-popup-pro__overlay"></div>
 
-      <div class="v-stack gap-8">
-        {%- if section.settings.title != blank or section.settings.content != blank -%}
-          <div class="v-stack gap-4 text-center">
+      <div class="newsletter-popup-pro__dialog">
+        <div class="newsletter-popup-pro__content">
+          <dialog-close-button class="contents">
+            <button class="newsletter-popup-pro__close tap-area" type="button">
+              <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
+              {%- render 'icon' with 'close' -%}
+            </button>
+          </dialog-close-button>
+          <div class="newsletter-popup-pro__text-content">
             {%- if section.settings.title != blank -%}
-              <p class="h4">{{ section.settings.title }}</p>
+              <h2 class="newsletter-popup-pro__title">{{ section.settings.title }}</h2>
+            {%- endif -%}
+
+            {%- if section.settings.subtitle != blank -%}
+              <p class="newsletter-popup-pro__subtitle">{{ section.settings.subtitle }}</p>
             {%- endif -%}
 
             {%- if section.settings.content != blank -%}
-              <div class="prose">
+              <div class="newsletter-popup-pro__description">
                 {{ section.settings.content }}
               </div>
             {%- endif -%}
-          </div>
-        {%- endif -%}
 
-        {%- if section.settings.show_newsletter_form -%}
-          {%- form 'customer', id: newsletter_id, class: 'form' -%}
-            {%- if form.posted_successfully? -%}
-              {%- capture success_message -%}{{ 'general.newsletter.subscribed_successfully' | t }}{%- endcapture -%}
-              {%- render 'banner', content: success_message, status: 'success', text_alignment: 'center' -%}
+            {%- if section.settings.show_newsletter_form -%}
+              {%- form 'customer', id: newsletter_id, class: 'newsletter-popup-pro__form' -%}
+                {%- if form.posted_successfully? -%}
+                  <div class="newsletter-popup-pro__success">
+                    {{ 'general.newsletter.subscribed_successfully' | t }}
+                  </div>
 
-              <script>
-                localStorage.setItem('theme:popup-filled', 'true');
-              </script>
-            {%- else -%}
-              {%- if form.errors -%}
-                {%- assign content = form.errors | default_errors -%}
-                {%- render 'banner', status: 'error', content: content, text_alignment: 'center' -%}
-              {%- endif -%}
+                  <script>
+                    localStorage.setItem('theme:popup-filled', 'true');
+                  </script>
+                {%- else -%}
+                  {%- if form.errors -%}
+                    <div class="newsletter-popup-pro__error">
+                      {{ form.errors | default_errors }}
+                    </div>
+                  {%- endif -%}
 
-              <div class="fieldset">
-                <input type="hidden" name="contact[tags]" value="newsletter">
+                  <input type="hidden" name="contact[tags]" value="newsletter">
 
-                {%- assign label = 'blog.comments.email' | t -%}
-                {%- render 'input', type: 'email', name: 'contact[email]', label: label, value: customer.email, required: true, autocomplete: 'email' -%}
-              </div>
+                  <div class="newsletter-popup-pro__field">
+                    <input
+                      type="email"
+                      name="contact[email]"
+                      id="newsletter-popup-email-{{ section.id }}"
+                      class="newsletter-popup-pro__input"
+                      placeholder="{{ section.settings.email_placeholder | default: 'Skriv inn din e-post' }}"
+                      value="{{ customer.email }}"
+                      required
+                      autocomplete="email"
+                    >
+                  </div>
 
-              {%- render 'button', content: section.settings.button_text, type: 'submit' -%}
+                  {%- if section.settings.show_consent_checkbox -%}
+                    <div class="newsletter-popup-pro__checkbox">
+                      <input
+                        type="checkbox"
+                        id="newsletter-consent-{{ section.id }}"
+                        name="contact[accepts_marketing]"
+                        value="true"
+                        required
+                      >
+                      <label for="newsletter-consent-{{ section.id }}">
+                        {{ section.settings.consent_text | default: 'Jeg godtar at dere kan sende meg e-post' }}
+                      </label>
+                    </div>
+                  {%- endif -%}
+
+                  <button type="submit" class="newsletter-popup-pro__button">
+                    {{ section.settings.button_text | default: 'Meld meg på' }}
+                  </button>
+                {%- endif -%}
+              {%- endform -%}
             {%- endif -%}
-          {%- endform -%}
-        {%- endif -%}
+          </div>
+
+          {%- if section.settings.image != blank -%}
+            <div class="newsletter-popup-pro__image-wrapper">
+              {{
+                section.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(max-width: 699px) 100vw, 400px',
+                  class: 'newsletter-popup-pro__image'
+              }}
+            </div>
+          {%- endif -%}
+        </div>
       </div>
     </newsletter-popup>
   {%- endunless -%}
@@ -65,18 +124,16 @@
 
 {% schema %}
 {
-  "name": "t:sections.newsletter_popup.name",
+  "name": "Newsletter Popup",
   "class": "shopify-section--popup",
   "settings": [
     {
       "type": "paragraph",
-      "content": "t:sections.newsletter_popup.instructions"
+      "content": "Create a professional newsletter popup that appears after page load. Configure timing, content, and appearance below."
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:global.colors.scheme",
-      "default": "scheme-3"
+      "type": "header",
+      "content": "Timing Settings"
     },
     {
       "type": "range",
@@ -85,50 +142,93 @@
       "max": 15,
       "step": 1,
       "unit": "sec",
-      "label": "t:sections.newsletter_popup.delay",
-      "default": 5
+      "label": "Delay before showing popup",
+      "default": 3
     },
     {
       "type": "checkbox",
       "id": "show_only_on_index",
-      "label": "t:sections.newsletter_popup.show_only_on_home_page",
+      "label": "Show only on home page",
       "default": true
     },
     {
       "type": "checkbox",
-      "id": "hide_for_account_holders",
-      "label": "t:sections.newsletter_popup.hide_for_account_holders",
+      "id": "show_only_for_visitors",
+      "label": "Hide for logged-in customers",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "show_only_once",
-      "label": "t:sections.newsletter_popup.show_only_once",
+      "label": "Show only once per visitor",
+      "info": "Uses browser localStorage to remember if popup was shown",
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "show_newsletter_form",
-      "label": "t:sections.newsletter_popup.show_newsletter_form",
-      "default": true
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "inline_richtext",
       "id": "title",
-      "label": "t:global.text.heading",
-      "default": "Signup for our newsletter"
+      "label": "Title",
+      "default": "20% rabatt"
     },
     {
       "type": "inline_richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "på din første ordre!"
+    },
+    {
+      "type": "richtext",
       "id": "content",
-      "label": "t:global.text.content",
-      "default": "Describe what your customers will receive when subscribing to your newsletter."
+      "label": "Description",
+      "default": "<p>Meld deg på vårt nyhetsbrev, og motta en eksklusiv rabattkode.</p><p>Gjelder ikke på allerede nedsatte varer. Kampanjen slutter når vi av november.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Form Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter_form",
+      "label": "Show newsletter form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email input placeholder",
+      "default": "Skriv inn din e-post"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_consent_checkbox",
+      "label": "Show consent checkbox",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "consent_text",
+      "label": "Consent checkbox text",
+      "default": "Jeg godtar at dere kan sende meg e-post."
     },
     {
       "type": "text",
       "id": "button_text",
-      "label": "t:global.text.button_text",
-      "default": "Subscribe"
+      "label": "Button text",
+      "default": "Meld meg på"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Side image",
+      "info": "Recommended size: 800x600px. This image appears on the right side of the popup."
     }
   ]
 }
