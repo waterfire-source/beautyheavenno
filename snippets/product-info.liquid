@@ -203,24 +203,10 @@
               </payment-terms>
             {%- endif -%}
 
-          {%- when 'rating' -%}
-            {%- if product != blank -%}
-              {%- render 'product-rating',
-                  product: product,
-                  show_empty: block.settings.show_empty,
-                  display_mode: block.settings.rating_mode,
-                  show_placeholder: false,
-                  only_on_product_page: true,
-                  manual_rating_value: block.settings.manual_rating_value,
-                  manual_rating_count: block.settings.manual_rating_count
-              -%}
-            {%- else -%}
-              {%- render 'product-rating', show_placeholder: true, only_on_product_page: true -%}
-            {%- endif -%}
-
           {%- when 'product_reviews' -%}
+            {%- comment -%}Judge.me reviews app integration - add your Judge.me snippet here{%- endcomment -%}
             {%- if product != blank -%}
-              {%- render 'product-reviews', product: product, reviews_url: block.settings.reviews_url, show_empty: block.settings.show_empty, block: block -%}
+              {%- comment -%}Replace with Judge.me widget: {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, product: product %}{%- endcomment -%}
             {%- endif -%}
 
           {%- when 'producer' -%}

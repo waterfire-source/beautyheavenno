@@ -498,22 +498,6 @@
           "id": "feature_3_text",
           "label": "Feature text",
           "default": "Norwegian online store"
-        },
-        {
-          "type": "header",
-          "content": "Payment Methods"
-        },
-        {
-          "type": "image_picker",
-          "id": "payment_logo_1",
-          "label": "Payment logo 1",
-          "info": "Upload payment method logo (e.g., Klarna)"
-        },
-        {
-          "type": "image_picker",
-          "id": "payment_logo_2",
-          "label": "Payment logo 2",
-          "info": "Upload payment method logo (e.g., Vipps)"
         }
       ]
     },
@@ -567,6 +551,75 @@
         },
         {
           "type": "header",
+          "content": "Tab Labels"
+        },
+        {
+          "type": "text",
+          "id": "information_tab_label",
+          "label": "Information tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "contents_tab_label",
+          "label": "Contents tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "producer_tab_label",
+          "label": "Producer tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "text",
+          "id": "reviews_tab_label",
+          "label": "Reviews tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "header",
+          "content": "Producer Tab Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_logo",
+          "label": "Show brand/producer logo",
+          "info": "Display logo from product metafield (custom.producer_logo or brand.logo)",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "producer_logo_width",
+          "min": 80,
+          "max": 300,
+          "step": 20,
+          "unit": "px",
+          "label": "Producer logo max width",
+          "default": 160
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_link",
+          "label": "Show 'View all products' link",
+          "info": "Display link to brand collection page",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_producer_description",
+          "label": "Show producer description",
+          "info": "Display brand description from metafields",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "qa_tab_label",
+          "label": "Q&A tab label",
+          "info": "Leave blank to use default translation"
+        },
+        {
+          "type": "header",
           "content": "Reviews Settings"
         },
         {
@@ -604,127 +657,6 @@
           "id": "show_taxes_notice",
           "label": "t:sections.main_product.blocks.price.show_taxes_notice",
           "default": false
-        }
-      ]
-    },
-    {
-      "type": "rating",
-      "name": "t:sections.main_product.blocks.rating.name",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "t:sections.main_product.blocks.rating.instructions"
-        },
-        {
-          "type": "header",
-          "content": "Manual Rating Override",
-          "info": "Manually set rating values to override product metafields. Leave blank to use metafields."
-        },
-        {
-          "type": "number",
-          "id": "manual_rating_value",
-          "label": "Rating value",
-          "info": "Enter rating value (e.g., 4.3). Leave blank to use metafields.",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "manual_rating_count",
-          "label": "Review count",
-          "info": "Enter number of reviews (e.g., 4). Leave blank to use metafields.",
-          "default": 0
-        },
-        {
-          "type": "header",
-          "content": "Display Settings"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_empty",
-          "label": "t:sections.main_product.blocks.rating.show_if_no_reviews",
-          "default": true
-        },
-        {
-          "type": "select",
-          "id": "rating_mode",
-          "label": "t:sections.main_product.blocks.rating.show_product_rating_as",
-          "options": [
-            {
-              "value": "rating",
-              "label": "t:sections.main_product.blocks.rating.show_product_rating_as_options.rating"
-            },
-            {
-              "value": "count",
-              "label": "t:sections.main_product.blocks.rating.show_product_rating_as_options.count"
-            }
-          ],
-          "default": "rating"
-        }
-      ]
-    },
-    {
-      "type": "product_reviews",
-      "name": "Product Reviews Breakdown",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Display a detailed breakdown of product reviews with star rating distribution."
-        },
-        {
-          "type": "checkbox",
-          "id": "show_empty",
-          "label": "Show if no reviews",
-          "default": false
-        },
-        {
-          "type": "url",
-          "id": "reviews_url",
-          "label": "Reviews page URL",
-          "info": "Link to the full reviews page (optional)"
-        },
-        {
-          "type": "header",
-          "content": "Rating Distribution",
-          "info": "Manually set rating distribution if not available from metafields"
-        },
-        {
-          "type": "number",
-          "id": "rating_5",
-          "label": "5 star votes",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "rating_4",
-          "label": "4 star votes",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "rating_3",
-          "label": "3 star votes",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "rating_2",
-          "label": "2 star votes",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "rating_1",
-          "label": "1 star votes",
-          "default": 0
-        },
-        {
-          "type": "number",
-          "id": "written_reviews_count",
-          "label": "Written reviews count",
-          "info": "Number of written reviews (optional)",
-          "default": 0
         }
       ]
     },

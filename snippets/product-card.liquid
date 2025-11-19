@@ -111,18 +111,22 @@
               <input type="hidden" name="on_success" value="force_open_drawer">
               <input type="hidden" name="quantity" value="1">
               <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-              <button type="submit" class="product-card__quick-add-button">
-                <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>
-                {%- render 'icon' with 'plus' -%}
+              <button type="submit" class="product-card__quick-add-button product-card__quick-add-button--pill">
+                {%- render 'icon' with 'plus', width: 16, height: 16 -%}
+                <span>{{ 'product.general.quick_add' | t }}</span>
               </button>
             {%- endform -%}
           </product-form>
         {%- else -%}
           {%- capture quick_buy_id -%}product-quick-buy-{{ section.id }}-{{ block.id }}-{{ quick_buy_context }}-{{ product.id }}{%- endcapture -%}
 
-          <button type="button" aria-controls="{{ quick_buy_id }}" class="product-card__quick-add-button">
-            <span class="sr-only">{{ 'product.general.choose_options' | t }}</span>
-            {%- render 'icon' with 'plus' -%}
+          <button
+            type="button"
+            aria-controls="{{ quick_buy_id }}"
+            class="product-card__quick-add-button product-card__quick-add-button--pill"
+          >
+            {%- render 'icon' with 'plus', width: 16, height: 16 -%}
+            <span>{{ 'product.general.quick_add' | t }}</span>
           </button>
 
           <quick-buy-modal
@@ -228,15 +232,7 @@
         {%- endcase -%}
       {%- endif -%}
     {%- endif -%}
-
-    {%- comment -%}Only show rating on product detail pages, not on collection pages{%- endcomment -%}
-    {%- if show_rating and request.page_type != 'collection' -%}
-      {%- render 'product-rating',
-        product: product,
-        show_empty: settings.show_product_rating_if_empty,
-        display_mode: settings.product_rating_mode,
-        only_on_product_page: true
-      -%}
-    {%- endif -%}
   </div>
 </product-card>
+
+{{- 'product-card-custom.css' | asset_url | stylesheet_tag -}}

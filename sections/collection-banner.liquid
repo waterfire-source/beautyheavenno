@@ -26,7 +26,7 @@
 
 {%- capture collection_content -%}
   {%- if section.settings.show_collection_title -%}
-    <h1 class="h1">{{ collection.title }}</h1>
+    <h1 class="h1" style="color: #000!important;">{{ collection.title }}</h1>
   {%- endif -%}
 
   {%- if section.settings.show_collection_description -%}
@@ -44,7 +44,15 @@
     }
   </style>
 
-  <collection-banner {% if section.settings.reveal %}reveal-on-scroll="true"{% endif %} class="collection-banner color-scheme color-scheme--{{ section.settings.color_scheme.id }}" {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %}>
+  <collection-banner
+    {% if section.settings.reveal %}
+      reveal-on-scroll="true"
+    {% endif %}
+    class="collection-banner color-scheme color-scheme--{{ section.settings.color_scheme.id }}"
+    {% if section.settings.allow_transparent_header %}
+      allow-transparent-header
+    {% endif %}
+  >
     {%- unless section.settings.allow_transparent_header -%}
       {{- collection_breadcrumb -}}
     {%- endunless -%}

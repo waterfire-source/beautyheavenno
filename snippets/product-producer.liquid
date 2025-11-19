@@ -1,12 +1,5 @@
 {%- liquid
   assign metafield_producer_name = product.metafields.custom.producer_name.value | default: product.metafields.brand.name.value
-  assign metafield_brand_collection = product.metafields.custom.brand_collection.value | default: product.metafields.brand.collection.value
-
-  assign brand_collection_url = null
-
-  if metafield_brand_collection != blank
-    assign brand_collection_url = metafield_brand_collection
-  endif
 
   assign show_producer = false
   if metafield_producer_name != blank
@@ -18,9 +11,7 @@
   {%- liquid
     assign collection_url = null
 
-    if brand_collection_url != blank
-      assign collection_url = brand_collection_url
-    elsif metafield_producer_name != blank
+    if metafield_producer_name != blank
       assign collection_handle = metafield_producer_name | handle
       assign collection_for_brand = collections[collection_handle]
       if collection_for_brand != blank

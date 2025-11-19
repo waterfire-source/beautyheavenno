@@ -1,0 +1,14 @@
+.product-features-payment__features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-features-payment__feature {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
