@@ -18,7 +18,8 @@
       <div class="featured-collections-wrapper">
         <div class="featured-collections-grid">
           {%- for block in section.blocks -%}
-            <div class="featured-collection-card" {{ block.shopify_attributes }}>
+            {%- assign collection_url = block.settings.collection.url | default: '/collections/all' -%}
+            <a href="{{ collection_url }}" class="featured-collection-card" {{ block.shopify_attributes }}>
               <div class="featured-collection-card__image-wrapper">
                 {%- if block.settings.desktop_image != blank -%}
                   <picture>
@@ -81,24 +82,9 @@
                   {%- elsif block.settings.collection.title != blank -%}
                     <h3 class="featured-collection-card__title">{{ block.settings.collection.title }}</h3>
                   {%- endif -%}
-
-                  {%- if block.settings.button_text != blank -%}
-                    {%- assign collection_url = block.settings.collection.url | default: '/collections/all' -%}
-                    <a
-                      href="{{ collection_url }}"
-                      class="button button--outline featured-collection-card__button"
-                      style="--button-background: transparent; --button-text-color: 255, 255, 255; --button-outline-color: 255, 255, 255;"
-                    >
-                      <span>{{ block.settings.button_text }}</span>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3.33334 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 3.33325L12.6667 7.99992L8 12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </a>
-                  {%- endif -%}
                 </div>
               </div>
-            </div>
+            </a>
           {%- endfor -%}
         </div>
 
