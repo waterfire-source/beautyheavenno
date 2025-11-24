@@ -1,9 +1,131 @@
 (function () {
   "use strict";
 
+  const initializedSections = new Set();
+
   function initChooseShade(sectionId) {
     const section = document.getElementById(`shopify-section-${sectionId}`);
     if (!section) return;
+
+    // Prevent multiple initializations
+    if (initializedSections.has(sectionId)) {
+      return;
+    }
+    initializedSections.add(sectionId);
+
+    // Initialize product carousel navigation with a slight delay to ensure carousel is ready
+    setTimeout(function() {
+      const productCarousel = section.querySelector("choose-shade-carousel");
+      if (productCarousel) {
+        // Check if already initialized
+        if (productCarousel.hasAttribute('data-buttons-initialized')) {
+          return;
+        }
+        productCarousel.setAttribute('data-buttons-initialized', 'true');
+
+        const carouselId = productCarousel.getAttribute("id");
+        const prevButton = section.querySelector(
+          `.choose-shade-section__nav-button--prev[data-carousel-id="${carouselId}"]`
+        );
+        const nextButton = section.querySelector(
+          `.choose-shade-section__nav-button--next[data-carousel-id="${carouselId}"]`
+        );
+
+        if (prevButton && nextButton) {
+          const slides = productCarousel.querySelectorAll(
+            ".choose-shade-section__product-slide"
+          );
+
+          // Previous button with loop
+          prevButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const currentIndex = Array.from(slides).findIndex((slide) =>
+              slide.classList.contains("is-selected")
+            );
+
+            if (currentIndex <= 0) {
+              // Loop to last slide
+              if (typeof productCarousel.select === "function") {
+                productCarousel.select(slides.length - 1);
+              }
+            } else {
+              if (typeof productCarousel.previous === "function") {
+                productCarousel.previous();
+              }
+            }
+          });
+
+          // Next button with loop
+          nextButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const currentIndex = Array.from(slides).findIndex((slide) =>
+              slide.classList.contains("is-selected")
+            );
+
+            if (currentIndex >= slides.length - 1) {
+              // Loop to first slide
+              if (typeof productCarousel.select === "function") {
+                productCarousel.select(0);
+              }
+            } else {
+              if (typeof productCarousel.next === "function") {
+                productCarousel.next();
+              }
+            }
+          });
+        }
+
+        // Reset image carousel to first slide when product changes
+        function resetImageCarouselToFirst(productSlide) {
+          const imageCarousel = productSlide.querySelector('choose-shade-image-carousel');
+          if (imageCarousel) {
+            if (typeof imageCarousel.select === 'function') {
+              imageCarousel.select(0, { instant: true });
+            } else {
+              // Fallback: manually set first slide
+              const imageSlides = imageCarousel.querySelectorAll('.choose-shade-section__image-slide');
+              imageSlides.forEach(function(imgSlide, index) {
+                if (index === 0) {
+                  imgSlide.classList.add('is-selected');
+                } else {
+                  imgSlide.classList.remove('is-selected');
+                }
+              });
+            }
+          }
+        }
+
+        // Listen for carousel:settle event (official event from effect-carousel)
+        productCarousel.addEventListener('carousel:settle', function(event) {
+          if (event.detail && event.detail.cell) {
+            resetImageCarouselToFirst(event.detail.cell);
+          }
+        });
+
+        // Also use MutationObserver as backup for when class changes
+        const productSlides = productCarousel.querySelectorAll(".choose-shade-section__product-slide");
+        const productObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'class') {
+              const slide = mutation.target;
+              if (slide.classList.contains('is-selected')) {
+                setTimeout(function() {
+                  resetImageCarouselToFirst(slide);
+                }, 50);
+              }
+            }
+          });
+        });
+
+        productSlides.forEach(function(slide) {
+          productObserver.observe(slide, { attributes: true, attributeFilter: ['class'] });
+        });
+      }
+    }, 100);
 
     const products = section.querySelectorAll(
       ".choose-shade-section__product-slide[data-product-index]"
@@ -27,8 +149,103 @@
       function showSlide(index) {
         if (typeof imageCarousel.select === "function") {
           imageCarousel.select(index);
+        } else {
+          // Fallback: manually set selected class
+          slides.forEach((slide, i) => {
+            if (i === index) {
+              slide.classList.add("is-selected");
+            } else {
+              slide.classList.remove("is-selected");
+            }
+          });
         }
       }
+
+      // Force first slide selection after carousel initializes
+      function ensureFirstSlideSelected() {
+        // Use the carousel's select method if available
+        if (typeof imageCarousel.select === "function") {
+          imageCarousel.select(0, { instant: true });
+        } else {
+          // Fallback: manually set selected class
+          slides.forEach((slide, i) => {
+            if (i === 0) {
+              slide.classList.add("is-selected");
+            } else {
+              slide.classList.remove("is-selected");
+            }
+          });
+        }
+      }
+
+      // Wait for carousel to be fully connected
+      if (customElements.get('choose-shade-image-carousel')) {
+        customElements.whenDefined('choose-shade-image-carousel').then(() => {
+          setTimeout(ensureFirstSlideSelected, 100);
+        });
+      } else {
+        setTimeout(ensureFirstSlideSelected, 100);
+      }
+
+      // Initialize image carousel navigation buttons with slight delay
+      setTimeout(function() {
+        // Check if already initialized
+        if (imageCarousel.hasAttribute('data-buttons-initialized')) {
+          return;
+        }
+        imageCarousel.setAttribute('data-buttons-initialized', 'true');
+
+        const prevImageButton = productElement.querySelector(
+          `.choose-shade-section__image-nav-button--prev[data-product-index="${productIndex}"]`
+        );
+        const nextImageButton = productElement.querySelector(
+          `.choose-shade-section__image-nav-button--next[data-product-index="${productIndex}"]`
+        );
+
+        if (prevImageButton && nextImageButton) {
+          // Previous button with loop
+          prevImageButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const currentIndex = Array.from(slides).findIndex((slide) =>
+              slide.classList.contains("is-selected")
+            );
+
+            if (currentIndex <= 0) {
+              // Loop to last slide
+              showSlide(slides.length - 1);
+            } else {
+              if (typeof imageCarousel.previous === "function") {
+                imageCarousel.previous();
+              } else {
+                showSlide(currentIndex - 1);
+              }
+            }
+          });
+
+          // Next button with loop
+          nextImageButton.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const currentIndex = Array.from(slides).findIndex((slide) =>
+              slide.classList.contains("is-selected")
+            );
+
+            if (currentIndex >= slides.length - 1) {
+              // Loop to first slide
+              showSlide(0);
+            } else {
+              if (typeof imageCarousel.next === "function") {
+                imageCarousel.next();
+              } else {
+                showSlide(currentIndex + 1);
+              }
+            }
+          });
+        }
+      }, 150);
 
       const formId = `choose-shade-form-${sectionId}-${productIndex}`;
       const form = document.getElementById(formId);
@@ -36,6 +253,7 @@
         form.addEventListener("variant:change", function (event) {
           const variant = event.detail.variant;
           if (variant && variant.featured_media) {
+            let mediaFound = false;
             slides.forEach((slide, i) => {
               const img = slide.querySelector("img");
               if (img) {
@@ -43,9 +261,19 @@
                   img.dataset.mediaId || img.getAttribute("data-media-id");
                 if (mediaId == variant.featured_media.id) {
                   showSlide(i);
+                  mediaFound = true;
                 }
               }
             });
+            // If no matching media found, show first slide
+            if (!mediaFound && slides.length > 0) {
+              showSlide(0);
+            }
+          } else {
+            // If no variant media, show first slide
+            if (slides.length > 0) {
+              showSlide(0);
+            }
           }
         });
 
@@ -56,6 +284,7 @@
               try {
                 const variantMedia = JSON.parse(this.dataset.variantMedia);
                 if (variantMedia && variantMedia.id) {
+                  let mediaFound = false;
                   slides.forEach((slide, i) => {
                     const img = slide.querySelector("img");
                     if (img) {
@@ -64,12 +293,26 @@
                         img.getAttribute("data-media-id");
                       if (mediaId == variantMedia.id) {
                         showSlide(i);
+                        mediaFound = true;
                       }
                     }
                   });
+                  // If no matching media found, show first slide
+                  if (!mediaFound && slides.length > 0) {
+                    showSlide(0);
+                  }
                 }
               } catch (e) {
                 console.error("Error parsing variant media:", e);
+                // On error, show first slide
+                if (slides.length > 0) {
+                  showSlide(0);
+                }
+              }
+            } else {
+              // If no variant media data, show first slide
+              if (slides.length > 0) {
+                showSlide(0);
               }
             }
           });
