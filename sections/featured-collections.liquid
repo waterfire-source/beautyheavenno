@@ -1,15 +1,8 @@
-{%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-FEATURED COLLECTIONS SECTION
-------------------------------------------------------------------------------------------------------------------------
-{%- endcomment -%}
-
 {{ 'featured-collections.css' | asset_url | stylesheet_tag }}
 
 {%- if section.blocks.size > 0 -%}
   <div class="featured-collections-section">
     <div class="container">
-      {%- comment -%} Header {%- endcomment -%}
       <div class="featured-collections-header">
         {%- if section.settings.category_button_text != blank -%}
           <div class="featured-collections-category-button">
@@ -22,7 +15,6 @@ FEATURED COLLECTIONS SECTION
         {%- endif -%}
       </div>
 
-      {%- comment -%} Collection Cards Grid {%- endcomment -%}
       <div class="featured-collections-wrapper">
         <div class="featured-collections-grid">
           {%- for block in section.blocks -%}
@@ -39,7 +31,15 @@ FEATURED COLLECTIONS SECTION
                       >
                     {%- endif -%}
 
-                    {{- block.settings.desktop_image | image_url: width: block.settings.desktop_image.width | image_tag: loading: 'lazy', sizes: '100vw', widths: '800,1200,1600,2000', class: 'featured-collection-card__image' -}}
+                    {{-
+                      block.settings.desktop_image
+                      | image_url: width: block.settings.desktop_image.width
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '100vw',
+                        widths: '800,1200,1600,2000',
+                        class: 'featured-collection-card__image'
+                    -}}
                   </picture>
                 {%- elsif block.settings.collection.featured_image != blank -%}
                   <picture>
@@ -52,14 +52,25 @@ FEATURED COLLECTIONS SECTION
                       >
                     {%- endif -%}
 
-                    {{- block.settings.collection.featured_image | image_url: width: block.settings.collection.featured_image.width | image_tag: loading: 'lazy', sizes: '100vw', widths: '800,1200,1600,2000', class: 'featured-collection-card__image' -}}
+                    {{-
+                      block.settings.collection.featured_image
+                      | image_url: width: block.settings.collection.featured_image.width
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '100vw',
+                        widths: '800,1200,1600,2000',
+                        class: 'featured-collection-card__image'
+                    -}}
                   </picture>
                 {%- else -%}
                   {%- capture placeholder_image -%}{%- cycle 'collection-1', 'collection-2', 'collection-3', 'collection-4' -%}{%- endcapture -%}
-                  {{- placeholder_image | placeholder_svg_tag: 'featured-collection-card__image placeholder' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}
+                  {{-
+                    placeholder_image
+                    | placeholder_svg_tag: 'featured-collection-card__image placeholder'
+                    | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"'
+                  -}}
                 {%- endif -%}
 
-                {%- comment -%} Content Overlay {%- endcomment -%}
                 <div class="featured-collection-card__content">
                   {%- if block.settings.tagline != blank -%}
                     <p class="featured-collection-card__tagline">{{ block.settings.tagline }}</p>
@@ -72,13 +83,18 @@ FEATURED COLLECTIONS SECTION
                   {%- endif -%}
 
                   {%- if block.settings.button_text != blank -%}
-                    <div class="featured-collection-card__button">
+                    {%- assign collection_url = block.settings.collection.url | default: '/collections/all' -%}
+                    <a
+                      href="{{ collection_url }}"
+                      class="button button--outline featured-collection-card__button"
+                      style="--button-background: transparent; --button-text-color: 255, 255, 255; --button-outline-color: 255, 255, 255;"
+                    >
                       <span>{{ block.settings.button_text }}</span>
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3.33334 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M8 3.33325L12.6667 7.99992L8 12.6666" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                    </div>
+                    </a>
                   {%- endif -%}
                 </div>
               </div>
@@ -86,11 +102,14 @@ FEATURED COLLECTIONS SECTION
           {%- endfor -%}
         </div>
 
-        {%- comment -%} Mobile Pagination Dots {%- endcomment -%}
         {%- if section.blocks.size > 1 -%}
           <div class="featured-collections-pagination">
             {%- for block in section.blocks -%}
-              <button class="featured-collections-dot {% if forloop.first %}active{% endif %}" aria-label="Go to slide {{ forloop.index }}" data-slide="{{ forloop.index0 }}"></button>
+              <button
+                class="featured-collections-dot {% if forloop.first %}active{% endif %}"
+                aria-label="Go to slide {{ forloop.index }}"
+                data-slide="{{ forloop.index0 }}"
+              ></button>
             {%- endfor -%}
           </div>
         {%- endif -%}
@@ -99,92 +118,8 @@ FEATURED COLLECTIONS SECTION
   </div>
 {%- endif -%}
 
-<script>
-  (function() {
-    const sectionId = 'shopify-section-{{ section.id }}';
-    const grid = document.querySelector(`#${sectionId} .featured-collections-grid`);
-    const dots = document.querySelectorAll(`#${sectionId} .featured-collections-dot`);
-
-    if (!grid || dots.length === 0) return;
-
-    // Only run on mobile
-    if (window.innerWidth > 699) return;
-
-    function updateActiveDot() {
-      if (!grid) return;
-
-      const cards = grid.querySelectorAll('.featured-collection-card');
-      if (cards.length === 0) return;
-
-      const scrollLeft = grid.scrollLeft;
-      const cardWidth = cards[0].offsetWidth;
-      const gap = 16; // 1rem gap
-      const scrollPosition = scrollLeft + (cardWidth / 2);
-
-      // Find which card is currently in view
-      let activeIndex = 0;
-      cards.forEach((card, index) => {
-        const cardLeft = index * (cardWidth + gap);
-        const cardRight = cardLeft + cardWidth;
-
-        if (scrollPosition >= cardLeft && scrollPosition < cardRight) {
-          activeIndex = index;
-        }
-      });
-
-      // Update dots
-      dots.forEach((dot, index) => {
-        if (index === activeIndex) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
-    }
-
-    // Handle scroll events
-    let scrollTimeout;
-    grid.addEventListener('scroll', function() {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(updateActiveDot, 100);
-    });
-
-    // Handle dot clicks
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', function() {
-        const cards = grid.querySelectorAll('.featured-collection-card');
-        if (cards[index]) {
-          const cardWidth = cards[0].offsetWidth;
-          const gap = 16;
-          const scrollTo = index * (cardWidth + gap);
-
-          grid.scrollTo({
-            left: scrollTo,
-            behavior: 'smooth'
-          });
-
-          // Update active dot immediately
-          dots.forEach(d => d.classList.remove('active'));
-          dot.classList.add('active');
-        }
-      });
-    });
-
-    // Initial update
-    updateActiveDot();
-
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        if (window.innerWidth <= 699) {
-          updateActiveDot();
-        }
-      }, 250);
-    });
-  })();
-</script>
+<script src="{{ 'swipe-carousel.js' | asset_url }}" defer></script>
+<script src="{{ 'featured-collections.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -245,7 +180,7 @@ FEATURED COLLECTIONS SECTION
           "id": "button_text",
           "label": "Button Text",
           "default": "Shop Collection"
-        },
+        }
       ]
     }
   ],

@@ -1,4 +1,7 @@
-{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient
+  | default: section.settings.color_scheme.settings.background
+  | md5
+-%}
 
 <div class="section-spacing section-spacing--tight color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}">
   {%- if cart.empty? -%}
@@ -32,9 +35,9 @@
 
           <div class="v-stack gap-6">
             {%- comment -%}
-            ----------------------------------------------------------------------------------------------------------------
-            ORDER SUMMARY
-            ----------------------------------------------------------------------------------------------------------------
+              ----------------------------------------------------------------------------------------------------------------
+              ORDER SUMMARY
+              ----------------------------------------------------------------------------------------------------------------
             {%- endcomment -%}
             <table class="order-summary table--reduce-border">
               <thead class="order-summary__header">
@@ -55,7 +58,11 @@
                         <line-item-quantity class="v-stack justify-items-center gap-2">
                           {%- render 'quantity-selector', line_item: line_item, size: 'sm' -%}
 
-                          <a href="{{ line_item.url_to_remove }}" class="link text-xs" aria-label="{{ 'cart.order.remove_with_title' | t: title: line_item.title | escape }}">
+                          <a
+                            href="{{ line_item.url_to_remove }}"
+                            class="link text-xs"
+                            aria-label="{{ 'cart.order.remove_with_title' | t: title: line_item.title | escape }}"
+                          >
                             {{- 'cart.order.remove' | t -}}
                           </a>
                         </line-item-quantity>
@@ -75,16 +82,23 @@
             </table>
 
             {%- comment -%}
-            ----------------------------------------------------------------------------------------------------------------
-            CART FOOTER
-            ----------------------------------------------------------------------------------------------------------------
+              ----------------------------------------------------------------------------------------------------------------
+              CART FOOTER
+              ----------------------------------------------------------------------------------------------------------------
             {%- endcomment -%}
             <div class="cart-footer">
               {%- if section.settings.show_cart_note -%}
                 <cart-note class="cart-note">
                   {%- assign order_note = 'cart.general.add_order_note' | t -%}
                   {%- assign placeholder = 'cart.general.note_placeholder' | t -%}
-                  {%- render 'input', name: 'note', multiline: 3, label: order_note, value: cart.note, placeholder: placeholder, show_label_as_block: true -%}
+                  {%- render 'input',
+                    name: 'note',
+                    multiline: 3,
+                    label: order_note,
+                    value: cart.note,
+                    placeholder: placeholder,
+                    show_label_as_block: true
+                  -%}
                 </cart-note>
               {%- endif -%}
 
@@ -99,10 +113,14 @@
                       <div class="h-stack justify-start gap-2">
                         <span class="discount-badge text-xs">
                           {%- render 'icon' with 'discount', width: 12 -%}
-                          {{- discount_application.title -}} (-{{ discount_application.total_allocated_amount | money }})
+                          {{- discount_application.title -}}
+                          (-{{ discount_application.total_allocated_amount | money }})
 
                           {%- if section.settings.allow_discount_application and discount_application.type != '' -%}
-                            <cart-discount-remove-button discount-code="{{ discount_application.title | escape }}" class="h-stack align-center">
+                            <cart-discount-remove-button
+                              discount-code="{{ discount_application.title | escape }}"
+                              class="h-stack align-center"
+                            >
                               <button type="button">{%- render 'icon' with 'close', width: 8 -%}</button>
                             </cart-discount-remove-button>
                           {%- endif -%}
@@ -146,11 +164,18 @@
 
                 {%- if section.settings.show_shipping_text -%}
                   {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
-                    <p class="text-subdued text-sm">{{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}</p>
+                    <p class="text-subdued text-sm">
+                      {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                    </p>
                   {%- elsif cart.taxes_included -%}
                     <p class="text-subdued text-sm">{{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}</p>
                   {%- elsif shop.shipping_policy.body != blank -%}
-                    <p class="text-subdued text-sm">{{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}</p>
+                    <p class="text-subdued text-sm">
+                      {{
+                        'cart.general.taxes_and_shipping_policy_at_checkout_html'
+                        | t: link: shop.shipping_policy.url
+                      }}
+                    </p>
                   {%- else -%}
                     <p class="text-subdued text-sm">{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
                   {%- endif -%}
@@ -168,19 +193,28 @@
                 </noscript>
 
                 {%- assign checkout_button = 'cart.general.checkout' | t -%}
-                {%- render 'button', type: 'submit', content: checkout_button, name: 'checkout' -%}
+                {%- render 'button',
+                  type: 'submit',
+                  content: checkout_button,
+                  name: 'checkout',
+                  background: section.settings.checkout_button_background,
+                  text_color: section.settings.checkout_button_text_color
+                -%}
               </div>
             </div>
           </div>
 
           {%- comment -%}
-          ----------------------------------------------------------------------------------------------------------------
-          SHIPPING ESTIMATOR
-          ----------------------------------------------------------------------------------------------------------------
+            ----------------------------------------------------------------------------------------------------------------
+            SHIPPING ESTIMATOR
+            ----------------------------------------------------------------------------------------------------------------
           {%- endcomment -%}
 
           {%- if section.settings.show_shipping_estimator and cart.requires_shipping -%}
-            {%- render 'shipping-estimator' -%}
+            {%- render 'shipping-estimator',
+              button_background: section.settings.checkout_button_background,
+              button_text_color: section.settings.checkout_button_text_color
+            -%}
           {%- endif -%}
         </form>
       </div>
@@ -236,11 +270,26 @@
       "id": "show_shipping_estimator",
       "label": "t:sections.main_cart.show_shipping_estimator",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "checkout_button_background",
+      "label": "Checkout button background",
+      "info": "Customize checkout and estimate button colors",
+      "default": "#18a9a2"
+    },
+    {
+      "type": "color",
+      "id": "checkout_button_text_color",
+      "label": "Checkout button text color",
+      "default": "#ffffff"
     }
   ],
 
-  "blocks": [
-    { "type": "@app" }
-  ]
+  "blocks": [{ "type": "@app" }]
 }
 {% endschema %}

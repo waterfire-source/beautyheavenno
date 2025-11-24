@@ -24,41 +24,22 @@
           {%- if product != blank -%}
             <div class="bestsellers__product-card" {{ block.shopify_attributes }}>
               <div class="bestsellers__product-image-wrapper">
-                {%- if product.featured_media -%}
-                  <a href="{{ product.url }}" class="bestsellers__product-image-link" data-instant>
-                    {{- product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', sizes: '(max-width: 699px) 50vw, 25vw', widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800', class: 'bestsellers__product-image' -}}
-                  </a>
-                {%- else -%}
-                  {%- capture placeholder -%}{% cycle 'product-1', 'product-2', 'product-3', 'product-4', 'product-5', 'product-6' %}{%- endcapture -%}
-                  <a href="{{ product.url }}" class="bestsellers__product-image-link" data-instant>
-                    {{- placeholder | placeholder_svg_tag: 'bestsellers__product-image placeholder' -}}
-                  </a>
-                {%- endif -%}
-
-                {%- if product.available -%}
-                  {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
-                    <product-form>
-                      {%- form 'product', product -%}
-                        <input type="hidden" name="on_success" value="force_open_drawer">
-                        <input type="hidden" name="quantity" value="1">
-                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                        <button type="submit" class="bestsellers__quick-add-button">
-                          <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>
-                          {%- render 'icon' with 'plus', width: 16 -%}
-                        </button>
-                      {%- endform -%}
-                    </product-form>
+                <a href="{{ product.url }}" class="bestsellers__product-image-link" data-instant>
+                  {%- if product.featured_media -%}
+                    {{-
+                      product.featured_media
+                      | image_url: width: product.featured_media.width
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(max-width: 699px) 50vw, 25vw',
+                        widths: '200,300,400,500,600,700,800,1000,1200,1400,1600,1800',
+                        class: 'bestsellers__product-image'
+                    -}}
                   {%- else -%}
-                    {%- capture quick_buy_id -%}bestsellers-quick-buy-{{ section.id }}-{{ block.id }}-{{ product.id }}{%- endcapture -%}
-                    <quick-buy-modal id="{{ quick_buy_id }}" handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}" class="quick-buy-modal modal modal--lg color-scheme color-scheme--dialog">
-                      LOADING
-                    </quick-buy-modal>
-                    <button type="button" aria-controls="{{ quick_buy_id }}" class="bestsellers__quick-add-button">
-                      <span class="sr-only">{{ 'product.general.choose_options' | t }}</span>
-                      {%- render 'icon' with 'plus', width: 16 -%}
-                    </button>
+                    {%- capture placeholder -%}{% cycle 'product-1', 'product-2', 'product-3', 'product-4', 'product-5', 'product-6' %}{%- endcapture -%}
+                    {{- placeholder | placeholder_svg_tag: 'bestsellers__product-image placeholder' -}}
                   {%- endif -%}
-                {%- endif -%}
+                </a>
               </div>
 
               <div class="bestsellers__product-info">
@@ -70,6 +51,67 @@
                     {{ product.selected_or_first_available_variant.price | money }}
                   {%- else -%}
                     {{ product.price | money }}
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} Add to Cart Button Below Product Info {%- endcomment -%}
+                <div class="bestsellers__button-wrapper">
+                  {%- if product.available -%}
+                    {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
+                      <product-form>
+                        {%- form 'product', product -%}
+                          <input type="hidden" name="on_success" value="force_open_drawer">
+                          <input type="hidden" name="quantity" value="1">
+                          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                          {%- liquid
+                            assign button_text = 'product.general.add_to_cart_button' | t
+                          -%}
+                          {%- render 'button',
+                            type: 'submit',
+                            content: button_text,
+                            style: 'solid',
+                            stretch: true,
+                            size: 'sm',
+                            background: section.settings.button_background,
+                            text_color: section.settings.button_text_color
+                          -%}
+                        {%- endform -%}
+                      </product-form>
+                    {%- else -%}
+                      {%- capture quick_buy_id -%}bestsellers-quick-buy-{{ section.id }}-{{ block.id }}-{{ product.id }}{%- endcapture -%}
+                      <quick-buy-modal
+                        id="{{ quick_buy_id }}"
+                        handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}"
+                        class="quick-buy-modal modal modal--lg color-scheme color-scheme--dialog"
+                      >
+                        LOADING
+                      </quick-buy-modal>
+                      {%- liquid
+                        assign button_text = 'product.general.choose_options' | t
+                      -%}
+                      {%- render 'button',
+                        type: 'button',
+                        content: button_text,
+                        style: 'solid',
+                        stretch: true,
+                        size: 'sm',
+                        aria_controls: quick_buy_id,
+                        background: section.settings.button_background,
+                        text_color: section.settings.button_text_color
+                      -%}
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- liquid
+                      assign button_text = 'product.general.sold_out_button' | t
+                    -%}
+                    {%- render 'button',
+                      type: 'button',
+                      content: button_text,
+                      style: 'outline',
+                      stretch: true,
+                      size: 'sm',
+                      disabled: true
+                    -%}
                   {%- endif -%}
                 </div>
               </div>
@@ -120,6 +162,23 @@
       "max": 3,
       "step": 1,
       "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#18a9a2",
+      "info": "Color for add to cart buttons"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     }
   ],
   "blocks": [

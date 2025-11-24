@@ -95,9 +95,16 @@
                     </div>
                   {%- endif -%}
 
-                  <button type="submit" class="newsletter-popup-pro__button">
-                    {{ section.settings.button_text | default: 'Meld meg på' }}
-                  </button>
+                  {%- liquid
+                    assign popup_button_text = section.settings.button_text | default: 'Meld meg på'
+                  -%}
+                  {%- render 'button',
+                    type: 'submit',
+                    content: popup_button_text,
+                    stretch: true,
+                    background: section.settings.button_background,
+                    text_color: section.settings.button_text_color
+                  -%}
                 {%- endif -%}
               {%- endform -%}
             {%- endif -%}
@@ -172,19 +179,19 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "Title",
-      "default": "20% rabatt"
+      "default": "20% Discount"
     },
     {
       "type": "inline_richtext",
       "id": "subtitle",
       "label": "Subtitle",
-      "default": "på din første ordre!"
+      "default": "on your first order!"
     },
     {
       "type": "richtext",
       "id": "content",
       "label": "Description",
-      "default": "<p>Meld deg på vårt nyhetsbrev, og motta en eksklusiv rabattkode.</p><p>Gjelder ikke på allerede nedsatte varer. Kampanjen slutter når vi av november.</p>"
+      "default": "<p>Sign up for our newsletter and receive an exclusive discount code.</p><p>Does not apply to already discounted items. The campaign ends at the end of November.</p>"
     },
     {
       "type": "header",
@@ -200,7 +207,7 @@
       "type": "text",
       "id": "email_placeholder",
       "label": "Email input placeholder",
-      "default": "Skriv inn din e-post"
+      "default": "Enter your email."
     },
     {
       "type": "checkbox",
@@ -212,13 +219,29 @@
       "type": "text",
       "id": "consent_text",
       "label": "Consent checkbox text",
-      "default": "Jeg godtar at dere kan sende meg e-post."
+      "default": "I agree that you can send me emails."
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button text",
-      "default": "Meld meg på"
+      "default": "Sign me up"
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#2CB9B9"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     },
     {
       "type": "header",

@@ -48,6 +48,7 @@
   display: flex;
   gap: 12px;
   width: 100%;
+  align-items: stretch;
 }
 
 .newsletter-section__input {
@@ -73,28 +74,11 @@
   border-color: #18a9a2;
 }
 
-.newsletter-section__button {
-  padding: 14px 32px;
-  border: none;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: 0.35px;
-  color: #ffffff;
-  background-color: #18a9a2;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+/* Native button wrapper styling */
+.newsletter-section__form-wrapper > form-submit-button,
+.newsletter-section__form-wrapper .button {
   white-space: nowrap;
-}
-
-.newsletter-section__button:hover {
-  background-color: #159a94;
-}
-
-.newsletter-section__button:active {
-  background-color: #128b86;
+  min-width: fit-content;
 }
 
 .newsletter-section__success {
@@ -139,7 +123,8 @@
     gap: 12px;
   }
 
-  .newsletter-section__button {
+  .newsletter-section__form-wrapper > form-submit-button,
+  .newsletter-section__form-wrapper .button {
     width: 100%;
   }
 }

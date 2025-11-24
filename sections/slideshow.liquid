@@ -1,9 +1,9 @@
 {%- comment -%}
-------------------------------------------------------------------------------------------------------------------------
-DEVELOPER NOTE: the slideshow is one of Prestige most complex sections due to the large number of settings it offers. We
-highly recommend you to not edit the code unless you have fully reviewed and understood all the code. A simple change
-may have important consequence on the section itself.
-------------------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------------------
+  DEVELOPER NOTE: the slideshow is one of Prestige most complex sections due to the large number of settings it offers. We
+  highly recommend you to not edit the code unless you have fully reviewed and understood all the code. A simple change
+  may have important consequence on the section itself.
+  ------------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {{ 'slideshow.css' | asset_url | stylesheet_tag }}
@@ -11,10 +11,26 @@ may have important consequence on the section itself.
 {%- if section.blocks.size > 0 -%}
   {%- assign carousel_id = 'carousel-' | append: section.id -%}
 
-  <slideshow-carousel id="{{ carousel_id }}" class="slideshow" allow-swipe {% if section.settings.allow_transparent_header %}allow-transparent-header{% endif %} cell-selector=".slideshow__slide" {% if section.settings.autoplay %}autoplay="{{ section.settings.cycle_speed }}"{% endif %} {% if section.settings.autoplay and section.settings.autoplay_pause_on_video %}autoplay-pause-on-video{% endif %} role="region" style="{% render 'surface', background: section.settings.background %}">
+  <slideshow-carousel
+    id="{{ carousel_id }}"
+    class="slideshow"
+    allow-swipe
+    {% if section.settings.allow_transparent_header %}
+      allow-transparent-header
+    {% endif %}
+    cell-selector=".slideshow__slide"
+    {% if section.settings.autoplay %}
+      autoplay="{{ section.settings.cycle_speed }}"
+    {% endif %}
+    {% if section.settings.autoplay and section.settings.autoplay_pause_on_video %}
+      autoplay-pause-on-video
+    {% endif %}
+    role="region"
+    style="{% render 'surface', background: section.settings.background %}"
+  >
     {%- for block in section.blocks -%}
       {%- capture slide -%}
-        <div class="content-over-media content-over-media--{{ section.settings.media_size }}" style="--content-over-media-content-max-width: {{ block.settings.content_max_width }}px; --content-over-media-gradient-overlay: {{ block.settings.gradient_overlay }}">
+        <div class="content-over-media content-over-media-slideshow content-over-media--{{ section.settings.media_size }}" style="--content-over-media-content-max-width: {{ block.settings.content_max_width }}px; --content-over-media-gradient-overlay: {{ block.settings.gradient_overlay }}">
           {%- comment -%}---------------- MEDIA ----------------{%- endcomment -%}
           {%- if block.type == 'image' -%}
             {%- if block.settings.image != blank -%}
@@ -26,8 +42,13 @@ may have important consequence on the section itself.
                   assign loading_strategy = 'lazy'
                   assign fetch_priority = 'low'
                 endif
+                
+                assign image_link = block.settings.button_1_link | default: block.settings.button_2_link
               -%}
 
+              {%- if image_link != blank -%}
+                <a href="{{ image_link }}" class="slideshow__image-link" data-instant>
+              {%- endif -%}
               <picture>
                 {%- if block.settings.mobile_image != blank -%}
                   <source
@@ -40,6 +61,9 @@ may have important consequence on the section itself.
 
                 {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, fetchpriority: fetch_priority, sizes: '100vw', widths: '800,1200,1800,2400,2800,3200' -}}
               </picture>
+              {%- if image_link != blank -%}
+                </a>
+              {%- endif -%}
             {%- else -%}
               {%- capture placeholder_image -%}{% cycle 'placeholder': 'lifestyle-1', 'lifestyle-2' %}{%- endcapture -%}
               {{- placeholder_image | placeholder_svg_tag: 'placeholder' | replace: '<svg', '<svg preserveAspectRatio="xMinYMin slice"' -}}
@@ -165,25 +189,55 @@ may have important consequence on the section itself.
         {%- endif -%}
       {%- endcapture -%}
 
-      {%- if block.settings.button_1_link != blank and block.settings.button_1_text == blank and block.settings.button_2_text == blank -%}
-        <a href="{{ block.settings.button_1_link }}" class="slideshow__slide {% if forloop.first %}is-selected{% endif %}" media-type="{{ block.type }}" {% if forloop.first and section.settings.show_initial_transition %}reveal-on-scroll="true"{% endif %} role="group" {{ block.shopify_attributes }}>
+      {%- if block.settings.button_1_link != blank
+        and block.settings.button_1_text == blank
+        and block.settings.button_2_text == blank
+      -%}
+        <a
+          href="{{ block.settings.button_1_link }}"
+          class="slideshow__slide {% if forloop.first %}is-selected{% endif %}"
+          media-type="{{ block.type }}"
+          {% if forloop.first and section.settings.show_initial_transition %}
+            reveal-on-scroll="true"
+          {% endif %}
+          role="group"
+          {{ block.shopify_attributes }}
+        >
           {{- slide -}}
         </a>
       {%- else -%}
-        <div class="slideshow__slide {% if forloop.first %}is-selected{% endif %}" media-type="{{ block.type }}" {% if forloop.first and section.settings.show_initial_transition %}reveal-on-scroll="true"{% endif %} role="group" {{ block.shopify_attributes }}>
+        <div
+          class="slideshow__slide {% if forloop.first %}is-selected{% endif %}"
+          media-type="{{ block.type }}"
+          {% if forloop.first and section.settings.show_initial_transition %}
+            reveal-on-scroll="true"
+          {% endif %}
+          role="group"
+          {{ block.shopify_attributes }}
+        >
           {{- slide -}}
         </div>
       {%- endif -%}
     {%- endfor -%}
 
     {%- if section.blocks.size > 1 -%}
-      <carousel-navigation aria-controls="{{ carousel_id }}" class="page-dots {% if section.settings.autoplay %}page-dots--autoplay{% endif %}" style="{% render 'surface', text_color: section.settings.controls_color %}">
+      <carousel-navigation
+        aria-controls="{{ carousel_id }}"
+        class="page-dots {% if section.settings.autoplay %}page-dots--autoplay{% endif %}"
+        style="{% render 'surface', text_color: section.settings.controls_color %}"
+      >
         {%- for i in (1..section.blocks.size) -%}
           <button class="tap-area" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
             <span class="sr-only">{{ 'general.accessibility.go_to_item' | t: index: forloop.index }}</span>
 
             {%- if section.settings.autoplay -%}
-              <svg class="circular-progress" height="8" width="8" viewBox="0 0 8 8" style="--stroke-dasharray: {{ 2 | times: 3.14159265359 | times: 3.25 }}">
+              <svg
+                class="circular-progress"
+                height="8"
+                width="8"
+                viewBox="0 0 8 8"
+                style="--stroke-dasharray: {{ 2 | times: 3.14159265359 | times: 3.25 }}"
+              >
                 <circle cx="50%" cy="50%" fill="none" stroke-width="1.5" r="3.25" stroke="currentColor" stroke-opacity="0.2"></circle>
                 <circle cx="50%" cy="50%" fill="none" stroke-width="1.5" r="3.25" stroke="currentColor" stroke-linecap="round"></circle>
               </svg>
@@ -194,7 +248,10 @@ may have important consequence on the section itself.
     {%- endif -%}
 
     {%- if section.settings.show_next_section_button -%}
-      <button data-action="navigate-next" class="slideshow__next-section-button circle-button circle-button--lg hover:animate-icon-block">
+      <button
+        data-action="navigate-next"
+        class="slideshow__next-section-button circle-button circle-button--lg hover:animate-icon-block"
+      >
         <span class="sr-only">{{ 'general.accessibility.navigate_to_next_section' | t }}</span>
         {%- render 'icon' with 'arrow-down' -%}
       </button>

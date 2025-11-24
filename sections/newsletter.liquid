@@ -20,7 +20,8 @@
       {%- else -%}
         {%- if form.errors -%}
           <div class="newsletter-section__error">
-            {{ form.errors.translated_fields['email'] }} {{ form.errors.messages['email'] }}
+            {{ form.errors.translated_fields.email }}
+            {{ form.errors.messages.email }}
           </div>
         {%- endif -%}
 
@@ -37,9 +38,15 @@
             autocomplete="email"
             aria-label="{{ 'general.newsletter.email' | t }}"
           >
-          <button type="submit" class="newsletter-section__button">
-            {{ section.settings.button_text | default: 'Subscribe' }}
-          </button>
+          {%- liquid
+            assign button_text = section.settings.button_text | default: 'Subscribe'
+          -%}
+          {%- render 'button',
+            type: 'submit',
+            content: button_text,
+            background: section.settings.button_background,
+            text_color: section.settings.button_text_color
+          -%}
         </div>
       {%- endif -%}
     {%- endform -%}
@@ -78,6 +85,22 @@
       "id": "button_text",
       "label": "Button Text",
       "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#18a9a2"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     }
   ],
   "presets": [

@@ -176,8 +176,16 @@
 
     {%- if show_reviews -%}
       {%- capture reviews_content -%}
-        <div class="product-tabs__reviews">
-          <p class="text-subdued">{{ 'product.reviews.no_reviews' | t }}</p>
+        <div class="product-tabs__reviews" id="product-reviews-tab-content-{{ block.id }}">
+          <div 
+            id="judgeme_product_reviews-{{ product.id }}" 
+            class="jdgm-widget jdgm-review-widget" 
+            data-id="{{ product.id }}"
+            data-product-title="{{ product.title | escape }}"
+            data-product-url="{{ shop.url }}{{ product.url }}"
+            data-auto-install="false"
+          >
+          </div>
         </div>
       {%- endcapture -%}
       {%- capture reviews_title -%}
@@ -187,12 +195,14 @@
           {{- 'product.tabs.reviews' | t -}}
         {%- endif -%}
       {%- endcapture -%}
-      {%- render 'accordion',
+      {%-
+        render 'accordion',
         title: reviews_title,
         content: reviews_content,
         open: false,
         prose_content: true,
-        block: block
+        block: block,
+        id: 'product-reviews-accordion-' | append: block.id
       -%}
     {%- endif -%}
 
@@ -293,6 +303,232 @@
           button.addEventListener('click', function () {});
         });
       }
+    })();
+
+    // Judge.me Reviews Tab Scroll Functionality
+    (function () {
+      {%- if show_reviews -%}
+      const reviewsAccordionId = 'product-reviews-accordion-{{ block.id }}';
+      const reviewsAccordion = document.getElementById(reviewsAccordionId);
+      const productId = {{ product.id }};
+
+      if (reviewsAccordion) {
+        // Function to scroll to and open reviews tab
+        function scrollToReviewsTab() {
+          const detailsElement = reviewsAccordion.querySelector('details');
+
+          if (detailsElement) {
+            // Open the accordion if it's closed
+            if (!detailsElement.open) {
+              detailsElement.open = true;
+              detailsElement.setAttribute('aria-expanded', 'true');
+            }
+
+            // Wait a bit for accordion to open, then scroll
+            setTimeout(function() {
+              const rect = reviewsAccordion.getBoundingClientRect();
+              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              const offset = 120; // Offset from top of viewport
+              const targetPosition = rect.top + scrollTop - offset;
+
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+
+              // Also focus on the accordion for accessibility
+              reviewsAccordion.focus();
+            }, 150);
+          }
+        }
+
+        // Use event delegation on document body to catch all Judge.me badge clicks
+        // This works even if widgets are loaded dynamically
+        function handleJudgeMeBadgeClick(e) {
+          // Check if click is on a Judge.me badge or rating element
+          const clickedElement = e.target;
+
+          // More comprehensive selectors for Judge.me badges
+          const badgeElement = clickedElement.closest(
+            '.jdgm-prev-badge, ' +
+            '.jdgm-prev-badge__stars, ' +
+            '.jdgm-prev-badge__text, ' +
+            '.jdgm-star-widget, ' +
+            'a[href*="#judgeme_product_reviews"], ' +
+            '[class*="jdgm-prev-badge"], ' +
+            '[class*="jdgm-star"]'
+          );
+
+          if (badgeElement) {
+            // Don't process if we're already in the reviews tab
+            const isInReviewsTab = clickedElement.closest('#product-reviews-tab-content-{{ block.id }}');
+            if (isInReviewsTab) {
+              return; // Allow normal behavior in the reviews tab
+            }
+
+            // Check if this badge is for the current product
+            const widget = badgeElement.closest('[data-id], .jdgm-widget');
+            const badgeProductId = widget ? (widget.getAttribute('data-id') || widget.dataset.id) : null;
+
+            // If product ID matches or no specific ID, proceed
+            if (!badgeProductId || badgeProductId == productId || badgeProductId == '{{ product.id }}') {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              scrollToReviewsTab();
+              return false;
+            }
+          }
+        }
+
+        // Add event listener to document body (event delegation) - capture phase
+        document.body.addEventListener('click', handleJudgeMeBadgeClick, true);
+
+        // Also add in bubble phase to catch any missed events
+        document.body.addEventListener('click', handleJudgeMeBadgeClick, false);
+
+        // Also add specific handlers for common Judge.me badge structures
+        function setupJudgeMeHandlers() {
+          // Find all Judge.me badge widgets (not in the reviews tab)
+          const judgeMeBadges = document.querySelectorAll(
+            '.jdgm-prev-badge, ' +
+            '.jdgm-widget.jdgm-prev-badge, ' +
+            '[data-id="' + productId + '"].jdgm-prev-badge, ' +
+            '[data-id="' + productId + '"] .jdgm-prev-badge, ' +
+            '.jdgm-star-widget, ' +
+            '.jdgm-prev-badge__text, ' +
+            '.jdgm-prev-badge__stars, ' +
+            'a[href*="#judgeme_product_reviews"]'
+          );
+
+          judgeMeBadges.forEach(function(badge) {
+            // Skip if this badge is inside the reviews tab
+            if (badge.closest('#product-reviews-tab-content-{{ block.id }}')) {
+              return;
+            }
+
+            // Remove any existing href to prevent default scroll
+            if (badge.tagName === 'A') {
+              badge.removeAttribute('href');
+              badge.setAttribute('data-original-href', badge.href);
+            }
+
+            // Make it clear it's clickable
+            badge.style.cursor = 'pointer';
+
+            // Remove all existing click listeners by cloning
+            const newBadge = badge.cloneNode(true);
+            if (badge.parentNode) {
+              badge.parentNode.replaceChild(newBadge, badge);
+            }
+
+            // Add our click handler with highest priority
+            newBadge.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              scrollToReviewsTab();
+              return false;
+            }, true);
+
+            // Also add in capture phase
+            newBadge.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              return false;
+            }, false);
+          });
+
+          // Also handle any anchor links that Judge.me creates
+          const reviewLinks = document.querySelectorAll('a[href*="#judgeme_product_reviews"]');
+          reviewLinks.forEach(function(link) {
+            if (link.closest('#product-reviews-tab-content-{{ block.id }}')) {
+              return;
+            }
+
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              scrollToReviewsTab();
+              return false;
+            }, true);
+          });
+        }
+
+        // Try immediately
+        setupJudgeMeHandlers();
+
+        // Try after delays for async-loaded widgets
+        setTimeout(setupJudgeMeHandlers, 300);
+        setTimeout(setupJudgeMeHandlers, 800);
+        setTimeout(setupJudgeMeHandlers, 1500);
+        setTimeout(setupJudgeMeHandlers, 3000);
+
+        // Use MutationObserver to detect when Judge.me widgets are added
+        const observer = new MutationObserver(function(mutations) {
+          let shouldSetup = false;
+          mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length > 0) {
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                  // Check if node is a Judge.me element or contains one
+                  if (node.classList && (
+                    node.classList.contains('jdgm') ||
+                    node.classList.contains('jdgm-prev-badge') ||
+                    node.classList.contains('jdgm-widget') ||
+                    node.querySelector('.jdgm-prev-badge, .jdgm-widget, [class*="jdgm"]')
+                  )) {
+                    shouldSetup = true;
+                  }
+                }
+              });
+            }
+          });
+
+          if (shouldSetup) {
+            setupJudgeMeHandlers();
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+
+        // Handle URL hash to open reviews tab
+        if (window.location.hash === '#reviews' || window.location.hash === '#product-reviews') {
+          setTimeout(scrollToReviewsTab, 100);
+        }
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', function() {
+          if (window.location.hash === '#reviews' || window.location.hash === '#product-reviews') {
+            scrollToReviewsTab();
+          }
+        });
+
+        // Initialize Judge.me review widget when tab is opened
+        const detailsElement = reviewsAccordion.querySelector('details');
+        if (detailsElement) {
+          detailsElement.addEventListener('toggle', function() {
+            if (detailsElement.open) {
+              // When tab opens, ensure Judge.me widget is initialized
+              const reviewWidget = document.getElementById('judgeme_product_reviews-{{ product.id }}');
+              if (reviewWidget && typeof window.judgeme !== 'undefined') {
+                // Trigger Judge.me to load reviews if not already loaded
+                setTimeout(function() {
+                  if (window.judgeme && window.judgeme.loadWidgets) {
+                    window.judgeme.loadWidgets();
+                  }
+                }, 100);
+              }
+            }
+          });
+        }
+      }
+      {%- endif -%}
     })();
   </script>
 {%- endif -%}

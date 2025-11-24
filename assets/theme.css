@@ -367,7 +367,7 @@ height-observer {
   cursor: pointer;
   color: rgb(var(--button-text-color));
   border: 1px solid rgb(var(--button-outline-color, var(--button-background)));
-  border-radius: var(--button-border-radius);
+  border-radius: max(8px, var(--button-border-radius));
   background-color: #0000;
   background-image: var(--initial-gradient), var(--hover-gradient);
   background-size: 101% 101%, 0 101%;
@@ -4191,6 +4191,21 @@ product-rerender {
   inset-inline-start: 0;
 }
 
+.cart-drawer__order-note .button {
+  --button-background: 24, 169, 162;
+  --button-text-color: 255, 255, 255;
+  --button-outline-color: 24, 169, 162;
+  background-color: #18a9a2;
+  color: #ffffff;
+  border-color: #18a9a2;
+}
+
+.cart-drawer__order-note .button:hover {
+  background-color: #ffffff;
+  color: #18a9a2;
+  border-color: #18a9a2;
+}
+
 @media screen and (min-width: 700px) {
   .cart-drawer__complementary-products {
     padding-block: 2rem;
@@ -4279,7 +4294,7 @@ product-rerender {
 
 .collection-toolbar .popover {
   --popover-block-offset: 0px;
-  inset-inline-end: -1px;
+  inset-inline-end: 0px;
 }
 
 .collection-toolbar__button-list {
@@ -4901,7 +4916,7 @@ product-rerender {
   width: max-content;
   height: 2px;
   transform-origin: var(--transform-origin-start);
-  background: rgb(var(--text-color));
+  background: #18a9a2;
   color: #0000;
   font-size: var(--text-h6);
   font-family: var(--heading-font-family);

@@ -1,15 +1,15 @@
 {%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-SHIPPING ESTIMATOR COMPONENT
----------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------------------------------------------------
+  SHIPPING ESTIMATOR COMPONENT
+  ---------------------------------------------------------------------------------------------------------------------
 
-This component creates a shipping estimator block.
+  This component creates a shipping estimator block.
 
-********************************************
-Supported parameters
-********************************************
+  ********************************************
+  Supported parameters
+  ********************************************
 
-None
+  None
 {%- endcomment -%}
 
 <shipping-estimator class="shipping-estimator bordered-box">
@@ -32,7 +32,12 @@ None
       </country-selector>
 
       {%- render 'input', label: zip_label, name: 'address[zip]', autocapitalize: 'characters' -%}
-      {%- render 'button', type: 'button', content: estimate_button -%}
+      {%- render 'button',
+        type: 'button',
+        content: estimate_button,
+        background: button_background,
+        text_color: button_text_color
+      -%}
     </div>
 
     <span role="region" aria-live="polite" hidden><!-- Holder for results --></span>

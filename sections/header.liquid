@@ -99,7 +99,7 @@
                 type="search"
                 name="q"
                 class="header__search-input"
-                placeholder="Hei. Hva leter du etter?"
+                placeholder="Search for products, brands..."
                 aria-label="Search"
                 autocomplete="off"
                 spellcheck="false"
@@ -119,7 +119,7 @@
             class="header__utility-item"
           >
             <i class="fa-solid fa-headphones header__utility-icon"></i>
-            <span class="header__utility-text">Kundeservice</span>
+            <span class="header__utility-text">Wishlist</span>
           </a>
 
           {%- comment -%} Login/Account {%- endcomment -%}
@@ -129,7 +129,7 @@
               class="header__utility-item"
             >
               {%- render 'icon' with 'account', class: 'header__utility-icon' -%}
-              <span class="header__utility-text">Logg inn</span>
+              <span class="header__utility-text">Account</span>
             </a>
           {%- endif -%}
 
@@ -143,7 +143,7 @@
             data-no-instant
           >
             {%- render 'icon' with 'cart', class: 'header__utility-icon' -%}
-            <span class="header__utility-text">Handlekurv</span>
+            <span class="header__utility-text">Cart</span>
             {%- unless cart.empty? -%}
               <span class="header__cart-badge">{{ cart.item_count }}</span>
             {%- endunless -%}

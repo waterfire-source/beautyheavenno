@@ -18,8 +18,14 @@
     {%- endif -%}
 
     {%- if has_products -%}
+      {%- assign carousel_id = 'choose-shade-carousel-' | append: section.id -%}
       <div class="choose-shade-section__products-wrapper">
-        <div class="choose-shade-section__products-carousel" id="products-carousel-{{ section.id }}">
+        <choose-shade-carousel
+          id="{{ carousel_id }}"
+          class="choose-shade-section__products-carousel"
+          allow-swipe
+          cell-selector=".choose-shade-section__product-slide"
+        >
           {%- for i in (1..2) -%}
             {%- assign product_setting = 'product_' | append: i -%}
             {%- assign product = section.settings[product_setting] -%}
@@ -27,104 +33,102 @@
             {%- if product != blank -%}
               {%- assign form_id = 'choose-shade-form-' | append: section.id | append: '-' | append: i -%}
 
-              <div class="choose-shade-section__product-slide {% if forloop.first %}is-active{% endif %}" data-product-index="{{ i }}">
-              {%- if product.media.size > 0 -%}
-                <div class="choose-shade-section__image-wrapper">
-                  <div class="choose-shade-section__image-carousel" id="carousel-{{ section.id }}-{{ i }}">
-                    {%- for media in product.media -%}
-                      <div class="choose-shade-section__image-slide {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
-                        <img src="{{ media | image_url: width: 600 }}" alt="{{ product.title }}" loading="lazy" class="choose-shade-section__image" data-media-id="{{ media.id }}" width="{{ media.width }}" height="{{ media.height }}">
-                      </div>
-                    {%- endfor -%}
+              <div
+                class="choose-shade-section__product-slide {% if forloop.first %}is-selected{% endif %}"
+                data-product-index="{{ i }}"
+              >
+                {%- if product.media.size > 0 -%}
+                  <div class="choose-shade-section__image-wrapper">
+                    <choose-shade-image-carousel
+                      class="choose-shade-section__image-carousel"
+                      data-product-index="{{ i }}"
+                      allow-swipe
+                      cell-selector=".choose-shade-section__image-slide"
+                    >
+                      {%- liquid
+                        assign first_slide_active = true
+                      -%}
+                      {%- for media in product.media -%}
+                        <div
+                          class="choose-shade-section__image-slide {% if first_slide_active %}is-selected{% endif %}"
+                          data-media-id="{{ media.id }}"
+                        >
+                          <img
+                            src="{{ media | image_url: width: 600 }}"
+                            alt="{{ product.title }}"
+                            loading="lazy"
+                            class="choose-shade-section__image"
+                            data-media-id="{{ media.id }}"
+                            width="{{ media.width }}"
+                            height="{{ media.height }}"
+                          >
+                        </div>
+                        {%- assign first_slide_active = false -%}
+                      {%- endfor -%}
+                    </choose-shade-image-carousel>
                   </div>
-
-                  {%- if product.media.size > 1 -%}
-                    <button type="button" class="choose-shade-section__nav choose-shade-section__nav--prev" aria-label="Previous image" data-carousel-id="carousel-{{ section.id }}-{{ i }}">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                    <button type="button" class="choose-shade-section__nav choose-shade-section__nav--next" aria-label="Next image" data-carousel-id="carousel-{{ section.id }}-{{ i }}">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                  {%- endif -%}
-                </div>
-              {%- else -%}
-                <div class="choose-shade-section__image-wrapper">
-                  <div class="choose-shade-section__image-placeholder">
-                    {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+                {%- else -%}
+                  <div class="choose-shade-section__image-wrapper">
+                    <div class="choose-shade-section__image-placeholder">
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+                    </div>
                   </div>
-                </div>
-              {%- endif -%}
+                {%- endif -%}
 
-              {%- if product.has_only_default_variant == false -%}
-                {%- form 'product', product, id: form_id, class: 'choose-shade-section__form' -%}
-                  {%- comment -%} Output product options data for JavaScript {%- endcomment -%}
-                  <script type="application/json" data-product-options>
-                    {
-                      "options": [
-                        {%- for option in product.options_with_values -%}
-                          {
-                            "position": {{ option.position }},
-                            "name": {{ option.name | json }},
-                            "values": [
-                              {%- for option_value in option.values -%}
-                                {
-                                  "id": "{{ option_value.id }}",
-                                  "name": {{ option_value | json }}
-                                }{% unless forloop.last %},{% endunless %}
-                              {%- endfor -%}
-                            ]
-                          }{% unless forloop.last %},{% endunless %}
-                        {%- endfor -%}
-                      ]
-                    }
-                  </script>
+                {%- if product.has_only_default_variant == false -%}
+                  {%- form 'product', product, id: form_id, class: 'choose-shade-section__form' -%}
+                    {%- comment -%} Output product options data for JavaScript {%- endcomment -%}
+                    <script type="application/json" data-product-options>
+                      {
+                        "options": [
+                          {%- for option in product.options_with_values -%}
+                            {
+                              "position": {{ option.position }},
+                              "name": {{ option.name | json }},
+                              "values": [
+                                {%- for option_value in option.values -%}
+                                  {
+                                    "id": "{{ option_value.id }}",
+                                    "name": {{ option_value | json }}
+                                  }{% unless forloop.last %},{% endunless %}
+                                {%- endfor -%}
+                              ]
+                            }{% unless forloop.last %},{% endunless %}
+                          {%- endfor -%}
+                        ]
+                      }
+                    </script>
 
-                  {%- render 'variant-picker',
-                    product: product,
-                    form_id: form_id,
-                    context: 'featured_product',
-                    selector_style: 'swatch',
-                    swatch_selector_style: 'swatch',
-                    variant_image_options: '' -%}
+                    {%- render 'variant-picker',
+                      product: product,
+                      form_id: form_id,
+                      context: 'featured_product',
+                      selector_style: 'swatch',
+                      swatch_selector_style: 'swatch',
+                      variant_image_options: ''
+                    -%}
+                  {%- endform -%}
+                {%- endif -%}
 
-                {%- endform -%}
-              {%- endif -%}
-
-              {%- if section.settings.button_text != blank -%}
-                <a href="{{ product.url }}" class="choose-shade-section__button">
-                  {{ section.settings.button_text }}
-                </a>
-              {%- endif -%}
+                {%- if section.settings.button_text != blank -%}
+                  <div class="choose-shade-section__button-wrapper">
+                    {%- liquid
+                      assign button_content = section.settings.button_text
+                    -%}
+                    {%- render 'button',
+                      href: product.url,
+                      content: button_content,
+                      style: 'solid',
+                      stretch: true,
+                      background: section.settings.button_background,
+                      text_color: section.settings.button_text_color
+                    -%}
+                  </div>
+                {%- endif -%}
               </div>
             {%- endif -%}
           {%- endfor -%}
-        </div>
-
-        {%- comment -%} Product carousel navigation - outside slides {%- endcomment -%}
-        {%- assign product_count = 0 -%}
-        {%- if product_1 != blank -%}
-          {%- assign product_count = product_count | plus: 1 -%}
-        {%- endif -%}
-        {%- if product_2 != blank -%}
-          {%- assign product_count = product_count | plus: 1 -%}
-        {%- endif -%}
-
-        {%- if product_count > 1 -%}
-          <button type="button" class="choose-shade-section__product-nav choose-shade-section__product-nav--prev" aria-label="Previous product" data-products-carousel="products-carousel-{{ section.id }}">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button type="button" class="choose-shade-section__product-nav choose-shade-section__product-nav--next" aria-label="Next product" data-products-carousel="products-carousel-{{ section.id }}">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        {%- endif -%}
+        </choose-shade-carousel>
       </div>
     {%- else -%}
       <div class="choose-shade-section__products-wrapper">
@@ -143,253 +147,8 @@
   </div>
 </div>
 
-  {%- if has_products -%}
-  <script>
-    (function() {
-      // Initialize product carousel
-      const sectionId = '{{ section.id }}';
-      const productsCarouselId = `products-carousel-${sectionId}`;
-      const productsCarousel = document.getElementById(productsCarouselId);
-
-      if (productsCarousel) {
-        const productSlides = productsCarousel.querySelectorAll('.choose-shade-section__product-slide');
-
-        // Find buttons in the products-wrapper (outside the carousel)
-        const productsWrapper = productsCarousel.closest('.choose-shade-section__products-wrapper');
-        const prevProductBtn = productsWrapper?.querySelector(`.choose-shade-section__product-nav--prev[data-products-carousel="${productsCarouselId}"]`);
-        const nextProductBtn = productsWrapper?.querySelector(`.choose-shade-section__product-nav--next[data-products-carousel="${productsCarouselId}"]`);
-
-        if (productSlides.length > 1) {
-          let currentProductSlide = 0;
-
-          // Find initial active slide
-          productSlides.forEach((slide, i) => {
-            if (slide.classList.contains('is-active')) {
-              currentProductSlide = i;
-            }
-          });
-
-          function showProductSlide(index) {
-            productSlides.forEach((slide, i) => {
-              slide.classList.toggle('is-active', i === index);
-            });
-            currentProductSlide = index;
-          }
-
-          if (prevProductBtn) {
-            prevProductBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              currentProductSlide = (currentProductSlide - 1 + productSlides.length) % productSlides.length;
-              showProductSlide(currentProductSlide);
-            });
-          }
-
-          if (nextProductBtn) {
-            nextProductBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              currentProductSlide = (currentProductSlide + 1) % productSlides.length;
-              showProductSlide(currentProductSlide);
-            });
-          }
-        }
-      }
-
-      // Initialize image carousels for all products
-      const products = document.querySelectorAll('.choose-shade-section__product-slide[data-product-index]');
-
-      products.forEach(function(productElement) {
-        const productIndex = productElement.getAttribute('data-product-index');
-        const carouselId = `carousel-${sectionId}-${productIndex}`;
-        const carousel = document.getElementById(carouselId);
-        if (!carousel) return;
-
-        const slides = carousel.querySelectorAll('.choose-shade-section__image-slide');
-        const prevBtn = productElement.querySelector(`.choose-shade-section__nav--prev[data-carousel-id="${carouselId}"]`);
-        const nextBtn = productElement.querySelector(`.choose-shade-section__nav--next[data-carousel-id="${carouselId}"]`);
-
-        let currentSlide = 0;
-
-        function showSlide(index) {
-          slides.forEach((slide, i) => {
-            slide.classList.toggle('is-active', i === index);
-          });
-        }
-
-        if (prevBtn) {
-          prevBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-          });
-        }
-
-        if (nextBtn) {
-          nextBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-          });
-        }
-
-        // Update image when variant changes
-        const formId = `choose-shade-form-${sectionId}-${productIndex}`;
-        const form = document.getElementById(formId);
-        if (form) {
-          form.addEventListener('variant:change', function(event) {
-            const variant = event.detail.variant;
-            if (variant && variant.featured_media) {
-              // Find and show the slide with this media
-              slides.forEach((slide, i) => {
-                const img = slide.querySelector('img');
-                if (img) {
-                  const mediaId = img.dataset.mediaId || img.getAttribute('data-media-id');
-                  if (mediaId == variant.featured_media.id) {
-                    currentSlide = i;
-                    showSlide(currentSlide);
-                  }
-                }
-              });
-            }
-          });
-
-          // Also listen to input changes for immediate feedback
-          const variantInputs = form.querySelectorAll('input[type="radio"]');
-          variantInputs.forEach(input => {
-            input.addEventListener('change', function() {
-              if (this.dataset.variantMedia) {
-                try {
-                  const variantMedia = JSON.parse(this.dataset.variantMedia);
-                  if (variantMedia && variantMedia.id) {
-                    slides.forEach((slide, i) => {
-                      const img = slide.querySelector('img');
-                      if (img) {
-                        const mediaId = img.dataset.mediaId || img.getAttribute('data-media-id');
-                        if (mediaId == variantMedia.id) {
-                          currentSlide = i;
-                          showSlide(currentSlide);
-                        }
-                      }
-                    });
-                  }
-                } catch (e) {
-                  console.error('Error parsing variant media:', e);
-                }
-              }
-            });
-          });
-        }
-
-        // Function to detect if a color is white or very light (needs border)
-        function isLightColor(hex) {
-          if (!hex || !hex.startsWith('#')) return false;
-          const r = parseInt(hex.slice(1, 3), 16);
-          const g = parseInt(hex.slice(3, 5), 16);
-          const b = parseInt(hex.slice(5, 7), 16);
-          // Calculate luminance
-          const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-          return luminance > 0.85; // Very light colors need border
-        }
-
-        // Function to add labels below swatches
-        function addSwatchLabels() {
-          // Get product options data
-          const optionsDataScript = form?.querySelector('script[data-product-options]');
-          let productOptions = null;
-          if (optionsDataScript) {
-            try {
-              productOptions = JSON.parse(optionsDataScript.textContent);
-            } catch (e) {
-              console.error('Error parsing product options:', e);
-            }
-          }
-
-          const swatches = form?.querySelectorAll('.color-swatch');
-          if (swatches) {
-            swatches.forEach((swatch) => {
-            const label = swatch.closest('label');
-            if (label) {
-              // Remove existing label if any
-              const existingLabel = label.querySelector('.choose-shade-section__swatch-label');
-              if (existingLabel) {
-                existingLabel.remove();
-              }
-
-              const input = label.querySelector('input[type="radio"]');
-              let labelText = '';
-
-              // Try to get option value name from product options data
-              if (input && productOptions) {
-                const optionPosition = parseInt(input.getAttribute('data-option-position'));
-                const optionValueId = input.value;
-
-                // Find the option and value in productOptions
-                const option = productOptions.options.find(opt => opt.position === optionPosition);
-                if (option) {
-                  const value = option.values.find(val => val.id.toString() === optionValueId.toString());
-                  if (value && value.name && !value.name.match(/^#[0-9A-Fa-f]{6}$/)) {
-                    labelText = value.name;
-                  }
-                }
-              }
-
-              // Fallback: try to get from tooltip
-              if (!labelText) {
-                const tooltip = swatch.getAttribute('data-tooltip');
-                if (tooltip && !tooltip.match(/^#[0-9A-Fa-f]{6}$/)) {
-                  labelText = tooltip;
-                }
-              }
-
-              // Fallback: get from sr-only element
-              if (!labelText) {
-                const srOnly = label.querySelector('.sr-only');
-                if (srOnly) {
-                  const srText = srOnly.textContent.trim();
-                  if (!srText.match(/^#[0-9A-Fa-f]{6}$/)) {
-                    labelText = srText;
-                  }
-                }
-              }
-
-              // Add border class for light colors
-              const swatchStyle = swatch.getAttribute('style') || '';
-              const hexMatch = swatchStyle.match(/#[0-9A-Fa-f]{6}/);
-              if (hexMatch) {
-                const hexColor = hexMatch[0];
-                if (isLightColor(hexColor)) {
-                  swatch.classList.add('needs-border');
-                }
-              } else if (labelText && (labelText.toLowerCase().includes('white') || labelText === '#FFFFFF' || labelText === '#ffffff')) {
-                swatch.classList.add('needs-border');
-              } else if (swatchStyle.includes('#FFFFFF') || swatchStyle.includes('#ffffff') || swatchStyle.includes('#fff')) {
-                swatch.classList.add('needs-border');
-              }
-
-              // Only show label if it's not a hex code
-              if (labelText && !labelText.match(/^#[0-9A-Fa-f]{6}$/)) {
-                const labelElement = document.createElement('span');
-                labelElement.className = 'choose-shade-section__swatch-label';
-                labelElement.textContent = labelText;
-                label.appendChild(labelElement);
-              }
-            }
-          });
-        }
-        }
-
-        // Add labels initially
-        addSwatchLabels();
-
-        // Re-add labels when variant picker updates
-        if (form) {
-          form.addEventListener('product:rerender', function() {
-            setTimeout(addSwatchLabels, 100);
-          });
-        }
-      });
-    })();
-  </script>
-  {%- endif -%}
+<script src="{{ 'choose-shade-carousel.js' | asset_url }}" defer></script>
+<script src="{{ 'choose-shade.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -424,6 +183,23 @@
       "id": "button_text",
       "label": "Button Text",
       "default": "View Product"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#18a9a2",
+      "info": "Color for view product buttons"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     }
   ],
   "presets": [

@@ -21,6 +21,7 @@
   * size: can be "sm" or "lg" (if none is passed, the small size is used)
   * bleed: if set to true, the accordion will bleed on mobile
   * block: an optional block to output theme editor attributes
+  * id: an optional id to add to the details element
 {%- endcomment -%}
 
 {{- 'accordion.css' | asset_url | stylesheet_tag -}}
@@ -30,6 +31,9 @@
   {{ block.shopify_attributes }}
 >
   <details
+    {% if id %}
+      id="{{ id }}"
+    {% endif %}
     class="accordion__disclosure group"
     {% if open %}
       open aria-expanded="true"

@@ -1,4 +1,9 @@
-<cart-drawer id="cart-drawer" class="cart-drawer drawer {% if cart.empty? %}drawer--center-body{% endif %} color-scheme color-scheme--{{ section.settings.color_scheme.id }}" initial-focus="false" handle-editor-events>
+<cart-drawer
+  id="cart-drawer"
+  class="cart-drawer drawer {% if cart.empty? %}drawer--center-body{% endif %} color-scheme color-scheme--{{ section.settings.color_scheme.id }}"
+  initial-focus="false"
+  handle-editor-events
+>
   <p class="h4" slot="header">{{ 'cart.general.title' | t }}</p>
 
   {%- if cart.empty? -%}
@@ -30,7 +35,10 @@
       <div class="cart-drawer__complementary-products complementary-products">
         {%- assign carousel_id = 'complementary-products-carousel-' | append: section.id -%}
 
-        {%- if section.settings.cross_sell_title != blank or section.settings.cross_sell_stack_products == false and cross_sell_products_count > 1 -%}
+        {%- if section.settings.cross_sell_title != blank
+          or section.settings.cross_sell_stack_products == false
+          and cross_sell_products_count > 1
+        -%}
           <div class="complementary-products__header complementary-products__header--align-start">
             <p class="h6">{{ section.settings.cross_sell_title }}</p>
 
@@ -63,7 +71,10 @@
             {{- complementary_products -}}
           </div>
         {%- else -%}
-          <scroll-carousel id="{{ carousel_id }}" class="complementary-products__product-list complementary-products__product-list--carousel scroll-area bleed snap-x">
+          <scroll-carousel
+            id="{{ carousel_id }}"
+            class="complementary-products__product-list complementary-products__product-list--carousel scroll-area bleed snap-x"
+          >
             {{- complementary_products -}}
           </scroll-carousel>
         {%- endif -%}
@@ -79,14 +90,23 @@
           <div class="v-stack gap-0.5 justify-items-start">
             {%- if section.settings.show_cart_note -%}
               {%- assign cart_note_dialog_id = 'cart-note-' | append: section.id -%}
-              <button class="link-faded-reverse" aria-controls="{{ cart_note_dialog_id }}">{{ 'cart.general.add_order_note' | t }}</button>
+              <button class="link-faded-reverse" aria-controls="{{ cart_note_dialog_id }}">
+                {{ 'cart.general.add_order_note' | t }}
+              </button>
 
               <cart-note-dialog id="{{ cart_note_dialog_id }}" class="cart-drawer__order-note">
                 <div class="form">
                   <cart-note class="form-control">
                     {%- assign order_note = 'cart.general.order_note' | t -%}
                     {%- assign placeholder = 'cart.general.note_placeholder' | t -%}
-                    {%- render 'input', name: 'note', multiline: 3, label: order_note, value: cart.note, placeholder: placeholder, show_label_as_block: true -%}
+                    {%- render 'input',
+                      name: 'note',
+                      multiline: 3,
+                      label: order_note,
+                      value: cart.note,
+                      placeholder: placeholder,
+                      show_label_as_block: true
+                    -%}
                   </cart-note>
 
                   <dialog-close-button class="contents">
@@ -115,7 +135,10 @@
                   {{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})
 
                   {%- if section.settings.allow_discount_application and discount_application.type != '' -%}
-                    <cart-discount-remove-button discount-code="{{ discount_application.title | escape }}" class="h-stack align-center">
+                    <cart-discount-remove-button
+                      discount-code="{{ discount_application.title | escape }}"
+                      class="h-stack align-center"
+                    >
                       <button type="button">{%- render 'icon' with 'close', width: 8 -%}</button>
                     </cart-discount-remove-button>
                   {%- endif -%}
@@ -128,7 +151,13 @@
         <div class="button-group">
           {%- if section.settings.show_view_cart_button or section.settings.show_checkout_button == false -%}
             {%- assign view_cart = 'cart.general.view_cart' | t -%}
-            {%- render 'button', href: routes.cart_url, content: view_cart, stretch: true -%}
+            {%- render 'button',
+              href: routes.cart_url,
+              content: view_cart,
+              stretch: true,
+              background: section.settings.button_background,
+              text_color: section.settings.button_text_color
+            -%}
           {%- endif -%}
 
           {%- if section.settings.show_checkout_button -%}
@@ -140,7 +169,14 @@
               {%- endif -%}
             {%- endcapture -%}
 
-            {%- render 'button', type: 'submit', content: checkout_button, name: 'checkout', stretch: true -%}
+            {%- render 'button',
+              type: 'submit',
+              content: checkout_button,
+              name: 'checkout',
+              stretch: true,
+              background: section.settings.button_background,
+              text_color: section.settings.button_text_color
+            -%}
           {%- endif -%}
         </div>
       </form>
@@ -203,6 +239,23 @@
       "id": "show_price_in_checkout_button",
       "label": "t:sections.cart_drawer.show_price_in_checkout_button",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "info": "Color for View Cart and Checkout buttons",
+      "default": "#18a9a2"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     },
     {
       "type": "header",

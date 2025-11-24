@@ -52,12 +52,6 @@
   {% endif %}
   handle="{{ product.handle | escape }}"
 >
-  {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    PRODUCT MEDIA
-    --------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
-
   {%- if product.media.size > 0 -%}
     <div class="product-card__figure">
       {%- if show_badges -%}
@@ -103,48 +97,8 @@
           endif
         -%}
       </a>
-
-      {%- if show_quick_buy and product.available -%}
-        {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
-          <product-form>
-            {%- form 'product', product -%}
-              <input type="hidden" name="on_success" value="force_open_drawer">
-              <input type="hidden" name="quantity" value="1">
-              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-              <button type="submit" class="product-card__quick-add-button product-card__quick-add-button--pill">
-                {%- render 'icon' with 'plus', width: 16, height: 16 -%}
-                <span>{{ 'product.general.quick_add' | t }}</span>
-              </button>
-            {%- endform -%}
-          </product-form>
-        {%- else -%}
-          {%- capture quick_buy_id -%}product-quick-buy-{{ section.id }}-{{ block.id }}-{{ quick_buy_context }}-{{ product.id }}{%- endcapture -%}
-
-          <button
-            type="button"
-            aria-controls="{{ quick_buy_id }}"
-            class="product-card__quick-add-button product-card__quick-add-button--pill"
-          >
-            {%- render 'icon' with 'plus', width: 16, height: 16 -%}
-            <span>{{ 'product.general.quick_add' | t }}</span>
-          </button>
-
-          <quick-buy-modal
-            handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}"
-            class="quick-buy-modal modal"
-            id="{{ quick_buy_id }}"
-          >
-          </quick-buy-modal>
-        {%- endif -%}
-      {%- endif -%}
     </div>
   {%- endif -%}
-
-  {%- comment -%}
-    --------------------------------------------------------------------------------------------------------------------
-    PRODUCT INFO
-    --------------------------------------------------------------------------------------------------------------------
-  {%- endcomment -%}
 
   <div class="product-card__info empty:hidden">
     {%- assign text_class = '' -%}
@@ -183,12 +137,20 @@
       </div>
     {%- endif -%}
 
+    {%- if show_rating -%}
+      {%- render 'product-rating',
+        product: product,
+        context: 'card',
+        show_empty: settings.show_product_rating_if_empty,
+        mode: settings.product_rating_mode
+      -%}
+    {%- endif -%}
+
     {%- if show_swatches and settings.product_color_display != 'hide' -%}
       {%- liquid
         assign matched_product_option = null
         assign color_label_list = 'general.label.color' | t | replace: ', ', ',' | downcase | split: ','
 
-        # First, we try to find an option named explicitly "color" in the store's language
         for color_label in color_label_list
           if product.options_by_name[color_label] != blank
             assign matched_product_option = product.options_by_name[color_label]
@@ -196,8 +158,6 @@
           endif
         endfor
 
-        # If we didn't find an option named "color", we try to find an option that has swatches, as this is probably
-        # the color option that the merchant want to use for swatches
         if matched_product_option == blank
           for product_option in product.options_with_values
             assign values_with_swatch = product_option.values | where: 'swatch'
@@ -233,6 +193,51 @@
       {%- endif -%}
     {%- endif -%}
   </div>
+
+  {%- if show_quick_buy and product.available -%}
+    {%- if product.variants.size == 1 and product.selling_plan_groups.size == 0 -%}
+      <product-form class="product-card__add-to-cart-form">
+        {%- form 'product', product -%}
+          <input type="hidden" name="on_success" value="force_open_drawer">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          {%- liquid
+            assign add_to_cart_text = 'product.general.add_to_cart_button' | t
+          -%}
+          {%- render 'button', type: 'submit', content: add_to_cart_text, style: 'solid', stretch: true -%}
+        {%- endform -%}
+      </product-form>
+    {%- else -%}
+      {%- capture quick_buy_id -%}product-quick-buy-{{ section.id }}-{{ block.id }}-{{ quick_buy_context }}-{{ product.id }}{%- endcapture -%}
+
+      <div class="product-card__add-to-cart-wrapper">
+        {%- liquid
+          assign add_to_cart_text = 'product.general.add_to_cart_button' | t
+        -%}
+        {%- render 'button',
+          type: 'button',
+          content: add_to_cart_text,
+          style: 'solid',
+          stretch: true,
+          aria_controls: quick_buy_id
+        -%}
+      </div>
+
+      <quick-buy-modal
+        handle="{{ product.handle }}?variant={{ product.selected_or_first_available_variant.id }}"
+        class="quick-buy-modal modal"
+        id="{{ quick_buy_id }}"
+      >
+      </quick-buy-modal>
+    {%- endif -%}
+  {%- elsif show_quick_buy -%}
+    <div class="product-card__add-to-cart-wrapper">
+      {%- liquid
+        assign sold_out_text = 'product.general.sold_out_button' | t
+      -%}
+      {%- render 'button', type: 'button', content: sold_out_text, style: 'outline', stretch: true, disabled: true -%}
+    </div>
+  {%- endif -%}
 </product-card>
 
 {{- 'product-card-custom.css' | asset_url | stylesheet_tag -}}
