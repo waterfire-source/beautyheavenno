@@ -113,7 +113,9 @@
       "available_colors_count": {
         "one": "{{ count }} color available",
         "other": "{{ count }} colors available"
-      }
+      },
+      "free_shipping": "Free Shipping",
+      "return_policy": "30-Day Return"
     },
     "gallery": {
       "close": "Close gallery",

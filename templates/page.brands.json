@@ -1,18 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-brands",
+      "blocks": {
+        "brand_KqkmG6": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Caudalie",
+            "brand_logo": "shopify://shop_images/caudalie.gif",
+            "logo_width": 200,
+            "brand_url": ""
+          }
+        },
+        "brand_nJkfwM": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Browrehab",
+            "brand_logo": "shopify://shop_images/browrehar.webp",
+            "logo_width": 200,
+            "brand_url": ""
+          }
+        },
+        "brand_icc7jk": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Bioline",
+            "brand_logo": "shopify://shop_images/bioline.webp",
+            "logo_width": 200,
+            "brand_url": ""
+          }
+        },
+        "brand_PfhUH9": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Babor",
+            "brand_logo": "shopify://shop_images/babor.jpg",
+            "logo_width": 200,
+            "brand_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_KqkmG6",
+        "brand_nJkfwM",
+        "brand_icc7jk",
+        "brand_PfhUH9"
+      ],
       "settings": {
         "color_scheme": "scheme-1",
         "title": "Brands",
         "description": "",
+        "stack_brands": false,
         "show_brand_names": true,
         "brands_per_row_desktop": 5,
         "brands_per_row_mobile": 2,
         "empty_state_text": "No brands to display. Add brands in the theme editor."
-      },
-      "blocks": {}
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

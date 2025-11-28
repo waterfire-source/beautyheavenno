@@ -1,22 +1,3 @@
-{%- comment -%}
-----------------------------------------------------------------------------------------------------------------------
-PRODUCT QUICK BUY
-----------------------------------------------------------------------------------------------------------------------
-
-This component is used to render the quick buy content. It is important to note that this snippet must always be
-included inside a product template (you can find an example in the "main-product.liquid" section). The reason is that
-we want to re-use the settings of the merchant on their product page (which info they want to make it visible). To do
-that, we need to re-use the whole product page, and extract the quick-buy part (rendered here).
-
-********************************************
-Supported variables
-********************************************
-
-* product: the product to render
-* section: the section is implicitly available. Here, the section is always a "product" template section, so you can
-           access all the information from the section
-{%- endcomment -%}
-
 {%- capture product_form_id -%}product-form-quick-buy-{{ product.id }}-{{ section.id }}{%- endcapture -%}
 
 <template id="quick-buy-content">
@@ -25,37 +6,141 @@ Supported variables
   <div class="quick-buy-modal__content">
     <product-rerender id="quick-buy-modal-content" observe-form="{{ product_form_id }}">
       <dialog-close-button class="contents">
-        <button type="button" class="quick-buy-modal__close-button sm-max:hidden">
-          <span class="sr-only">{{ 'general.accessibility.close' | t }}</span>
-          {%- render 'icon' with 'close' -%}
+        <button
+          type="button"
+          class="quick-buy-modal__close-button sm-max:hidden"
+          aria-label="{{ 'general.accessibility.close' | t }}"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </button>
       </dialog-close-button>
 
       <div class="quick-buy-modal__gallery-wrapper">
-        {%- if product.media.size > 0 -%}
-          {%- render 'product-gallery',
+        <div class="quick-buy-modal__gallery-inner">
+          {%- if product.media.size > 0 -%}
+            {%- render 'product-gallery',
               product: product,
               product_form_id: product_form_id,
-              desktop_layout: 'carousel_dots',
+              desktop_layout: 'carousel_thumbnails_left',
               mobile_controls: 'arrows',
               enable_media_autoplay: section.settings.enable_media_autoplay,
               enable_video_looping: section.settings.enable_video_looping,
               enable_image_zoom: false
-          -%}
-        {%- endif -%}
-        
+            -%}
+          {%- endif -%}
+        </div>
+
         <div class="quick-buy-modal__mobile-info v-stack gap-1 justify-center text-center sm:hidden">
+          {%- if product.vendor != blank -%}
+            <span class="quick-buy-modal__brand">{{ product.vendor }}</span>
+          {%- endif -%}
           <a href="{{ product.url }}" class="product-title h6">{{ product.title }}</a>
 
-          {%- if product.selected_or_first_available_variant != nil -%}
-            {% render 'price-list', product: product, variant: product.selected_or_first_available_variant, hide_unit_price: true, context: 'card' %}
+          {%- if product.selected_or_first_available_variant != null -%}
+            {% render 'price-list',
+              product: product,
+              variant: product.selected_or_first_available_variant,
+              hide_unit_price: true,
+              context: 'card'
+            %}
           {%- endif -%}
         </div>
       </div>
 
       <div class="quick-buy-modal__info-wrapper">
+        <div class="quick-buy-modal__badges-row">
+          {%- if product.tags contains 'renewed-packaging' or product.tags contains 'megújult-csomagolás' -%}
+            <span class="quick-buy-modal__badge quick-buy-modal__badge--eco">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Renewed
+            </span>
+          {%- endif -%}
+
+          {%- if product.tags contains 'bestseller' -%}
+            <span class="quick-buy-modal__badge quick-buy-modal__badge--best">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Bestseller
+            </span>
+          {%- endif -%}
+
+          {%- if product.compare_at_price > product.price -%}
+            {%- assign savings = product.compare_at_price
+              | minus: product.price
+              | times: 100.0
+              | divided_by: product.compare_at_price
+              | round
+            -%}
+            <span class="quick-buy-modal__badge quick-buy-modal__badge--sale"> -{{ savings }}% </span>
+          {%- endif -%}
+        </div>
+
+        {%- if settings.show_product_rating -%}
+          <div class="quick-buy-modal__rating">
+            {%- render 'product-rating', product: product, context: 'quick_buy', show_empty: false -%}
+          </div>
+        {%- endif -%}
+
         {%- render 'product-info', product: product, product_form_id: product_form_id, context: 'quick_buy' -%}
-        <a href="{{ product.url }}" class="quick-buy-modal__view-more link sm-max:hidden">{{ 'product.general.view_details' | t }}</a>
+
+        {%- if product.available -%}
+          {%- assign total_inventory = 0 -%}
+          {%- for variant in product.variants -%}
+            {%- if variant.inventory_quantity > 0 -%}
+              {%- assign total_inventory = total_inventory | plus: variant.inventory_quantity -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if total_inventory > 0 -%}
+            <div class="quick-buy-modal__availability {% if total_inventory <= 5 %}quick-buy-modal__availability--low{% endif %}">
+              <span class="quick-buy-modal__availability-dot"></span>
+              <span class="quick-buy-modal__availability-text">
+                {%- if total_inventory <= 5 -%}
+                  Only {{ total_inventory }} left – Order soon!
+                {%- elsif total_inventory <= 20 -%}
+                  In stock – Ships within 24h
+                {%- else -%}
+                  In stock – Ready to ship
+                {%- endif -%}
+              </span>
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="quick-buy-modal__availability quick-buy-modal__availability--out">
+            <span class="quick-buy-modal__availability-dot"></span>
+            <span class="quick-buy-modal__availability-text">Currently unavailable</span>
+          </div>
+        {%- endif -%}
+
+        <div class="quick-buy-modal__trust">
+          <div class="quick-buy-modal__trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Secure Payment</span>
+          </div>
+          <div class="quick-buy-modal__trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <rect x="1" y="3" width="15" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 8h4l3 3v5a2 2 0 01-2 2h-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>Fast Delivery</span>
+          </div>
+          <div class="quick-buy-modal__trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,6 12,2 8,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Easy Returns</span>
+          </div>
+        </div>
+
+        <a href="{{ product.url }}" class="quick-buy-modal__details-link sm-max:hidden">
+          <span>View full product details</span>
+        </a>
       </div>
     </product-rerender>
   </div>

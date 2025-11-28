@@ -1,0 +1,171 @@
+{{ 'product-carousel.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign collection = section.settings.collection
+  assign products_to_show = section.settings.products_to_show | default: 8
+
+  if collection != blank
+    assign products = collection.products
+  else
+    assign products = collections.all.products
+  endif
+-%}
+
+{%- if products.size > 0 -%}
+  <style>
+    #shopify-section-{{ section.id }} {
+      --carousel-products-per-view: {{ section.settings.products_per_row }};
+      --carousel-products-per-view-mobile: {{ section.settings.products_per_row_mobile }};
+    }
+  </style>
+
+  <div class="product-carousel section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+    <div class="product-carousel__container">
+      <div class="product-carousel__header">
+        {%- if section.settings.category_tag != blank -%}
+          <div class="product-carousel__category-tag">
+            {{ section.settings.category_tag }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="product-carousel__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.show_view_all and collection != blank -%}
+          <a href="{{ collection.url }}" class="product-carousel__view-all">
+            View All
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 3l5 5-5 5"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="product-carousel__wrapper">
+        {%- if products.size > section.settings.products_per_row -%}
+          <button class="product-carousel__nav product-carousel__nav--prev" aria-label="Previous">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 15l-5-5 5-5"/>
+            </svg>
+          </button>
+        {%- endif -%}
+
+        <div class="product-carousel__track" data-carousel-track>
+          {%- for product in products limit: products_to_show -%}
+            <div class="product-carousel__slide">
+              {%- render 'product-card',
+                product: product,
+                position: forloop.index,
+                show_vendor: section.settings.show_vendor,
+                show_rating: true,
+                reveal: false
+              -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if products.size > section.settings.products_per_row -%}
+          <button class="product-carousel__nav product-carousel__nav--next" aria-label="Next">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 5l5 5-5 5"/>
+            </svg>
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- if products.size > section.settings.products_per_row -%}
+        <div class="product-carousel__dots" data-carousel-dots></div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <script src="{{ 'product-carousel.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product Carousel",
+  "class": "shopify-section--product-carousel",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select a collection to display products from"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products to show",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "category_tag",
+      "label": "Category tag",
+      "default": "SHOP BY CATEGORY",
+      "info": "Small text above the title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_mobile",
+      "label": "Products per row (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Product Card Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Carousel",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

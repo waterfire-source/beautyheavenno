@@ -12,33 +12,47 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "vendor",
-          "settings": {}
-        },
         "title": {
           "type": "title",
+          "settings": {
+            "heading_tag": "h3"
+          }
+        },
+        "judge_me_reviews_preview_badge_XdCQzp": {
+          "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {}
+        },
+        "producer_VpCwYy": {
+          "type": "producer",
+          "settings": {
+            "producer_name": "",
+            "producer_homepage_url": "",
+            "show_all_products_link": true
+          }
+        },
+        "article_bonus_h7GXTV": {
+          "type": "article_bonus",
+          "settings": {
+            "article_number": "104022",
+            "bonus_points": 100
+          }
         },
         "price": {
           "type": "price",
-          "settings": {}
+          "settings": {
+            "show_taxes_notice": false
+          }
         },
         "payment_terms": {
           "type": "payment_terms",
           "settings": {}
         },
-        "separator": {
-          "type": "separator",
-          "settings": {}
-        },
         "description": {
           "type": "description",
-          "settings": {}
-        },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {}
+          "settings": {
+            "collapse_content": false,
+            "show_below_gallery": false
+          }
         },
         "quantity_selector": {
           "type": "quantity_selector",
@@ -46,38 +60,130 @@
         },
         "buy_buttons": {
           "type": "buy_buttons",
-          "settings": {}
-        },
-        "pickup_availability": {
-          "type": "pickup_availability",
-          "settings": {}
+          "settings": {
+            "show_payment_button": true,
+            "show_gift_card_recipient": true,
+            "atc_button_background": "#18a9a2",
+            "atc_button_text_color": "#ffffff",
+            "payment_button_background": "#000000",
+            "payment_button_text_color": "#ffffff"
+          }
         },
         "complementary_products": {
           "type": "complementary_products",
-          "settings": {}
+          "settings": {
+            "title": "Pairs well with",
+            "products_count": 2,
+            "show_below_gallery": true,
+            "stack_products": false,
+            "show_quick_buy": true
+          }
+        },
+        "features_payment_4D8AkR": {
+          "type": "features_payment",
+          "settings": {
+            "feature_1_icon": "fa fa-truck",
+            "feature_1_text": "Always free shipping",
+            "feature_2_icon": "fa fa-heart",
+            "feature_2_text": "Bonus points on all purchases",
+            "feature_3_icon": "fa fa-user",
+            "feature_3_text": "Norwegian online store"
+          }
+        },
+        "product_tabs_tNQnKA": {
+          "type": "product_tabs",
+          "settings": {
+            "show_information_tab": true,
+            "show_contents_tab": true,
+            "show_producer_tab": true,
+            "show_reviews_tab": true,
+            "show_qa_tab": true,
+            "information_tab_label": "",
+            "contents_tab_label": "",
+            "producer_tab_label": "",
+            "reviews_tab_label": "",
+            "show_producer_logo": true,
+            "producer_logo_width": 160,
+            "show_producer_link": true,
+            "show_producer_description": true,
+            "qa_tab_label": "",
+            "show_empty_reviews": true,
+            "reviews_url": ""
+          }
         }
       },
       "block_order": [
-        "vendor",
         "title",
+        "judge_me_reviews_preview_badge_XdCQzp",
+        "producer_VpCwYy",
+        "article_bonus_h7GXTV",
         "price",
         "payment_terms",
-        "separator",
         "description",
-        "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "complementary_products"
+        "complementary_products",
+        "features_payment_4D8AkR",
+        "product_tabs_tNQnKA"
       ],
-      "settings": {}
+      "settings": {
+        "color_scheme": "",
+        "container_size": "lg",
+        "product_info_size": 35,
+        "show_sticky_add_to_cart": true,
+        "center_basic_info": false,
+        "desktop_media_layout": "grid",
+        "desktop_media_grid_gap": 30,
+        "mobile_controls": "dots",
+        "enable_media_autoplay": false,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3
+      }
     },
     "related-products": {
       "type": "related-products",
-      "settings": {}
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "hide_product_information": false,
+        "stack_products": false,
+        "recommendations_count": 10,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 1,
+        "vertical_spacing_factor": 1,
+        "quick_buy_button_background": "#18a9a2",
+        "quick_buy_button_text_color": "#ffffff",
+        "subheading": "",
+        "title": "Related products",
+        "content": ""
+      }
+    },
+    "recently_viewed_products_iiBUPH": {
+      "type": "recently-viewed-products",
+      "name": "t:sections.recently_viewed_products.presets.recently_viewed_products.name",
+      "settings": {
+        "separate_section_with_border": true,
+        "color_scheme": "",
+        "hide_product_information": false,
+        "stack_products": false,
+        "products_count": 9,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 1,
+        "vertical_spacing_factor": 1,
+        "quick_buy_button_background": "#18a9a2",
+        "quick_buy_button_text_color": "#ffffff",
+        "subheading": "",
+        "title": "Recently viewed products",
+        "content": ""
+      }
     }
   },
   "order": [
     "main",
-    "related-products"
+    "related-products",
+    "recently_viewed_products_iiBUPH"
   ]
 }

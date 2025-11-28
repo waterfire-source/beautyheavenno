@@ -7,28 +7,42 @@
       <div class="footer__newsletter-section">
         <div class="footer__newsletter-content">
           <h2 class="footer__newsletter-heading">Join Our Beauty Community</h2>
-          <p class="footer__newsletter-text">Get exclusive access to new products, beauty tips, and special offers delivered to your inbox.</p>
+          <p class="footer__newsletter-text">
+            Get exclusive access to new products, beauty tips, and special offers delivered to your inbox.
+          </p>
         </div>
         <div class="footer__newsletter-form-wrapper">
-          <form class="footer__newsletter-form-inline" onsubmit="window.location.href='/newsletter/?action=join&email=' + encodeURIComponent(this.email.value); return false;">
+          <form
+            class="footer__newsletter-form-inline"
+            onsubmit="window.location.href='/newsletter/?action=join&email=' + encodeURIComponent(this.email.value); return false;"
+          >
             <input type="email" name="email" placeholder="Enter your email" class="footer__newsletter-input" required>
             <button type="submit" class="footer__newsletter-submit-btn">
               <i class="fa-solid fa-paper-plane"></i>
             </button>
           </form>
         </div>
-                        </div>
+      </div>
 
       {%- comment -%} Footer Content {%- endcomment -%}
       <div class="footer__content">
         {%- comment -%} Column 1: Beauty Heaven.no {%- endcomment -%}
         <div class="footer__column">
           <div class="footer__logo-wrapper">
-            <img src="{{ 'logo.jpeg' | asset_url }}" alt="Beauty Heaven Logo" class="footer__logo" width="264px" height="67px">
-                        </div>
+            <img
+              src="{{ 'logo.jpeg' | asset_url }}"
+              alt="Beauty Heaven Logo"
+              class="footer__logo"
+              width="264px"
+              height="67px"
+            >
+          </div>
           <div class="footer__text">
-            <p>Your destination for premium, curated beauty products from around the world. Authentic, ethical, and luxurious.</p>
-                    </div>
+            <p>
+              Your destination for premium, curated beauty products from around the world. Authentic, ethical, and
+              luxurious.
+            </p>
+          </div>
           <ul class="footer__social_icons unstyled-list">
             <li>
               <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
@@ -61,9 +75,9 @@
                   <path d="M15.0004 3.00098H3.00037C2.17194 3.00098 1.50037 3.67255 1.50037 4.50098V13.501C1.50037 14.3294 2.17194 15.001 3.00037 15.001H15.0004C15.8288 15.001 16.5004 14.3294 16.5004 13.501V4.50098C16.5004 3.67255 15.8288 3.00098 15.0004 3.00098Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </a>
-                          </li>
-                      </ul>
-                    </div>
+            </li>
+          </ul>
+        </div>
 
         {%- comment -%} Column 2: SHOP {%- endcomment -%}
         <div class="footer__column">
@@ -87,7 +101,7 @@
             <li><a href="/pages/faq">FAQ</a></li>
             <li><a href="/pages/track-order">Track Order</a></li>
           </ul>
-                      </div>
+        </div>
 
         {%- comment -%} Column 4: COMPANY {%- endcomment -%}
         <div class="footer__column">
@@ -99,8 +113,8 @@
             <li><a href="/pages/privacy-policy">Privacy Policy</a></li>
             <li><a href="/pages/terms-of-service">Terms of Service</a></li>
           </ul>
-                        </div>
-                  </div>
+        </div>
+      </div>
 
       {%- comment -%} Footer Bottom {%- endcomment -%}
       <div class="footer__bottom">
@@ -157,7 +171,7 @@
                 </clipPath>
               </defs>
             </svg>
-              </div>
+          </div>
           <div class="footer__payment-icon">
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_1_1629)">
@@ -186,8 +200,8 @@
                 </clipPath>
               </defs>
             </svg>
-        </div>
           </div>
+        </div>
       </div>
     </div>
   </div>

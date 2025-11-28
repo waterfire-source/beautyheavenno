@@ -648,6 +648,24 @@
           }
         ],
         "default": "saving"
+      },
+      {
+        "type": "header",
+        "content": "CRO Features"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_trust_signals_on_cards",
+        "label": "Show trust signals (Free Shipping, Returns)",
+        "default": true,
+        "info": "Display trust badges on product cards to increase conversion"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_product_description_on_card",
+        "label": "Show product description preview",
+        "default": false,
+        "info": "Display first 100 characters of product description on cards"
       }
     ]
   },

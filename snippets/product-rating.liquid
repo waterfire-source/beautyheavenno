@@ -1,11 +1,79 @@
 {%- if product != blank -%}
-  <div class="product-rating {% if context == 'card' %}product-card__rating{% endif %}">
+  {%- liquid
+    assign show_empty = show_empty | default: false
+    assign mode = mode | default: 'rating'
+    assign context = context | default: 'default'
+  -%}
+
+  <div
+    class="product-rating {% if context == 'card' %}product-card__rating{% endif %}"
+    data-product-id="{{ product.id }}"
+    data-scroll-to-reviews="true"
+    style="cursor: pointer;"
+  >
     <div
       class="jdgm-widget jdgm-prev-badge"
       data-id="{{ product.id }}"
       data-product-title="{{ product.title | escape }}"
       data-product-url="{{ shop.url }}{{ product.url }}"
-      data-auto-install="false"
+      data-auto-install="true"
     ></div>
+
+    {%- if product.metafields.reviews.rating.value != blank -%}
+      <div class="product-rating__native" data-native-rating>
+        {%- assign rating_value = product.metafields.reviews.rating.value.rating | default: 0 | plus: 0 -%}
+        {%- assign rating_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0 -%}
+
+        {%- if rating_count > 0 -%}
+          <div class="product-rating__stars">
+            {%- for i in (1..5) -%}
+              {%- assign half_star_threshold = i | minus: 0.5 -%}
+              {%- if rating_value >= i -%}
+                <svg class="product-rating__star product-rating__star--filled" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {%- elsif rating_value >= half_star_threshold -%}
+                <svg class="product-rating__star product-rating__star--half" viewBox="0 0 24 24">
+                  <defs>
+                    <linearGradient id="half-star-{{ product.id }}-{{ i }}">
+                      <stop offset="50%" stop-color="currentColor"/>
+                      <stop offset="50%" stop-color="#e8e8e8"/>
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#half-star-{{ product.id }}-{{ i }})" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {%- else -%}
+                <svg class="product-rating__star product-rating__star--empty" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if mode == 'count' -%}
+            <span class="product-rating__text">
+              <span class="product-rating__count">({{ rating_count }})</span>
+            </span>
+          {%- else -%}
+            <span class="product-rating__text">
+              {{ rating_value | round: 1 }}
+              <span class="product-rating__count">({{ rating_count }})</span>
+            </span>
+          {%- endif -%}
+        {%- elsif show_empty -%}
+          <span class="product-rating__text product-rating__text--empty">
+            {{- 'product.reviews.no_reviews' | t -}}
+          </span>
+        {%- endif -%}
+      </div>
+    {%- elsif show_empty -%}
+      <div class="product-rating__empty" data-native-rating>
+        <span class="product-rating__text product-rating__text--empty">
+          {{- 'product.reviews.no_reviews' | t -}}
+        </span>
+      </div>
+    {%- endif -%}
   </div>
+
+  <script src="{{ 'product-rating.js' | asset_url }}" defer></script>
 {%- endif -%}

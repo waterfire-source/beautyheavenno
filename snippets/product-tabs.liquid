@@ -178,13 +178,13 @@
       {%- capture reviews_content -%}
         <div class="product-tabs__reviews" id="product-reviews-tab-content-{{ block.id }}">
           <div 
-            id="judgeme_product_reviews-{{ product.id }}" 
+            id="judgeme_product_reviews" 
             class="jdgm-widget jdgm-review-widget" 
             data-id="{{ product.id }}"
             data-product-title="{{ product.title | escape }}"
             data-product-url="{{ shop.url }}{{ product.url }}"
-            data-auto-install="false"
           >
+            {{ product.metafields.judgeme.widget }}
           </div>
         </div>
       {%- endcapture -%}
@@ -512,20 +512,35 @@
         // Initialize Judge.me review widget when tab is opened
         const detailsElement = reviewsAccordion.querySelector('details');
         if (detailsElement) {
+          function initJudgeMeReviewWidget() {
+            const reviewWidget = document.getElementById('judgeme_product_reviews');
+            if (!reviewWidget) return;
+
+            const jm = window.judgeme || window.jdgm;
+            if (jm) {
+              try {
+                if (typeof jm.loadWidgets === 'function') jm.loadWidgets();
+                if (typeof jm.initReviewWidget === 'function') jm.initReviewWidget(reviewWidget);
+                if (typeof jm.refreshWidgets === 'function') jm.refreshWidgets();
+              } catch (e) {
+                console.warn('Judge.me review widget init error:', e);
+              }
+            }
+          }
+
           detailsElement.addEventListener('toggle', function() {
             if (detailsElement.open) {
               // When tab opens, ensure Judge.me widget is initialized
-              const reviewWidget = document.getElementById('judgeme_product_reviews-{{ product.id }}');
-              if (reviewWidget && typeof window.judgeme !== 'undefined') {
-                // Trigger Judge.me to load reviews if not already loaded
-                setTimeout(function() {
-                  if (window.judgeme && window.judgeme.loadWidgets) {
-                    window.judgeme.loadWidgets();
-                  }
-                }, 100);
-              }
+              setTimeout(initJudgeMeReviewWidget, 100);
+              setTimeout(initJudgeMeReviewWidget, 500);
+              setTimeout(initJudgeMeReviewWidget, 1000);
             }
           });
+
+          // Also try to initialize on page load if tab is already open
+          if (detailsElement.open) {
+            setTimeout(initJudgeMeReviewWidget, 500);
+          }
         }
       }
       {%- endif -%}

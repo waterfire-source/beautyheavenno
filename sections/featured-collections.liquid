@@ -104,9 +104,6 @@
   </div>
 {%- endif -%}
 
-<script src="{{ 'swipe-carousel.js' | asset_url }}" defer></script>
-<script src="{{ 'featured-collections.js' | asset_url }}" defer></script>
-
 {% schema %}
 {
   "name": "Featured Collections",
@@ -160,12 +157,6 @@
           "id": "title",
           "label": "Collection Title",
           "info": "Leave blank to use collection name"
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Button Text",
-          "default": "Shop Collection"
         }
       ]
     }
@@ -178,32 +169,28 @@
           "type": "collection",
           "settings": {
             "tagline": "Glow from within",
-            "title": "Skincare",
-            "button_text": "Shop Collection"
+            "title": "Skincare"
           }
         },
         {
           "type": "collection",
           "settings": {
             "tagline": "Healthy, beautiful hair",
-            "title": "Haircare",
-            "button_text": "Shop Collection"
+            "title": "Haircare"
           }
         },
         {
           "type": "collection",
           "settings": {
             "tagline": "Nourish your skin",
-            "title": "Bodycare",
-            "button_text": "Shop Collection"
+            "title": "Bodycare"
           }
         },
         {
           "type": "collection",
           "settings": {
             "tagline": "Perfect presents",
-            "title": "Gift Sets",
-            "button_text": "Shop Collection"
+            "title": "Gift Sets"
           }
         }
       ]

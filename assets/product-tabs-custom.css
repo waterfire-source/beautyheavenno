@@ -103,6 +103,205 @@
     color: rgb(var(--text-color));
 }
 
+.product-tabs__reviews .jdgm-rev-widg__header,
+.product-tabs__reviews .jdgm-rev-widg__summary,
+.product-tabs__reviews .jdgm-rev-widg__summary-text,
+.product-tabs__reviews .jdgm-histogram,
+.product-tabs__reviews .jdgm-write-rev-link,
+.product-tabs__reviews .jdgm-rev-widg__sort-wrapper,
+.product-tabs__reviews .jdgm-rev__replier,
+.product-tabs__reviews .jdgm-paginate,
+.product-tabs__reviews .jdgm-rev-widg__title,
+.product-tabs__reviews .jdgm-rev__share-links,
+.product-tabs__reviews .jdgm-rev__votes,
+.product-tabs__reviews .jdgm-form-wrapper,
+.product-tabs__reviews .jdgm-rev__buyer-badge-wrapper,
+.product-tabs__reviews .jdgm-carousel-wrapper,
+.product-tabs__reviews .jdgm-row-actions,
+.product-tabs__reviews .jdgm-rev__icon,
+.product-tabs__reviews .jdgm-rev__pics,
+.product-tabs__reviews form.jdgm-form {
+    display: none !important;
+}
+
+.product-tabs__reviews .jdgm-rev-widg__reviews {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev {
+    background: #ffffff !important;
+    border: 1px solid #f0f0f0 !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    margin: 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+
+.product-tabs__reviews .jdgm-rev:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-2px) !important;
+}
+
+.product-tabs__reviews .jdgm-rev__header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 1px solid #f5f5f5 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__author-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin: 0 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__author-wrapper::before {
+    content: '' !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: linear-gradient(135deg, #18a9a2 0%, #14b8a6 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__author-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev__author {
+    font-weight: 600 !important;
+    color: #1a1a1a !important;
+    font-size: 0.938rem !important;
+    line-height: 1.3 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__buyer-badge {
+    background: linear-gradient(135deg, #18a9a2 0%, #14b8a6 100%) !important;
+    color: white !important;
+    font-size: 0.688rem !important;
+    padding: 3px 8px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    text-transform: uppercase !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.product-tabs__reviews .jdgm-rev__buyer-badge::before {
+    content: '✓' !important;
+    font-size: 0.625rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev__rating {
+    display: flex !important;
+    gap: 3px !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev__rating .jdgm-star {
+    color: #f59e0b !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.product-tabs__reviews .jdgm-rev__rating .jdgm-star.jdgm--on {
+    color: #f59e0b !important;
+}
+
+.product-tabs__reviews .jdgm-rev__rating .jdgm-star.jdgm--off {
+    color: #e5e5e5 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__timestamp {
+    font-size: 0.813rem !important;
+    color: #9ca3af !important;
+    font-weight: 400 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__title {
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.063rem !important;
+    line-height: 1.4 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__body {
+    color: #4b5563 !important;
+    line-height: 1.7 !important;
+    font-size: 0.938rem !important;
+    margin: 0 !important;
+}
+
+.product-tabs__reviews .jdgm-rev__content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.product-tabs__reviews .jdgm-rev-widg--no-reviews {
+    text-align: center !important;
+    padding: 2rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev-widg--no-reviews .jdgm-rev-widg__summary {
+    display: block !important;
+    text-align: center !important;
+    padding: 2rem !important;
+    background: #f9fafb !important;
+    border-radius: 12px !important;
+    border: 1px dashed #e5e7eb !important;
+}
+
+.product-tabs__reviews .jdgm-rev-widg--no-reviews .jdgm-rev-widg__summary-text {
+    display: block !important;
+    color: #6b7280 !important;
+    font-size: 0.938rem !important;
+}
+
+.product-tabs__reviews .jdgm-rev-widg--no-reviews .jdgm-histogram,
+.product-tabs__reviews .jdgm-rev-widg--no-reviews .jdgm-rev-widg__title,
+.product-tabs__reviews .jdgm-rev-widg--no-reviews .jdgm-write-rev-link {
+    display: none !important;
+}
+
+@media screen and (max-width: 699px) {
+    .product-tabs__reviews .jdgm-rev {
+        padding: 1.25rem !important;
+        border-radius: 10px !important;
+    }
+
+    .product-tabs__reviews .jdgm-rev__header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+    }
+
+    .product-tabs__reviews .jdgm-rev__author-wrapper::before {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .product-tabs__reviews .jdgm-rev__rating .jdgm-star {
+        width: 16px !important;
+        height: 16px !important;
+    }
+}
+
 .product-tabs__contents {
     color: rgb(var(--text-color));
 }
